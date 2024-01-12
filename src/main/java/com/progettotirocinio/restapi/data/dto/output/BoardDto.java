@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.controllers.RoleController;
 import com.progettotirocinio.restapi.controllers.TagController;
 import com.progettotirocinio.restapi.controllers.TaskGroupController;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,6 +30,7 @@ public class BoardDto extends GenericOutput<BoardDto>
     private Integer minMembers;
     private Integer maxMembers;
     private LocalDate expirationDate;
+    private BoardVisibility visibility;
     private Integer amountOfGroups;
     private Integer amountOfRoles;
     private Integer amountOfTags;

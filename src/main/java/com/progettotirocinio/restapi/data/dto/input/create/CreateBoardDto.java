@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.input.create;
 
 
+import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,8 @@ public class CreateBoardDto
     @NotNull
     @PositiveOrZero
     private Integer maxMembers;
+    @NotNull
+    private BoardVisibility visibility;
     @Future
     private LocalDate expirationDate;
 }

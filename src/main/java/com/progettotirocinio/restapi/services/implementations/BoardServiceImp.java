@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,6 +66,12 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         BoardSpecifications.Filter filter = new BoardSpecifications.Filter(requiredBoard);
         Page<Board> boards = this.boardDao.findAll(BoardSpecifications.withFilter(filter),pageable);
         return this.pagedResourcesAssembler.toModel(boards,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<BoardVisibility> getVisibilities() {
+        List<BoardVisibility> visibilities = Arrays.stream(BoardVisibility.values()).toList();
+        return CollectionModel.of(visibilities);
     }
 
     @Override

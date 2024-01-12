@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
+import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
@@ -44,6 +45,10 @@ public class Board implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "VISIBILITY",nullable = false)
+    private BoardVisibility visibility;
 
     @OneToOne(mappedBy = "board",fetch = FetchType.LAZY)
     private BoardImage boardImage;
