@@ -1,8 +1,11 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
+import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 
 import java.util.UUID;
@@ -15,6 +18,10 @@ public interface TaskService {
     PagedModel<TaskDto> getTasksByPublisher(UUID publisherID,Pageable pageable);
     PagedModel<TaskDto> getTasksByGroup(UUID groupID,Pageable pageable);
     PagedModel<TaskDto> getTasksByPriority(Priority priority,Pageable pageable);
+    PagedModel<TaskDto> getTasksBySpec(Specification<Task> specification,Pageable pageable);
+    PagedModel<TaskDto> getSimilarTasks(UUID taskID,Pageable pageable);
+    CollectionModel<Priority> getPriorities();
+    CollectionModel<String> getOrderTypes();
     TaskDto getTask(UUID id);
     void deleteTask(UUID id);
 }

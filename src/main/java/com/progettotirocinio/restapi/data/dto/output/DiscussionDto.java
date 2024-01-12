@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@Relation(collectionRelation = "content")
 public class DiscussionDto extends GenericOutput<DiscussionDto>
 {
     private String title;

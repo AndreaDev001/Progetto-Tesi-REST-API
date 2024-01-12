@@ -14,7 +14,11 @@ public class SecurityConfig
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/documentation/**").permitAll());
+                authorize.requestMatchers("/documentation/**").permitAll()
+                        .requestMatchers("/tasks/public/**").permitAll()
+                        .requestMatchers("/users/public/**").permitAll()
+                        .requestMatchers("/boards/public/**").permitAll()
+                        .anyRequest().authenticated());
         return httpSecurity.build();
     }
 }

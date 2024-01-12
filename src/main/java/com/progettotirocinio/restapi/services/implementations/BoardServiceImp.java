@@ -1,17 +1,22 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.data.dao.BoardDao;
+import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
+import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,6 +50,26 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     public PagedModel<BoardDto> getBoardsByDescription(String description, Pageable pageable) {
         Page<Board> boards = this.boardDao.getBoardsByDescription(description,pageable);
         return this.pagedResourcesAssembler.toModel(boards,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<BoardDto> getBoardsBySpec(Specification<Board> specification, Pageable pageable) {
+        Page<Board> boards = this.boardDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(boards,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<BoardDto> getSimilarBoards(UUID boardID, Pageable pageable) {;
+        Board requiredBoard = this.boardDao.findById(boardID).orElseThrow();
+        BoardSpecifications.Filter filter = new BoardSpecifications.Filter(requiredBoard);
+        Page<Board> boards = this.boardDao.findAll(BoardSpecifications.withFilter(filter),pageable);
+        return this.pagedResourcesAssembler.toModel(boards,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<String> getOrderTypes() {
+        List<String> orderTypes = SpecificationsUtils.generateOrderTypes(Board.class);
+        return CollectionModel.of(orderTypes);
     }
 
     @Override

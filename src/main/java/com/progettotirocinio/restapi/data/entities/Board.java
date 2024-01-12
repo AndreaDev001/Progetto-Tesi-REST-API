@@ -2,6 +2,8 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
+import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
@@ -26,6 +28,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "BOARDS")
+@SpecificationPrefix
 public class Board implements OwnableEntity
 {
     @Id
@@ -34,10 +37,12 @@ public class Board implements OwnableEntity
 
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String title;
 
     @Column(name = "DESCRIPTION",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String description;
 
     @OneToOne(mappedBy = "board",fetch = FetchType.LAZY)
@@ -45,6 +50,7 @@ public class Board implements OwnableEntity
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
+    @SpecificationOrderType(allowDepth = true)
     private User publisher;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)

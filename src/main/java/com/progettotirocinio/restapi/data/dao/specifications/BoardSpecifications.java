@@ -45,7 +45,7 @@ public class BoardSpecifications
             this.publisherGender = board.getPublisher().getGender();
         }
     }
-    public static Specification<Board> withFilter(UserSpecifications.Filter filter) {
+    public static Specification<Board> withFilter(BoardSpecifications.Filter filter) {
         return (Root<Board> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) -> {
             Predicate requiredPredicate = SpecificationsUtils.generatePredicate(filter,root,criteriaBuilder);
             List<Order> requiredOrders = SpecificationsUtils.generateOrders(root,Board.class,criteriaBuilder,filter.orderTypes,filter.orderMode);

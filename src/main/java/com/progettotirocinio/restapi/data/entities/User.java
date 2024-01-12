@@ -2,6 +2,8 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
+import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import jakarta.persistence.*;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "USERS")
+@SpecificationPrefix
 public class User
 {
     @Id
@@ -31,18 +34,22 @@ public class User
 
     @Column(name = "EMAIL",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String email;
 
     @Column(name = "USERNAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String username;
 
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String name;
 
     @Column(name = "SURNAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @SpecificationOrderType
     private String surname;
 
     @Column(name = "GENDER",nullable = false)

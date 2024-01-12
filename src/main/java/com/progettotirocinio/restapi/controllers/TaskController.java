@@ -1,17 +1,21 @@
 package com.progettotirocinio.restapi.controllers;
 
 
+import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
+import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +41,30 @@ public class TaskController
     public ResponseEntity<PagedModel<TaskDto>> getTasksByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/private/spec")
+    public ResponseEntity<PagedModel<TaskDto>> getTasksBySpec(@ParameterObject @Valid TaskSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskDto> tasks = this.taskService.getTasksBySpec(TaskSpecifications.withFilter(filter),paginationRequest.toPageRequest());
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/private/similar/{taskID}")
+    public ResponseEntity<PagedModel<TaskDto>> getSimilarTasks(@PathVariable("taskID") UUID taskID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskDto> tasks = this.taskService.getSimilarTasks(taskID,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(tasks);
+    }
+
+    @GetMapping("/public/priorities")
+    public ResponseEntity<CollectionModel<Priority>> getPriorities() {
+        CollectionModel<Priority> priorities = this.taskService.getPriorities();
+        return ResponseEntity.ok(priorities);
+    }
+
+    @GetMapping("/public/orderTypes")
+    public ResponseEntity<CollectionModel<String>> getOrderTypes() {
+        CollectionModel<String> orderTypes = this.taskService.getOrderTypes();
+        return ResponseEntity.ok(orderTypes);
     }
 
     @GetMapping("/private/publisher/{publisherID}")

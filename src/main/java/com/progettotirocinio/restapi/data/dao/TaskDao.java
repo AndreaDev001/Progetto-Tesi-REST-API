@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface TaskDao extends JpaRepository<Task, UUID> {
+public interface TaskDao extends JpaRepository<Task, UUID>, JpaSpecificationExecutor<Task> {
     @Query("select t from Task t where t.publisher.id = :requiredPublisherID and t.group.id = :requiredGroupID")
     Page<Task> getTasksByPublisherAndGroup(@Param("requiredPublisherID") UUID publisherID, @Param("requiredGroupID") UUID groupID, Pageable pageable);
     @Query("select t from Task t where t.name = :requiredName")

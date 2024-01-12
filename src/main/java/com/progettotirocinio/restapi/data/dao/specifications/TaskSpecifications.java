@@ -50,7 +50,7 @@ public class TaskSpecifications
             this.groupID = task.getGroup().getId();
         }
     }
-    public static Specification<Task> withFilter(UserSpecifications.Filter filter) {
+    public static Specification<Task> withFilter(TaskSpecifications.Filter filter) {
         return (Root<Task> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) -> {
             Predicate requiredPredicate = SpecificationsUtils.generatePredicate(filter,root,criteriaBuilder);
             List<Order> requiredOrders = SpecificationsUtils.generateOrders(root,Task.class,criteriaBuilder,filter.orderTypes,filter.orderMode);
