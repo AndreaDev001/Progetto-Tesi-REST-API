@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,9 @@ public class User
     @Column(name = "SURNAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String surname;
+
+    @Column(name = "GENDER",nullable = false)
+    private Gender gender;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
     private UserImage user;
