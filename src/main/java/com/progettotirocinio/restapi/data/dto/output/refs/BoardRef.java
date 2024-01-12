@@ -1,10 +1,9 @@
 package com.progettotirocinio.restapi.data.dto.output.refs;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
+import com.progettotirocinio.restapi.data.entities.Board;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,10 +11,17 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class BoardRef
+@EqualsAndHashCode(callSuper = false)
+public class BoardRef extends GenericOutput<BoardRef>
 {
-    private UUID id;
-    private String name;
-    private LocalDate createdDate;
+    private String title;
+    private Integer minMembers;
+    private Integer maxMembers;
+
+    public BoardRef(Board board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.maxMembers = board.getMaxMembers();
+        this.createdDate = board.getCreatedDate();
+    }
 }
