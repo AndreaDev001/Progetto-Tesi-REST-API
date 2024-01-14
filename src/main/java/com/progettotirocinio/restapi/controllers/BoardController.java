@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,12 @@ public class BoardController
     public ResponseEntity<PagedModel<BoardDto>> getSimilarBoards(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardDto> boards = this.boardService.getSimilarBoards(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(boards);
+    }
+
+    @GetMapping("/public/visibilities")
+    public ResponseEntity<CollectionModel<BoardVisibility>> getVisibilities() {
+        CollectionModel<BoardVisibility> visibilities = this.boardService.getVisibilities();
+        return ResponseEntity.ok(visibilities);
     }
 
     @GetMapping("/public/orderTypes")

@@ -12,46 +12,46 @@ import org.springframework.ui.ModelMap;
 @Configuration
 public class ModelMapperConfig
 {
-    private Converter<Board, BoardRef> boardRefConverter = new AbstractConverter<Board, BoardRef>() {
+    private final Converter<Board, BoardRef> boardRefConverter = new AbstractConverter<Board, BoardRef>() {
         @Override
         protected BoardRef convert(Board board) {
             return new BoardRef(board);
         }
     };
 
-    private Converter<Discussion,DiscussionRef> discussionRefConverter = new AbstractConverter<Discussion, DiscussionRef>() {
+    private final Converter<Discussion,DiscussionRef> discussionRefConverter = new AbstractConverter<Discussion, DiscussionRef>() {
         @Override
         protected DiscussionRef convert(Discussion discussion) {
             return new DiscussionRef(discussion);
         }
     };
 
-    private Converter<Role, RoleRef> roleRefConverter = new AbstractConverter<Role,RoleRef>() {
+    private final Converter<Role, RoleRef> roleRefConverter = new AbstractConverter<Role,RoleRef>() {
         @Override
         protected RoleRef convert(Role role) {
             return new RoleRef(role);
         }
     };
-    private Converter<TaskGroup, TaskGroupRef> taskGroupRefConverter = new AbstractConverter<TaskGroup, TaskGroupRef>() {
+    private final Converter<TaskGroup, TaskGroupRef> taskGroupRefConverter = new AbstractConverter<TaskGroup, TaskGroupRef>() {
         @Override
         protected TaskGroupRef convert(TaskGroup taskGroup) {
             return new TaskGroupRef(taskGroup);
         }
     };
-    private Converter<Task,TaskRef> taskRefConverter = new AbstractConverter<Task, TaskRef>() {
+    private final Converter<Task,TaskRef> taskRefConverter = new AbstractConverter<Task, TaskRef>() {
         @Override
         protected TaskRef convert(Task task) {
             return new TaskRef(task);
         }
     };
 
-    private Converter<Team, TeamRef> teamRefConverter = new AbstractConverter<Team,TeamRef>() {
+    private final Converter<Team, TeamRef> teamRefConverter = new AbstractConverter<Team,TeamRef>() {
         @Override
         protected TeamRef convert(Team team) {
             return new TeamRef(team);
         }
     };
-    private Converter<User,UserRef> userRefConverter = new AbstractConverter<User, UserRef>() {
+    private final Converter<User,UserRef> userRefConverter = new AbstractConverter<User, UserRef>() {
         @Override
         protected UserRef convert(User user) {
             return new UserRef(user);
