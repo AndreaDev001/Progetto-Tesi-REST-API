@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
@@ -20,8 +21,8 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
 
     private final TaskGroupDao taskGroupDao;
 
-    public TaskGroupServiceImp(ModelMapper modelMapper,TaskGroupDao taskGroupDao,PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
-        super(modelMapper,TaskGroup.class,TaskGroupDto.class, pagedResourcesAssembler);
+    public TaskGroupServiceImp(Mapper mapper, TaskGroupDao taskGroupDao, PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
+        super(mapper,TaskGroup.class,TaskGroupDto.class, pagedResourcesAssembler);
         this.taskGroupDao = taskGroupDao;
     }
 

@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
@@ -18,8 +19,8 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
 
     private final CommentDao commentDao;
 
-    public CommentServiceImp(ModelMapper modelMapper,CommentDao commentDao,PagedResourcesAssembler<Comment> pagedResourcesAssembler) {
-        super(modelMapper, Comment.class,CommentDto.class, pagedResourcesAssembler);
+    public CommentServiceImp(Mapper mapper, CommentDao commentDao, PagedResourcesAssembler<Comment> pagedResourcesAssembler) {
+        super(mapper, Comment.class,CommentDto.class, pagedResourcesAssembler);
         this.commentDao = commentDao;
     }
 

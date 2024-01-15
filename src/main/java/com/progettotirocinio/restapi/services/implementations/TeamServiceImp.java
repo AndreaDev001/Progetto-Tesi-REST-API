@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
 import com.progettotirocinio.restapi.data.dto.output.TeamDto;
 import com.progettotirocinio.restapi.data.entities.Team;
@@ -19,8 +20,8 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
 
     private final TeamDao teamDao;
 
-    public TeamServiceImp(ModelMapper modelMapper,TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
-        super(modelMapper, Team.class,TeamDto.class, pagedResourcesAssembler);
+    public TeamServiceImp(Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
+        super(mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
         this.teamDao = teamDao;
     }
 

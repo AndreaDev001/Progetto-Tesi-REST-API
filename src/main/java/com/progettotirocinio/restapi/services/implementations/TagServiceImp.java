@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TagDao;
 import com.progettotirocinio.restapi.data.dto.output.TagDto;
 import com.progettotirocinio.restapi.data.entities.Tag;
@@ -17,8 +18,8 @@ import java.util.UUID;
 @Service
 public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements TagService  {
     private final TagDao tagDao;
-    public TagServiceImp(ModelMapper modelMapper,TagDao tagDao,PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
-        super(modelMapper, Tag.class,TagDto.class, pagedResourcesAssembler);
+    public TagServiceImp(Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
+        super(mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
         this.tagDao = tagDao;
     }
 

@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -19,14 +20,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "USERS")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @SpecificationPrefix
-public class User
+public class User extends AmountEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -77,10 +79,16 @@ public class User
     private Set<RoleOwner> rolesOwned  = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "publisher")
+    private Set<BoardInvite> boardInvites = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "publisher")
     private Set<Poll> createdPolls = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
     private Set<Tag> createdTags = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
+    private Set<Role> createdRoles = new HashSet<>();
 
     @CreatedDate
     @Column(name = "CREATED_DATE",nullable = false)

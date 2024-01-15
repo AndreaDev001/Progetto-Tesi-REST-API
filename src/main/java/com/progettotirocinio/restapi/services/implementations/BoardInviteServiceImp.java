@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardInviteDao;
 import com.progettotirocinio.restapi.data.dto.output.BoardInviteDto;
 import com.progettotirocinio.restapi.data.entities.Board;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardInviteDto> implements BoardInviteService {
 
     private final BoardInviteDao boardInviteDao;
-    public BoardInviteServiceImp(ModelMapper modelMapper,BoardInviteDao boardInviteDao,PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
+    public BoardInviteServiceImp(Mapper modelMapper, BoardInviteDao boardInviteDao, PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
         super(modelMapper,BoardInvite.class,BoardInviteDto.class, pagedResourcesAssembler);
         this.boardInviteDao = boardInviteDao;
     }

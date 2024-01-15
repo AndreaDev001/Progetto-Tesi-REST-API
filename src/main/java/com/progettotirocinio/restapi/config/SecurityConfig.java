@@ -18,7 +18,7 @@ public class SecurityConfig
                         .requestMatchers("/tasks/public/**").permitAll()
                         .requestMatchers("/users/public/**").permitAll()
                         .requestMatchers("/boards/public/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
         return httpSecurity.build();
     }
 }

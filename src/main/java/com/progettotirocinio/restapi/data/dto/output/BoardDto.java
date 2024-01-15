@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 import com.progettotirocinio.restapi.controllers.RoleController;
 import com.progettotirocinio.restapi.controllers.TagController;
 import com.progettotirocinio.restapi.controllers.TaskGroupController;
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import lombok.AllArgsConstructor;
@@ -31,15 +32,18 @@ public class BoardDto extends GenericOutput<BoardDto>
     private Integer maxMembers;
     private LocalDate expirationDate;
     private BoardVisibility visibility;
+    @AmountReference(name = "groups")
     private Integer amountOfGroups;
+    @AmountReference(name = "roles")
     private Integer amountOfRoles;
+    @AmountReference(name = "tags")
     private Integer amountOfTags;
 
     @Override
     public void addLinks(Object... params) {
         PaginationRequest paginationRequest = new PaginationRequest(0,20);
-        this.add(linkTo(methodOn(TaskGroupController.class).getTaskGroupsByPublisher(this.id,paginationRequest)).withRel("taskGroups").withName("taskGroups"));
-        this.add(linkTo(methodOn(RoleController.class).getRoles(paginationRequest)).withRel("roles").withName("roles"));
-        this.add(linkTo(methodOn(TagController.class).getTagsByBoard(this.id,paginationRequest)).withRel("tags").withName("tags"));
+        this.add(linkTo(methodOn(TaskGroupController.class).getTaskGroupsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("taskGroups").withName("taskGroups"));
+        this.add(linkTo(methodOn(RoleController.class).getRoles(paginationRequest)).slash(paginationRequest.toString()).withRel("roles").withName("roles"));
+        this.add(linkTo(methodOn(TagController.class).getTagsByBoard(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("tags").withName("tags"));
     }
 }

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.RoleDao;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.data.entities.Role;
@@ -18,8 +19,8 @@ import java.util.UUID;
 public class RoleServiceImp extends GenericServiceImp<Role, RoleDto> implements RoleService
 {
     private final RoleDao roleDao;
-    public RoleServiceImp(ModelMapper modelMapper,RoleDao roleDao,PagedResourcesAssembler<Role> pagedResourcesAssembler) {
-        super(modelMapper,Role.class,RoleDto.class, pagedResourcesAssembler);
+    public RoleServiceImp(Mapper mapper, RoleDao roleDao, PagedResourcesAssembler<Role> pagedResourcesAssembler) {
+        super(mapper,Role.class,RoleDto.class, pagedResourcesAssembler);
         this.roleDao = roleDao;
     }
 

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.RoleOwnerDao;
 import com.progettotirocinio.restapi.data.dto.output.RoleOwnerDto;
 import com.progettotirocinio.restapi.data.entities.RoleOwner;
@@ -19,8 +20,8 @@ public class RoleOwnerServiceImp extends GenericServiceImp<RoleOwner, RoleOwnerD
 {
     private final RoleOwnerDao roleOwnerDao;
 
-    public RoleOwnerServiceImp(ModelMapper modelMapper,RoleOwnerDao roleOwnerDao, PagedResourcesAssembler<RoleOwner> pagedResourcesAssembler) {
-        super(modelMapper,RoleOwner.class,RoleOwnerDto.class, pagedResourcesAssembler);
+    public RoleOwnerServiceImp(Mapper mapper, RoleOwnerDao roleOwnerDao, PagedResourcesAssembler<RoleOwner> pagedResourcesAssembler) {
+        super(mapper,RoleOwner.class,RoleOwnerDto.class, pagedResourcesAssembler);
         this.roleOwnerDao = roleOwnerDao;
     }
 

@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
@@ -24,8 +25,8 @@ import java.util.UUID;
 public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements TaskService {
     private final TaskDao taskDao;
 
-    public TaskServiceImp(ModelMapper modelMapper,TaskDao taskDao,PagedResourcesAssembler<Task> pagedResourcesAssembler) {
-        super(modelMapper,Task.class,TaskDto.class, pagedResourcesAssembler);
+    public TaskServiceImp(Mapper mapper, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
+        super(mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
         this.taskDao = taskDao;
     }
 

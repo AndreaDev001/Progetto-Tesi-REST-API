@@ -1,10 +1,12 @@
-package com.progettotirocinio.restapi.config;
+package com.progettotirocinio.restapi.config.mapper;
 
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
+import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.dto.output.refs.*;
 import com.progettotirocinio.restapi.data.entities.*;
-import org.modelmapper.AbstractConverter;
-import org.modelmapper.Converter;
-import org.modelmapper.ModelMapper;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import org.modelmapper.*;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.ModelMap;
@@ -57,10 +59,11 @@ public class ModelMapperConfig
             return new UserRef(user);
         }
     };
-
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setFieldMatchingEnabled(true);
+        modelMapper.getConfiguration().setSkipNullEnabled(false);
         modelMapper.addConverter(boardRefConverter);
         modelMapper.addConverter(discussionRefConverter);
         modelMapper.addConverter(roleRefConverter);

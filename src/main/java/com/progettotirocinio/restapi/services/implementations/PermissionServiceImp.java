@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PermissionDao;
 import com.progettotirocinio.restapi.data.dto.output.PermissionDto;
 import com.progettotirocinio.restapi.data.entities.Permission;
@@ -20,8 +21,8 @@ public class PermissionServiceImp extends GenericServiceImp<Permission, Permissi
 {
     private final PermissionDao permissionDao;
 
-    public PermissionServiceImp(ModelMapper modelMapper,PermissionDao permissionDao, PagedResourcesAssembler<Permission> pagedResourcesAssembler) {
-        super(modelMapper,Permission.class,PermissionDto.class, pagedResourcesAssembler);
+    public PermissionServiceImp(Mapper mapper, PermissionDao permissionDao, PagedResourcesAssembler<Permission> pagedResourcesAssembler) {
+        super(mapper,Permission.class,PermissionDto.class, pagedResourcesAssembler);
         this.permissionDao = permissionDao;
     }
 

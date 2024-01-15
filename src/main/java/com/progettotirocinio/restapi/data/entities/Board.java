@@ -30,7 +30,7 @@ import java.util.UUID;
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "BOARDS")
 @SpecificationPrefix
-public class Board implements OwnableEntity
+public class Board extends AmountEntity implements OwnableEntity
 {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -66,6 +66,9 @@ public class Board implements OwnableEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
+    private Set<BoardInvite> invites = new HashSet<>();
 
     @Column(name = "MAX_MEMBERS",nullable = false)
     private Integer maxMembers;

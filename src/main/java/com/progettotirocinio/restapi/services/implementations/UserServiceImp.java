@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.UserSpecifications;
@@ -25,8 +26,8 @@ import java.util.UUID;
 public class UserServiceImp extends GenericServiceImp<User, UserDto> implements UserService {
 
     private final UserDao userDao;
-    public UserServiceImp(ModelMapper modelMapper,UserDao userDao,PagedResourcesAssembler<User> pagedResourcesAssembler) {
-        super(modelMapper,User.class,UserDto.class, pagedResourcesAssembler);
+    public UserServiceImp(Mapper mapper, UserDao userDao, PagedResourcesAssembler<User> pagedResourcesAssembler) {
+        super(mapper,User.class,UserDto.class, pagedResourcesAssembler);
         this.userDao = userDao;
     }
 

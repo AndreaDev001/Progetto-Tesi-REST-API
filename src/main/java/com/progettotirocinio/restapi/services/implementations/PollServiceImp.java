@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.data.entities.Poll;
@@ -17,8 +18,8 @@ import java.util.UUID;
 public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements PollService {
 
     private final PollDao pollDao;
-    public PollServiceImp(ModelMapper modelMapper,PollDao pollDao,PagedResourcesAssembler<Poll> pagedResourcesAssembler) {
-        super(modelMapper,Poll.class,PollDto.class, pagedResourcesAssembler);
+    public PollServiceImp(Mapper mapper, PollDao pollDao, PagedResourcesAssembler<Poll> pagedResourcesAssembler) {
+        super(mapper,Poll.class,PollDto.class, pagedResourcesAssembler);
         this.pollDao = pollDao;
     }
 

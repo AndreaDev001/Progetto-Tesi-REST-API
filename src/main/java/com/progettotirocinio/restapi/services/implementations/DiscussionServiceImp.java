@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
@@ -18,8 +19,8 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
 
     private final DiscussionDao discussionDao;
 
-    public DiscussionServiceImp(ModelMapper modelMapper,DiscussionDao discussionDao, PagedResourcesAssembler<Discussion> pagedResourcesAssembler) {
-        super(modelMapper, Discussion.class,DiscussionDto.class, pagedResourcesAssembler);
+    public DiscussionServiceImp(Mapper mapper, DiscussionDao discussionDao, PagedResourcesAssembler<Discussion> pagedResourcesAssembler) {
+        super(mapper, Discussion.class,DiscussionDto.class, pagedResourcesAssembler);
         this.discussionDao = discussionDao;
     }
 

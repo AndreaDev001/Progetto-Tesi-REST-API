@@ -26,9 +26,4 @@ public class TaskDto extends GenericOutput<TaskDto>
     private Priority priority;
     private UserRef publisher;
     private TaskGroupRef taskGroup;
-
-    @Override
-    public void addLinks(Object... params) {
-
-    }
 }
