@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
 import jakarta.validation.Valid;
@@ -43,6 +44,12 @@ public class PollController
     public ResponseEntity<PagedModel<PollDto>> getPollsByTitle(@PathVariable("title") String title,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollDto> polls = this.pollService.getPollsByTitle(title,paginationRequest.toPageRequest());
         return ResponseEntity.ok(polls);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<PollDto> createPoll(@RequestBody @Valid CreatePollDto createPollDto) {
+        PollDto pollDto = this.pollService.createPoll(createPollDto);
+        return ResponseEntity.status(201).body(pollDto);
     }
 
     @GetMapping("/private/description/{description}")

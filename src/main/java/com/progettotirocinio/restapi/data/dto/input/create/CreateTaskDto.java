@@ -19,6 +19,11 @@ import java.util.UUID;
 @Builder
 public class CreateTaskDto
 {
+
+    @NotNull
+    @NotBlank
+    private String title;
+
     @NotNull
     @NotBlank
     private String name;

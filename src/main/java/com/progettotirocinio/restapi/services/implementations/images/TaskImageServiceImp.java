@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.images;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.images.TaskImageDao;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.dto.output.images.TaskImageDto;
@@ -22,8 +23,8 @@ public class TaskImageServiceImp extends GenericServiceImp<TaskImage, TaskImageD
 
     private final TaskImageDao taskImageDao;
 
-    public TaskImageServiceImp(Mapper mapper, TaskImageDao taskImageDao, PagedResourcesAssembler<TaskImage> pagedResourcesAssembler) {
-        super(mapper,TaskImage.class,TaskImageDto.class, pagedResourcesAssembler);
+    public TaskImageServiceImp(UserDao userDao,Mapper mapper, TaskImageDao taskImageDao, PagedResourcesAssembler<TaskImage> pagedResourcesAssembler) {
+        super(userDao,mapper,TaskImage.class,TaskImageDto.class, pagedResourcesAssembler);
         this.taskImageDao = taskImageDao;
     }
 

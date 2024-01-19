@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.services.implementations.images;
 
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.images.BoardImageDao;
 import com.progettotirocinio.restapi.data.dto.output.images.BoardImageDto;
 import com.progettotirocinio.restapi.data.entities.Board;
@@ -23,8 +24,8 @@ public class BoardImageServiceImp extends GenericServiceImp<BoardImage, BoardIma
 {
     private final BoardImageDao boardImageDao;
 
-    public BoardImageServiceImp(Mapper mapper, BoardImageDao boardImageDao, PagedResourcesAssembler<BoardImage> pagedResourcesAssembler) {
-        super(mapper, BoardImage.class,BoardImageDto.class, pagedResourcesAssembler);
+    public BoardImageServiceImp(UserDao userDao,Mapper mapper, BoardImageDao boardImageDao, PagedResourcesAssembler<BoardImage> pagedResourcesAssembler) {
+        super(userDao,mapper, BoardImage.class,BoardImageDto.class, pagedResourcesAssembler);
         this.boardImageDao = boardImageDao;
     }
 

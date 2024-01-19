@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import com.progettotirocinio.restapi.services.interfaces.DiscussionService;
@@ -32,6 +33,12 @@ public class DiscussionController
     public ResponseEntity<DiscussionDto> getDiscussion(@PathVariable("discussionID") UUID discussionID) {
         DiscussionDto discussion = this.discussionService.getDiscussion(discussionID);
         return ResponseEntity.ok(discussion);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<DiscussionDto> createDiscussion(@RequestBody @Valid CreateDiscussionDto createDiscussionDto) {
+        DiscussionDto discussionDto = this.discussionService.createDiscussion(createDiscussionDto);
+        return ResponseEntity.status(201).body(discussionDto);
     }
 
     @GetMapping("/private/publisher/{publisherID}")

@@ -32,6 +32,12 @@ public class RoleOwnerController
         return ResponseEntity.ok(roleOwner);
     }
 
+    @PostMapping("/private/{roleID}")
+    public ResponseEntity<RoleOwnerDto> createRoleOwner(@PathVariable("roleID") UUID roleID) {
+        RoleOwnerDto roleOwnerDto = this.roleOwnerService.createRoleOwner(roleID);
+        return ResponseEntity.status(201).body(roleOwnerDto);
+    }
+
     @GetMapping("/private/owner/{ownerID}")
     public ResponseEntity<PagedModel<RoleOwnerDto>> getRoleOwnersByOwner(@PathVariable("ownerID") UUID ownerID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<RoleOwnerDto> roleOwners = this.roleOwnerService.getOwnersByUser(ownerID,paginationRequest.toPageRequest());

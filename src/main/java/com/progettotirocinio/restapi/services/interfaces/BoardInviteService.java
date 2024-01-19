@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardInviteDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardInviteDto;
 import com.progettotirocinio.restapi.data.entities.BoardInvite;
 import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
@@ -16,5 +17,6 @@ public interface BoardInviteService
     PagedModel<BoardInviteDto> getBoardInvitesByBoard(UUID boardID, Pageable pageable);
     PagedModel<BoardInviteDto> getBoardInvitesByStatus(BoardInviteStatus status,Pageable pageable);
     BoardInviteDto getBoardInvite(UUID inviteID);
+    BoardInviteDto createBoardInvite(CreateBoardInviteDto createBoardInviteDto);
     void deleteBoardInvite(UUID inviteID);
 }

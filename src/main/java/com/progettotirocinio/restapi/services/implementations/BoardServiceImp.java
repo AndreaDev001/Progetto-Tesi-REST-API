@@ -2,10 +2,13 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import org.modelmapper.ModelMapper;
@@ -16,6 +19,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -26,8 +30,8 @@ import java.util.UUID;
 public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implements BoardService  {
 
     private final BoardDao boardDao;
-    public BoardServiceImp(BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
-        super(mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
+    public BoardServiceImp(UserDao userDao,BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+        super(userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
         this.boardDao = boardDao;
     }
 
@@ -84,6 +88,20 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     @Override
     public BoardDto getBoard(UUID id) {
         Board board = this.boardDao.findById(id).orElseThrow();
+        return this.modelMapper.map(board,BoardDto.class);
+    }
+
+    @Override
+    public BoardDto createBoard(CreateBoardDto createBoardDto) {
+        User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Board board = new Board();
+        board.setTitle(createBoardDto.getTitle());
+        board.setDescription(createBoardDto.getDescription());
+        board.setVisibility(createBoardDto.getVisibility());
+        board.setMaxMembers(createBoardDto.getMaxMembers());
+        board.setExpirationDate(createBoardDto.getExpirationDate());
+        board.setPublisher(publisher);
+        board = this.boardDao.save(board);
         return this.modelMapper.map(board,BoardDto.class);
     }
 

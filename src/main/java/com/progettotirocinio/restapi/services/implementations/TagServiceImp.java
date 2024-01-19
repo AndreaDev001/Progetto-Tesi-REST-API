@@ -2,15 +2,22 @@ package com.progettotirocinio.restapi.services.implementations;
 
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TagDao;
+import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTagDto;
+import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.dto.output.TagDto;
+import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.Tag;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.TagService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,9 +25,12 @@ import java.util.UUID;
 @Service
 public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements TagService  {
     private final TagDao tagDao;
-    public TagServiceImp(Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
-        super(mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
+    private final BoardDao boardDao;
+
+    public TagServiceImp(UserDao userDao,BoardDao boardDao,Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
+        super(userDao,mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
         this.tagDao = tagDao;
+        this.boardDao = boardDao;
     }
 
     @Override
@@ -50,6 +60,18 @@ public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements Tag
     @Override
     public TagDto getTag(UUID tagID) {
         Tag tag = this.tagDao.findById(tagID).orElseThrow();
+        return this.modelMapper.map(tag,TagDto.class);
+    }
+
+    @Override
+    public TagDto createTag(CreateTagDto createTagDto) {
+        User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Board board = this.boardDao.findById(createTagDto.getBoardID()).orElseThrow();
+        Tag tag = new Tag();
+        tag.setName(createTagDto.getName());
+        tag.setBoard(board);
+        tag.setPublisher(publisher);
+        tag = this.tagDao.save(tag);
         return this.modelMapper.map(tag,TagDto.class);
     }
 

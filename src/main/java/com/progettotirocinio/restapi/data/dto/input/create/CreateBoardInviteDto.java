@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.input.create;
 
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,9 @@ public class CreateBoardInviteDto
     private UUID userID;
     @NotNull
     private UUID boardID;
+    @NotNull
+    @NotBlank
+    private String text;
     @NotNull
     private LocalDate expirationDate;
 }

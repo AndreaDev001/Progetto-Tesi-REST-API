@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
 import jakarta.validation.Valid;
@@ -31,6 +32,12 @@ public class TaskGroupController
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskGroups);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<TaskGroupDto> createTaskGroup(@RequestBody @Valid CreateTaskGroupDto createTaskGroupDto) {
+        TaskGroupDto taskGroupDto = this.taskGroupService.createTaskGroup(createTaskGroupDto);
+        return ResponseEntity.status(201).body(taskGroupDto);
     }
 
     @GetMapping("/private/board/{boardID}")

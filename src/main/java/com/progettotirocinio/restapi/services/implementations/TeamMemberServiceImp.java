@@ -1,15 +1,20 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.TeamDao;
 import com.progettotirocinio.restapi.data.dao.TeamMemberDao;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.output.TeamMemberDto;
+import com.progettotirocinio.restapi.data.entities.Team;
 import com.progettotirocinio.restapi.data.entities.TeamMember;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.TeamMemberService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,8 +23,11 @@ import java.util.UUID;
 public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemberDto> implements TeamMemberService {
 
     private final TeamMemberDao teamMemberDao;
-    public TeamMemberServiceImp(Mapper mapper, TeamMemberDao teamMemberDao, PagedResourcesAssembler<TeamMember> pagedResourcesAssembler) {
-        super(mapper, TeamMember.class,TeamMemberDto.class, pagedResourcesAssembler);
+    private final TeamDao teamDao;
+
+    public TeamMemberServiceImp(Mapper mapper,TeamDao teamDao, UserDao userDao, TeamMemberDao teamMemberDao, PagedResourcesAssembler<TeamMember> pagedResourcesAssembler) {
+        super(userDao,mapper, TeamMember.class,TeamMemberDto.class, pagedResourcesAssembler);
+        this.teamDao = teamDao;
         this.teamMemberDao = teamMemberDao;
     }
 
@@ -44,6 +52,17 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
     @Override
     public TeamMemberDto getTeamMember(UUID memberID) {
         TeamMember teamMember = this.teamMemberDao.findById(memberID).orElseThrow();
+        return this.modelMapper.map(teamMember,TeamMemberDto.class);
+    }
+
+    @Override
+    public TeamMemberDto createTeamMember(UUID teamID) {
+        Team requiredTeam = this.teamDao.findById(teamID).orElseThrow();
+        User requiredUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        TeamMember teamMember = new TeamMember();
+        teamMember.setMember(requiredUser);
+        teamMember.setTeam(requiredTeam);
+        teamMember = this.teamMemberDao.save(teamMember);
         return this.modelMapper.map(teamMember,TeamMemberDto.class);
     }
 

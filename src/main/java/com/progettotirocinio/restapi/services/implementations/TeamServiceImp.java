@@ -1,15 +1,21 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
+import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamDto;
+import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.Team;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.TeamService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,9 +25,11 @@ import java.util.UUID;
 public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements TeamService {
 
     private final TeamDao teamDao;
+    private final BoardDao boardDao;
 
-    public TeamServiceImp(Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
-        super(mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
+    public TeamServiceImp(UserDao userDao,BoardDao boardDao,Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
+        super(userDao,mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
+        this.boardDao = boardDao;
         this.teamDao = teamDao;
     }
 
@@ -53,6 +61,19 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
     public TeamDto getTeam(UUID id) {
         Team team = this.teamDao.findById(id).orElseThrow();
         return this.modelMapper.map(team,TeamDto.class);
+    }
+
+    @Override
+    public TeamDto createTeam(CreateTeamDto createTeamDto) {
+        User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Board board = this.boardDao.findById(createTeamDto.getBoardID()).orElseThrow();
+        Team team = new Team();
+        team.setName(createTeamDto.getName());
+        team.setBoard(board);
+        team.setPublisher(publisher);
+        team = this.teamDao.save(team);
+        return this.modelMapper.map(team,TeamDto.class);
+
     }
 
     @Override

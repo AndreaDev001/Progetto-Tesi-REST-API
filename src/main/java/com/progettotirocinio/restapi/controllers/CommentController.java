@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.services.interfaces.CommentService;
@@ -36,6 +37,12 @@ public class CommentController
     public ResponseEntity<PagedModel<CommentDto>> getCommentsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<CommentDto> comments = this.commentService.getCommentsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(comments);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<CommentDto> createComment(@RequestBody @Valid CreateCommentDto createCommentDto) {
+        CommentDto commentDto = this.commentService.createComment(createCommentDto);
+        return ResponseEntity.status(201).body(commentDto);
     }
 
     @GetMapping("/private/discussion/{discussionID}")

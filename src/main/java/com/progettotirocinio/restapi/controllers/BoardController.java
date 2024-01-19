@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
@@ -59,6 +60,12 @@ public class BoardController
     public ResponseEntity<CollectionModel<BoardVisibility>> getVisibilities() {
         CollectionModel<BoardVisibility> visibilities = this.boardService.getVisibilities();
         return ResponseEntity.ok(visibilities);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<BoardDto> createBoard(@RequestBody @Valid CreateBoardDto createBoardDto) {
+        BoardDto boardDto = this.boardService.createBoard(createBoardDto);
+        return ResponseEntity.status(201).body(boardDto);
     }
 
     @GetMapping("/public/orderTypes")

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreatePermissionDto;
 import com.progettotirocinio.restapi.data.dto.output.PermissionDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.data.entities.Role;
@@ -40,6 +41,12 @@ public class PermissionController
     public ResponseEntity<PagedModel<PermissionDto>> getPermissionsByRole(@PathVariable("roleID") UUID roleID, @ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PermissionDto> permissions = this.permissionService.getPermissionsByRole(roleID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(permissions);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<PermissionDto> createPermission(@RequestBody @Valid CreatePermissionDto createPermissionDto) {
+        PermissionDto permissionDto = this.permissionService.createPermission(createPermissionDto);
+        return ResponseEntity.status(201).body(permissionDto);
     }
 
     @GetMapping("/private/name/{name}")

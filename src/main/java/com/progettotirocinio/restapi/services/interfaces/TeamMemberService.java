@@ -12,5 +12,6 @@ public interface TeamMemberService {
     PagedModel<TeamMemberDto> getTeamMembersByMember(UUID memberID,Pageable pageable);
     PagedModel<TeamMemberDto> getTeamMembersByTeam(UUID teamID,Pageable pageable);
     TeamMemberDto getTeamMember(UUID memberID);
+    TeamMemberDto createTeamMember(UUID teamID);
     void deleteTeamMember(UUID memberID);
 }

@@ -2,10 +2,13 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
 import org.modelmapper.ModelMapper;
@@ -15,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -25,8 +29,8 @@ import java.util.UUID;
 public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements TaskService {
     private final TaskDao taskDao;
 
-    public TaskServiceImp(Mapper mapper, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
-        super(mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
+    public TaskServiceImp(Mapper mapper,UserDao userDao, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
+        super(userDao,mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
         this.taskDao = taskDao;
     }
 
@@ -101,6 +105,19 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     @Override
     public TaskDto getTask(UUID id) {
         Task task = this.taskDao.findById(id).orElseThrow();
+        return this.modelMapper.map(task,TaskDto.class);
+    }
+
+    @Override
+    public TaskDto createTask(CreateTaskDto createTaskDto) {
+        User publisher  = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Task task = new Task();
+        task.setTitle(createTaskDto.getTitle());
+        task.setName(createTaskDto.getName());
+        task.setDescription(createTaskDto.getDescription());
+        task.setPriority(createTaskDto.getPriority());
+        task.setExpirationDate(createTaskDto.getExpirationDate());
+        task.setPublisher(publisher);
         return this.modelMapper.map(task,TaskDto.class);
     }
 

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTagDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.dto.output.TagDto;
 import com.progettotirocinio.restapi.services.interfaces.TagService;
@@ -33,6 +34,12 @@ public class TagController
     public ResponseEntity<TagDto> getTag(@PathVariable("tagID") UUID tagID) {
         TagDto tag = this.tagService.getTag(tagID);
         return ResponseEntity.ok(tag);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<TagDto> createTag(@RequestBody @Valid CreateTagDto createTagDto) {
+        TagDto tagDto = this.tagService.createTag(createTagDto);
+        return ResponseEntity.status(201).body(tagDto);
     }
 
     @GetMapping("/private/publisher/{publisherID}")

@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -14,5 +15,6 @@ public interface PollService {
     PagedModel<PollDto> getPollsByMinimumVotes(Integer votes,Pageable pageable);
     PagedModel<PollDto> getPollsByMaximumVotes(Integer votes,Pageable pageable);
     PollDto getPoll(UUID pollID);
+    PollDto createPoll(CreatePollDto createPollDto);
     void deletePoll(UUID pollID);
 }

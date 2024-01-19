@@ -18,12 +18,13 @@ import java.util.Set;
 public class Mapper
 {
     private final ModelMapper modelMapper;
+    private final Map<Class<?>,Field[]> annotatedFields = new HashMap<>();
 
     @SneakyThrows
     public<T> T map(Object source,Class<T> requiredClass) {
         T result = this.modelMapper.map(source,requiredClass);
         if(source instanceof AmountEntity amountEntity) {
-            Field[] fields = result.getClass().getDeclaredFields();
+            Field[] fields = getFields(result);
             for(Field current : fields)
             {
                 if(current.isAnnotationPresent(AmountReference.class))
@@ -40,5 +41,13 @@ public class Mapper
             }
         }
         return result;
+    }
+    private Field[] getFields(Object value) {
+        Field[] fields = value.getClass().getDeclaredFields();
+        if(this.annotatedFields.containsKey(value.getClass()))
+            fields = this.annotatedFields.get(value.getClass());
+        else
+            this.annotatedFields.put(value.getClass(),fields);
+        return fields;
     }
 }

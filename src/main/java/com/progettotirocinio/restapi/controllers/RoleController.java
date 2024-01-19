@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateRoleDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.services.interfaces.RoleService;
 import jakarta.validation.Valid;
@@ -9,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -33,6 +31,12 @@ public class RoleController
     public ResponseEntity<RoleDto> getRole(@PathVariable("roleID") UUID roleID) {
         RoleDto role = this.roleService.getRole(roleID);
         return ResponseEntity.ok(role);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<RoleDto> createRole(@RequestBody @Valid CreateRoleDto createRoleDto) {
+        RoleDto roleDto = this.roleService.createRole(createRoleDto);
+        return ResponseEntity.status(201).body(roleDto);
     }
 
     @GetMapping("/private/board/{boardID}")

@@ -13,5 +13,6 @@ public interface RoleOwnerService {
     PagedModel<RoleOwnerDto> getOwnersByUser(UUID userID,Pageable pageable);
     PagedModel<RoleOwnerDto> getOwnersByRole(UUID roleID,Pageable pageable);
     RoleOwnerDto getById(UUID id);
+    RoleOwnerDto createRoleOwner(UUID roleID);
     void deleteOwner(UUID id);
 }

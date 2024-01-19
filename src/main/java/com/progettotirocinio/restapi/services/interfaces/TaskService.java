@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
@@ -23,5 +24,6 @@ public interface TaskService {
     CollectionModel<Priority> getPriorities();
     CollectionModel<String> getOrderTypes();
     TaskDto getTask(UUID id);
+    TaskDto createTask(CreateTaskDto createTaskDto);
     void deleteTask(UUID id);
 }

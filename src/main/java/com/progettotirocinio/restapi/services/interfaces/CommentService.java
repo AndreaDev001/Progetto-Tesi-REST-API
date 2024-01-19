@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -11,5 +12,6 @@ public interface CommentService {
     PagedModel<CommentDto> getCommentsByPublisher(UUID publisherID,Pageable pageable);
     PagedModel<CommentDto> getCommentsByDiscussion(UUID discussionID,Pageable pageable);
     CommentDto getComment(UUID id);
+    CommentDto createComment(CreateCommentDto createCommentDto);
     void deleteComment(UUID id);
 }

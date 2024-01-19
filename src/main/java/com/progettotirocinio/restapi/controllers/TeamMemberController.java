@@ -32,6 +32,12 @@ public class TeamMemberController
         return ResponseEntity.ok(teamMember);
     }
 
+    @PostMapping("/private/{teamID}")
+    public ResponseEntity<TeamMemberDto> createTeamMember(@PathVariable("teamID") UUID teamID) {
+        TeamMemberDto teamMemberDto = this.teamMemberService.createTeamMember(teamID);
+        return ResponseEntity.status(201).body(teamMemberDto);
+    }
+
     @GetMapping("/private/member/{memberID}")
     public ResponseEntity<PagedModel<TeamMemberDto>> getTeamMembersByMember(@PathVariable("memberID") UUID memberID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TeamMemberDto> teamMembers = this.teamMemberService.getTeamMembersByMember(memberID,paginationRequest.toPageRequest());

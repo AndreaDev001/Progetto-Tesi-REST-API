@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateRoleDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
@@ -12,5 +13,6 @@ public interface RoleService {
     PagedModel<RoleDto> getRolesByName(String name,Pageable pageable);
     PagedModel<RoleDto> getRolesByBoard(UUID boardID,Pageable pageable);
     RoleDto getRole(UUID roleID);
+    RoleDto createRole(CreateRoleDto createRoleDto);
     void deleteRole(UUID roleID);
 }

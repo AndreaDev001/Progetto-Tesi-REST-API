@@ -25,10 +25,8 @@ import java.util.UUID;
 @Service
 public class UserServiceImp extends GenericServiceImp<User, UserDto> implements UserService {
 
-    private final UserDao userDao;
-    public UserServiceImp(Mapper mapper, UserDao userDao, PagedResourcesAssembler<User> pagedResourcesAssembler) {
-        super(mapper,User.class,UserDto.class, pagedResourcesAssembler);
-        this.userDao = userDao;
+    public UserServiceImp(UserDao userDao,Mapper mapper,PagedResourcesAssembler<User> pagedResourcesAssembler) {
+        super(userDao,mapper,User.class,UserDto.class, pagedResourcesAssembler);
     }
 
     @Override

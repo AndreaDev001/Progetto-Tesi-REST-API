@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
@@ -41,6 +42,12 @@ public class TaskController
     public ResponseEntity<PagedModel<TaskDto>> getTasksByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
+    }
+
+    @PostMapping("/private")
+    public ResponseEntity<TaskDto> createTask(@RequestBody @Valid CreateTaskDto createTaskDto) {
+        TaskDto taskDto = this.taskService.createTask(createTaskDto);
+        return ResponseEntity.status(201).body(taskDto);
     }
 
     @GetMapping("/private/spec")
