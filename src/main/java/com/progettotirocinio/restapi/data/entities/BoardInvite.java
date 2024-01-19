@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
-@Table(name = "BOARD_INVITES")
+@Table(name = "BOARD_INVITES",uniqueConstraints = {@UniqueConstraint(columnNames = {"RECEIVER_ID","BOARD_ID"})})
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
@@ -37,6 +37,10 @@ public class BoardInvite extends GenericEntity
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
+    @JoinColumn(name = "RECEIVER_ID",nullable = false,updatable = false)
+    private User receiver;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)

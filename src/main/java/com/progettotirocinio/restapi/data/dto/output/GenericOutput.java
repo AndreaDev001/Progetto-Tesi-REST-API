@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
