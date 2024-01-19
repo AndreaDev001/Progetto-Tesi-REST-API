@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,15 +18,12 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "BOARD_INVITES")
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardInvite
+public class BoardInvite extends GenericEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "TEXT",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String text;
@@ -43,12 +41,4 @@ public class BoardInvite
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    private LocalDate lastModifiedDate;
 }

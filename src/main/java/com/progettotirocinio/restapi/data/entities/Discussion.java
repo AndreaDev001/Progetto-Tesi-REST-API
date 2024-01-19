@@ -24,12 +24,8 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "DISCUSSIONS")
-public class Discussion implements OwnableEntity
+public class Discussion extends GenericEntity implements OwnableEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "TITLE",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String title;
@@ -47,14 +43,6 @@ public class Discussion implements OwnableEntity
 
     @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
     private LocalDate expirationDate;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    private LocalDate lastModifiedDate;
 
     @Override
     public UUID getOwnerID() {

@@ -9,10 +9,7 @@ import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,16 +21,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASKS")
 @SpecificationPrefix
-public class Task implements OwnableEntity
+public class Task extends GenericEntity implements OwnableEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
@@ -68,14 +62,6 @@ public class Task implements OwnableEntity
     @Column(name = "EXPIRATION_DATE")
     @Convert(converter = TrimConverter.class)
     private LocalDate expirationDate;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false)
-    private LocalDate lastModifiedDate;
 
     @Override
     public UUID getOwnerID() {

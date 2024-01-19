@@ -2,10 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,15 +14,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "ROLE_OWNERS")
-public class RoleOwner
+public class RoleOwner extends GenericEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "ROLE_ID",nullable = false,updatable = false)
     private Role role;
@@ -33,12 +27,4 @@ public class RoleOwner
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "OWNER_ID",nullable = false,updatable = false)
     private User owner;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    private LocalDate lastModifiedDate;
 }

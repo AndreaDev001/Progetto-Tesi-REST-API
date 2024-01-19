@@ -8,10 +8,7 @@ import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -25,6 +22,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
@@ -32,10 +30,6 @@ import java.util.UUID;
 @SpecificationPrefix
 public class Board extends AmountEntity implements OwnableEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
@@ -75,14 +69,6 @@ public class Board extends AmountEntity implements OwnableEntity
 
     @Column(name = "EXPIRATION_DATE",nullable = false)
     private LocalDate expirationDate;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    private LocalDate lastModifiedDate;
 
     @Override
     public UUID getOwnerID() {

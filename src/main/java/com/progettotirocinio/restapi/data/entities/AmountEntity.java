@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 @Getter
-public abstract class AmountEntity {
+public abstract class AmountEntity extends GenericEntity {
     protected Map<String,Field> amounts = new HashMap<>();
 
     public AmountEntity() {

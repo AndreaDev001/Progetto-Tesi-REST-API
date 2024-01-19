@@ -2,7 +2,9 @@ package com.progettotirocinio.restapi.config.mapper;
 
 
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
 import com.progettotirocinio.restapi.data.entities.AmountEntity;
+import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,10 @@ public class Mapper
     @SneakyThrows
     public<T> T map(Object source,Class<T> requiredClass) {
         T result = this.modelMapper.map(source,requiredClass);
+        if(source instanceof GenericEntity genericEntity && result instanceof GenericOutput<?> genericOutput) {
+            genericOutput.setId(genericEntity.getId());
+            genericOutput.setCreatedDate(genericEntity.getCreatedDate());
+        }
         if(source instanceof AmountEntity amountEntity) {
             Field[] fields = getFields(result);
             for(Field current : fields)

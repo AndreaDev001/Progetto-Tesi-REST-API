@@ -30,10 +30,6 @@ import java.util.UUID;
 @SpecificationPrefix
 public class User extends AmountEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "EMAIL",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
@@ -89,12 +85,4 @@ public class User extends AmountEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
     private Set<Role> createdRoles = new HashSet<>();
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false)
-    private LocalDate lastModifiedDate;
 }

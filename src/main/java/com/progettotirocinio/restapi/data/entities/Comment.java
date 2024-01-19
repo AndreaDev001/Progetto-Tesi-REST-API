@@ -4,10 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,15 +17,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "COMMENTS")
-public class Comment implements OwnableEntity
+public class Comment extends GenericEntity implements OwnableEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String title;
@@ -44,14 +38,6 @@ public class Comment implements OwnableEntity
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false)
-    private LocalDate lastModifiedDate;
 
     @Override
     public UUID getOwnerID() {
