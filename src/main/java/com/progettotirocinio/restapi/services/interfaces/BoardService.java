@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.services.interfaces;
 
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
@@ -24,5 +25,6 @@ public interface BoardService {
     CollectionModel<String> getOrderTypes();
     BoardDto getBoard(UUID id);
     BoardDto createBoard(CreateBoardDto createBoardDto);
+    BoardDto updateBoard(UpdateBoardDto updateBoardDto);
     void deleteBoard(UUID id);
 }

@@ -6,11 +6,13 @@ import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -109,6 +111,7 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     }
 
     @Override
+    @Transactional
     public TaskDto createTask(CreateTaskDto createTaskDto) {
         User publisher  = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Task task = new Task();
@@ -122,6 +125,25 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     }
 
     @Override
+    @Transactional
+    public TaskDto updateTask(UpdateTaskDto updateTaskDto) {
+        Task task = this.taskDao.findById(updateTaskDto.getTaskID()).orElseThrow();
+        if(task.getName() != null)
+             task.setName(updateTaskDto.getName());
+        if(task.getDescription() != null)
+            task.setDescription(updateTaskDto.getDescription());
+        if(task.getTitle() != null)
+            task.setTitle(updateTaskDto.getTitle());
+        if(task.getExpirationDate() != null)
+            task.setExpirationDate(updateTaskDto.getExpirationDate());
+        if(task.getPriority() != null)
+            task.setPriority(updateTaskDto.getPriority());
+        task = this.taskDao.save(task);
+        return this.modelMapper.map(task,TaskDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteTask(UUID id) {
         this.taskDao.findById(id).orElseThrow();
         this.taskDao.deleteById(id);

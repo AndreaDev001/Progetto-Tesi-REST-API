@@ -4,10 +4,12 @@ import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.data.entities.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -70,6 +72,7 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     }
 
     @Override
+    @Transactional
     public PollDto createPoll(CreatePollDto createPollDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Poll poll = new Poll();
@@ -84,6 +87,23 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     }
 
     @Override
+    @Transactional
+    public PollDto updatePoll(UpdatePollDto updatePollDto) {
+        Poll poll = this.pollDao.findById(updatePollDto.getPollID()).orElseThrow();
+        if(poll.getTitle() != null)
+            poll.setTitle(updatePollDto.getTitle());
+        if(poll.getDescription() != null)
+            poll.setDescription(updatePollDto.getDescription());
+        if(poll.getMaximumVotes() != null)
+            poll.setMaximumVotes(updatePollDto.getMaximumVotes());
+        if(poll.getMinimumVotes() != null)
+            poll.setMinimumVotes(updatePollDto.getMinimumVotes());
+        poll = this.pollDao.save(poll);
+        return this.modelMapper.map(poll,PollDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deletePoll(UUID pollID) {
         this.pollDao.findById(pollID).orElseThrow();
         this.pollDao.deleteById(pollID);

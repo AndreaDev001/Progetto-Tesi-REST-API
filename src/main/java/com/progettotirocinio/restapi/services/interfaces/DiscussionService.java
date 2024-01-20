@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +16,6 @@ public interface DiscussionService {
     PagedModel<DiscussionDto> getDiscussionsByTitle(String title,Pageable pageable);
     DiscussionDto getDiscussion(UUID discussionID);
     DiscussionDto createDiscussion(CreateDiscussionDto createDiscussionDto);
+    DiscussionDto updateDiscussion(UpdateDiscussionDto updateDiscussionDto);
     void deleteDiscussion(UUID discussionID);
 }

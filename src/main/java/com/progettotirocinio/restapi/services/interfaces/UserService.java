@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
@@ -21,5 +22,6 @@ public interface UserService {
     CollectionModel<Gender> getGenders();
     UserDto getUser(String username);
     UserDto getUser(UUID id);
+    UserDto updateUser(UpdateUserDto updateUserDto);
     void deleteUser(UUID id);
 }

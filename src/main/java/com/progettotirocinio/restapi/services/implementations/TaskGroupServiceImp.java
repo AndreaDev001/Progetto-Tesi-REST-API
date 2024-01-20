@@ -6,11 +6,13 @@ import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +67,7 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     }
 
     @Override
+    @Transactional
     public TaskGroupDto createTaskGroup(CreateTaskGroupDto createTaskGroupDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = this.boardDao.findById(createTaskGroupDto.getBoardID()).orElseThrow();
@@ -78,6 +81,19 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     }
 
     @Override
+    @Transactional
+    public TaskGroupDto updateTaskGroup(UpdateTaskGroupDto updateTaskGroupDto) {
+        TaskGroup taskGroup = this.taskGroupDao.findById(updateTaskGroupDto.getTaskGroupID()).orElseThrow();
+        if(updateTaskGroupDto.getName() != null)
+            taskGroup.setName(updateTaskGroupDto.getName());
+        if(updateTaskGroupDto.getExpirationDate() != null)
+            taskGroup.setExpirationDate(updateTaskGroupDto.getExpirationDate());
+        taskGroup = this.taskGroupDao.save(taskGroup);
+        return this.modelMapper.map(taskGroup,TaskGroupDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteTaskGroup(UUID id) {
         this.taskGroupDao.findById(id).orElseThrow();
         this.taskGroupDao.deleteById(id);

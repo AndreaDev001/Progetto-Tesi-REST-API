@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dao.specifications.UserSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
@@ -34,6 +35,12 @@ public class UserController
     public ResponseEntity<UserDto> getUser(@PathVariable("userID") UUID userID) {
         UserDto user = this.userService.getUser(userID);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UpdateUserDto userDto) {
+        UserDto result = this.userService.updateUser(userDto);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/private/username/{username}")

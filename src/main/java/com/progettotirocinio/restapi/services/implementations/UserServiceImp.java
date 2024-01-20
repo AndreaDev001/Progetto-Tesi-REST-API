@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.UserSpecifications;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -87,6 +89,16 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     @Override
     public UserDto getUser(UUID id) {
         User user = this.userDao.findById(id).orElseThrow();
+        return this.modelMapper.map(user,UserDto.class);
+    }
+
+    @Override
+    public UserDto updateUser(UpdateUserDto updateUserDto) {
+        User user = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        user.setName(updateUserDto.getName());
+        user.setSurname(updateUserDto.getSurname());
+        user.setEmail(updateUserDto.getEmail());
+        user =  this.userDao.save(user);
         return this.modelMapper.map(user,UserDto.class);
     }
 

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTagDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTagDto;
 import com.progettotirocinio.restapi.data.dto.output.TagDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +16,6 @@ public interface TagService {
     PagedModel<TagDto> getTagsByName(String name,Pageable pageable);
     TagDto getTag(UUID tagID);
     TagDto createTag(CreateTagDto createTagDto);
+    TagDto updateTag(UpdateTagDto updateTagDto);
     void deleteTag(UUID tagID);
 }

@@ -51,6 +51,7 @@ public class User extends AmountEntity
     private String surname;
 
     @Column(name = "GENDER",nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)

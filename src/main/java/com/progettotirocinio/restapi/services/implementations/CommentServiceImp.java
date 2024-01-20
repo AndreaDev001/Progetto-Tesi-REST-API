@@ -5,11 +5,13 @@ import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.CommentService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +58,7 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
     }
 
     @Override
+    @Transactional
     public CommentDto createComment(CreateCommentDto createCommentDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Discussion discussion = this.discussionDao.findById(createCommentDto.getDiscussionID()).orElseThrow();
@@ -69,6 +72,19 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
     }
 
     @Override
+    @Transactional
+    public CommentDto updateComment(UpdateCommentDto updateCommentDto) {
+        Comment comment = this.commentDao.findById(updateCommentDto.getCommentID()).orElseThrow();
+        if(comment.getText() != null)
+            comment.setText(updateCommentDto.getText());
+        if(comment.getTitle() != null)
+            comment.setTitle(updateCommentDto.getTitle());
+        comment = this.commentDao.save(comment);
+        return this.modelMapper.map(comment,CommentDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteComment(UUID id) {
         this.commentDao.findById(id).orElseThrow();
         this.commentDao.deleteById(id);

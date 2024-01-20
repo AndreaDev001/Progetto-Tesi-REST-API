@@ -4,10 +4,12 @@ import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.DiscussionService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +61,7 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     }
 
     @Override
+    @Transactional
     public DiscussionDto createDiscussion(CreateDiscussionDto createDiscussionDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Discussion discussion = new Discussion();
@@ -71,6 +74,22 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     }
 
     @Override
+    @Transactional
+    public DiscussionDto updateDiscussion(UpdateDiscussionDto updateDiscussionDto) {
+        User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Discussion discussion = this.discussionDao.findById(updateDiscussionDto.getDiscussionID()).orElseThrow();
+        if(discussion.getTitle() != null)
+            discussion.setTitle(updateDiscussionDto.getTitle());
+        if(discussion.getTopic() != null)
+            discussion.setTopic(updateDiscussionDto.getTopic());
+        if(discussion.getExpirationDate() != null)
+            discussion.setExpirationDate(updateDiscussionDto.getExpirationDate());
+        discussion = this.discussionDao.save(discussion);
+        return this.modelMapper.map(discussion,DiscussionDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteDiscussion(UUID discussionID) {
         this.discussionDao.findById(discussionID).orElseThrow();
         this.discussionDao.deleteById(discussionID);

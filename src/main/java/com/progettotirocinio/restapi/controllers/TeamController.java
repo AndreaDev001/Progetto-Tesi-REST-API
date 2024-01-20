@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTeamDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamDto;
 import com.progettotirocinio.restapi.services.interfaces.TeamService;
@@ -51,6 +52,12 @@ public class TeamController
     public ResponseEntity<TeamDto> createTeam(@RequestBody @Valid CreateTeamDto createTeamDto) {
         TeamDto teamDto = this.teamService.createTeam(createTeamDto);
         return ResponseEntity.status(201).body(teamDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<TeamDto> updateTeam(@RequestBody @Valid UpdateTeamDto updateTeamDto) {
+        TeamDto teamDto = this.teamService.updateTeam(updateTeamDto);
+        return ResponseEntity.ok(teamDto);
     }
 
     @GetMapping("/private/{teamID}")

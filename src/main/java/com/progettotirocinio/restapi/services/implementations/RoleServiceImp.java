@@ -6,11 +6,13 @@ import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.RoleDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateRoleDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateRoleDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.Role;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.RoleService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +66,7 @@ public class RoleServiceImp extends GenericServiceImp<Role, RoleDto> implements 
     }
 
     @Override
+    @Transactional
     public RoleDto createRole(CreateRoleDto createRoleDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = this.boardDao.findById(createRoleDto.getBoardID()).orElseThrow();
@@ -76,6 +79,17 @@ public class RoleServiceImp extends GenericServiceImp<Role, RoleDto> implements 
     }
 
     @Override
+    @Transactional
+    public RoleDto updateRole(UpdateRoleDto updateRoleDto) {
+        Role role = this.roleDao.findById(updateRoleDto.getRoleID()).orElseThrow();
+        if(updateRoleDto.getName() != null)
+            role.setName(updateRoleDto.getName());
+        role = this.roleDao.save(role);
+        return this.modelMapper.map(role,RoleDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteRole(UUID roleID) {
         this.roleDao.findById(roleID).orElseThrow();
         this.roleDao.deleteById(roleID);

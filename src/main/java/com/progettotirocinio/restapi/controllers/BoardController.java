@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.controllers;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
@@ -74,6 +75,11 @@ public class BoardController
         return ResponseEntity.ok(orderTypes);
     }
 
+    @PutMapping("/private")
+    public ResponseEntity<BoardDto> updateBoard(@RequestBody @Valid UpdateBoardDto updateBoardDto) {
+        BoardDto boardDto = this.boardService.updateBoard(updateBoardDto);
+        return ResponseEntity.ok(boardDto);
+    }
 
     @GetMapping("/private/title/{title}")
     public ResponseEntity<PagedModel<BoardDto>> getBoardsByTitle(@PathVariable("title") String title,@ParameterObject @Valid PaginationRequest paginationRequest) {

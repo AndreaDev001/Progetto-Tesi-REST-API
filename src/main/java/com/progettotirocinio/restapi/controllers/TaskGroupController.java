@@ -3,6 +3,8 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
 import jakarta.validation.Valid;
@@ -38,6 +40,12 @@ public class TaskGroupController
     public ResponseEntity<TaskGroupDto> createTaskGroup(@RequestBody @Valid CreateTaskGroupDto createTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.createTaskGroup(createTaskGroupDto);
         return ResponseEntity.status(201).body(taskGroupDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<TaskGroupDto> updateTaskGroup(@RequestBody @Valid UpdateTaskGroupDto updateTaskGroupDto) {
+        TaskGroupDto taskGroupDto = this.taskGroupService.updateTaskGroup(updateTaskGroupDto);
+        return ResponseEntity.ok(taskGroupDto);
     }
 
     @GetMapping("/private/board/{boardID}")

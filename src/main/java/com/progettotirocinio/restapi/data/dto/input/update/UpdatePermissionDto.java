@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.input.update;
 
 
+import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateTagDto
+public class UpdatePermissionDto
 {
     @NotNull
-    private UUID tagID;
+    private UUID permissionID;
     private String name;
+    private PermissionType type;
 }

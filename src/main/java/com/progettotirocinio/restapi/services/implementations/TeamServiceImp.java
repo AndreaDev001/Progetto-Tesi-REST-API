@@ -5,11 +5,13 @@ import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTeamDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.Team;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.TeamService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +66,7 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
     }
 
     @Override
+    @Transactional
     public TeamDto createTeam(CreateTeamDto createTeamDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = this.boardDao.findById(createTeamDto.getBoardID()).orElseThrow();
@@ -77,6 +80,17 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
     }
 
     @Override
+    @Transactional
+    public TeamDto updateTeam(UpdateTeamDto updateTeamDto) {
+        Team team = this.teamDao.findById(updateTeamDto.getTeamID()).orElseThrow();
+        if(updateTeamDto.getName() != null)
+            team.setName(updateTeamDto.getName());
+        team = this.teamDao.save(team);
+        return this.modelMapper.map(team,TeamDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteTeam(UUID id) {
         this.teamDao.findById(id).orElseThrow();
         this.teamDao.deleteById(id);

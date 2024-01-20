@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateRoleDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateRoleDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.services.interfaces.RoleService;
 import jakarta.validation.Valid;
@@ -37,6 +38,12 @@ public class RoleController
     public ResponseEntity<RoleDto> createRole(@RequestBody @Valid CreateRoleDto createRoleDto) {
         RoleDto roleDto = this.roleService.createRole(createRoleDto);
         return ResponseEntity.status(201).body(roleDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<RoleDto> updateRole(@RequestBody @Valid UpdateRoleDto updateRoleDto) {
+        RoleDto roleDto = this.roleService.updateRole(updateRoleDto);
+        return ResponseEntity.ok(roleDto);
     }
 
     @GetMapping("/private/board/{boardID}")

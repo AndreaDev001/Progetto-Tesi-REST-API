@@ -1,16 +1,19 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,6 +95,7 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     }
 
     @Override
+    @Transactional
     public BoardDto createBoard(CreateBoardDto createBoardDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = new Board();
@@ -106,6 +110,23 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     }
 
     @Override
+    @Transactional
+    public BoardDto updateBoard(UpdateBoardDto updateBoardDto) {
+        Board board = this.boardDao.findById(updateBoardDto.getBoardID()).orElseThrow();
+        if(board.getTitle() != null)
+            board.setTitle(updateBoardDto.getTitle());
+        if(board.getDescription() != null)
+            board.setDescription(updateBoardDto.getDescription());
+        if(board.getVisibility() != null)
+            board.setVisibility(updateBoardDto.getVisibility());
+        if(board.getMaxMembers() != null)
+            board.setMaxMembers(updateBoardDto.getMaxMembers());
+        board = this.boardDao.save(board);
+        return this.modelMapper.map(board,BoardDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteBoard(UUID id) {
         this.boardDao.findById(id).orElseThrow();
         this.boardDao.deleteById(id);

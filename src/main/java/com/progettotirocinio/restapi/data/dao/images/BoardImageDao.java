@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BoardImageDao extends JpaRepository<BoardImage, BoardImageDto> {
+public interface BoardImageDao extends JpaRepository<BoardImage, UUID> {
     @Query("select b from BoardImage b where b.board.id = :requiredID")
-    Optional<BoardImage> getBoard(@Param("requiredID") UUID boardID);
+    Optional<BoardImage> getBoardImageByBoard(@Param("requiredID") UUID boardID);
 }

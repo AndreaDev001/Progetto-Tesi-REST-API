@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import com.progettotirocinio.restapi.services.interfaces.DiscussionService;
@@ -39,6 +40,12 @@ public class DiscussionController
     public ResponseEntity<DiscussionDto> createDiscussion(@RequestBody @Valid CreateDiscussionDto createDiscussionDto) {
         DiscussionDto discussionDto = this.discussionService.createDiscussion(createDiscussionDto);
         return ResponseEntity.status(201).body(discussionDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<DiscussionDto> updateDiscussion(@RequestBody @Valid UpdateDiscussionDto updateDiscussionDto) {
+        DiscussionDto discussionDto = this.discussionService.updateDiscussion(updateDiscussionDto);
+        return ResponseEntity.ok(discussionDto);
     }
 
     @GetMapping("/private/publisher/{publisherID}")

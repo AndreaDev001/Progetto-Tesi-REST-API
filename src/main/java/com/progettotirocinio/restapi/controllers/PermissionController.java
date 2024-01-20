@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePermissionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdatePermissionDto;
 import com.progettotirocinio.restapi.data.dto.output.PermissionDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleDto;
 import com.progettotirocinio.restapi.data.entities.Role;
@@ -47,6 +48,12 @@ public class PermissionController
     public ResponseEntity<PermissionDto> createPermission(@RequestBody @Valid CreatePermissionDto createPermissionDto) {
         PermissionDto permissionDto = this.permissionService.createPermission(createPermissionDto);
         return ResponseEntity.status(201).body(permissionDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<PermissionDto> updatePermission(@RequestBody @Valid UpdatePermissionDto updatePermissionDto) {
+        PermissionDto permissionDto = this.permissionService.updatePermission(updatePermissionDto);
+        return ResponseEntity.ok(permissionDto);
     }
 
     @GetMapping("/private/name/{name}")

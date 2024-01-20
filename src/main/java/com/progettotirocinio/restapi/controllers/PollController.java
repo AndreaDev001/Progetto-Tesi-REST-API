@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
 import jakarta.validation.Valid;
@@ -50,6 +51,12 @@ public class PollController
     public ResponseEntity<PollDto> createPoll(@RequestBody @Valid CreatePollDto createPollDto) {
         PollDto pollDto = this.pollService.createPoll(createPollDto);
         return ResponseEntity.status(201).body(pollDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<PollDto> updatePoll(@RequestBody @Valid UpdatePollDto updatePollDto) {
+        PollDto pollDto = this.pollService.updatePoll(updatePollDto);
+        return ResponseEntity.ok(pollDto);
     }
 
     @GetMapping("/private/description/{description}")

@@ -4,11 +4,13 @@ package com.progettotirocinio.restapi.controllers;
 import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.services.interfaces.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,12 @@ public class CommentController
     public ResponseEntity<CommentDto> createComment(@RequestBody @Valid CreateCommentDto createCommentDto) {
         CommentDto commentDto = this.commentService.createComment(createCommentDto);
         return ResponseEntity.status(201).body(commentDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<CommentDto> updateComment(@RequestBody @Valid UpdateCommentDto updateCommentDto) {
+        CommentDto commentDto = this.commentService.updateComment(updateCommentDto);
+        return ResponseEntity.ok(commentDto);
     }
 
     @GetMapping("/private/discussion/{discussionID}")

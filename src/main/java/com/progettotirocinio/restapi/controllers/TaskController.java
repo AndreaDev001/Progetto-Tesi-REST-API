@@ -4,12 +4,14 @@ package com.progettotirocinio.restapi.controllers;
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
@@ -48,6 +50,12 @@ public class TaskController
     public ResponseEntity<TaskDto> createTask(@RequestBody @Valid CreateTaskDto createTaskDto) {
         TaskDto taskDto = this.taskService.createTask(createTaskDto);
         return ResponseEntity.status(201).body(taskDto);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<TaskDto> updateTask(@RequestBody @Valid UpdateTaskDto updateTaskDto) {
+        TaskDto taskDto = this.taskService.updateTask(updateTaskDto);
+        return ResponseEntity.ok(taskDto);
     }
 
     @GetMapping("/private/spec")
