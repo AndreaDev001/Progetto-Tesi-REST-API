@@ -13,6 +13,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.repository.query.Param;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,48 +26,56 @@ public class TaskGroupController
     private final TaskGroupService taskGroupService;
 
     @GetMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroups(@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> pagedModel = this.taskGroupService.getTasks(paginationRequest.toPageRequest());
         return ResponseEntity.ok(pagedModel);
     }
 
     @GetMapping("/private/publisher/{publisherID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#publisherID)")
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskGroups);
     }
 
     @PostMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<TaskGroupDto> createTaskGroup(@RequestBody @Valid CreateTaskGroupDto createTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.createTaskGroup(createTaskGroupDto);
         return ResponseEntity.status(201).body(taskGroupDto);
     }
 
     @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasAccess(@taskGroupDao,#updateTaskGroupDto.groupID)")
     public ResponseEntity<TaskGroupDto> updateTaskGroup(@RequestBody @Valid UpdateTaskGroupDto updateTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.updateTaskGroup(updateTaskGroupDto);
         return ResponseEntity.ok(taskGroupDto);
     }
 
     @GetMapping("/private/board/{boardID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByBoard(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskGroups);
     }
 
     @GetMapping("/private/name/{name}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByName(@PathVariable("name") String name, @ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskGroups);
     }
 
     @GetMapping("/private/{taskGroupID}")
+    @PreAuthorize("@permissionHandler.hasRole(@taskGroupDao,#taskGroupID)")
     public ResponseEntity<TaskGroupDto> getTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         TaskGroupDto taskGroup = this.taskGroupService.getTaskGroup(taskGroupID);
         return ResponseEntity.ok(taskGroup);
     }
 
     @DeleteMapping("/private/{taskGroupID}")
+    @PreAuthorize("@permissionHandler.hasAccess(@taskGroupDao,#taskGroupID)")
     public ResponseEntity<TaskGroupDto> deleteTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         this.taskGroupService.deleteTaskGroup(taskGroupID);
         return ResponseEntity.noContent().build();
