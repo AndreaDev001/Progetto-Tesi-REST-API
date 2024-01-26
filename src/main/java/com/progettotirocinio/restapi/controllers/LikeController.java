@@ -74,7 +74,6 @@ public class LikeController
     }
 
     @GetMapping("/private/type/{type}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<LikeDto>> getLikesByType(@PathVariable("type")LikeType type,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<LikeDto> likes = this.likeService.getLikesByType(type,paginationRequest.toPageRequest());
         return ResponseEntity.ok(likes);
