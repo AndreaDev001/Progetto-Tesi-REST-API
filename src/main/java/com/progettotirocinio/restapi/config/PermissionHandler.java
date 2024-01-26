@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.BoardMember;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.MultiOwnableEntity;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,6 +55,15 @@ public class PermissionHandler
         UUID authenticatedID = this.getAuthenticatedID();
         if(authenticatedID != null)
             return authenticatedID.equals(userID);
+        return false;
+    }
+
+    public boolean hasAccessMulti(JpaRepository<MultiOwnableEntity,UUID> repository,UUID resourceID) {
+        Optional<MultiOwnableEntity> multiOwnableEntityOptional = repository.findById(resourceID);
+        if(multiOwnableEntityOptional.isPresent()) {
+            List<UUID> values = multiOwnableEntityOptional.get().getOwnersID();
+            return values.contains(resourceID);
+        }
         return false;
     }
 

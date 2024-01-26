@@ -3,10 +3,10 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.DiscussionLike;
+import com.progettotirocinio.restapi.data.entities.likes.Like;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -32,10 +32,8 @@ public class Discussion extends AmountEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     private String topic;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "DISCUSSION_LIKES",joinColumns = @JoinColumn(name = "DISCUSSION_ID"),
-    inverseJoinColumns = @JoinColumn(name = "LIKE_ID"),uniqueConstraints = @UniqueConstraint(columnNames = {"DISCUSSION_ID","LIKE_ID"}))
-    private Set<Like> receivedLikes = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "discussion")
+    private Set<DiscussionLike> receivedLikes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "discussion")
     private Set<Comment> comments = new HashSet<>();

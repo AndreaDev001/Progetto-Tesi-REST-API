@@ -1,8 +1,8 @@
-package com.progettotirocinio.restapi.data.dto.output;
+package com.progettotirocinio.restapi.data.dto.output.likes;
 
 
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
 import com.progettotirocinio.restapi.data.dto.output.refs.*;
-import com.progettotirocinio.restapi.data.entities.enums.LikeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,10 +16,5 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "content")
 public class LikeDto extends GenericOutput<LikeDto>
 {
-    private UserRef user;
-    private PollRef poll;
-    private CommentRef comment;
-    private DiscussionRef discussion;
-    private TaskRef task;
-    private LikeType type;
+    protected UserRef user;
 }

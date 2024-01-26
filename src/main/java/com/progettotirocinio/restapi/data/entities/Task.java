@@ -3,15 +3,14 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
-import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPath;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.Like;
+import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -52,10 +51,8 @@ public class Task extends GenericEntity implements OwnableEntity
     @OneToOne(mappedBy = "task",fetch = FetchType.LAZY)
     private TaskImage taskImage;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "TASK_LIKES",joinColumns = @JoinColumn(name = "TASK_ID"),
-    inverseJoinColumns = @JoinColumn(name = "LIKE_ID"),uniqueConstraints = @UniqueConstraint(columnNames = {"LIKE_ID","TASK_ID"}))
-    private Set<Like> receivedLikes = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<TaskLike> receivedLikes = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
@@ -67,7 +64,6 @@ public class Task extends GenericEntity implements OwnableEntity
     private TaskGroup group;
 
     @Column(name = "EXPIRATION_DATE")
-    @Convert(converter = TrimConverter.class)
     private LocalDate expirationDate;
 
     @Override

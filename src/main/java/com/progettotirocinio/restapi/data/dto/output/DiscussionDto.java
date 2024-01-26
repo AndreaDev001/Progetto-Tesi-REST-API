@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.CommentController;
+import com.progettotirocinio.restapi.controllers.likes.DiscussionLikeController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
@@ -38,5 +39,6 @@ public class DiscussionDto extends GenericOutput<DiscussionDto>
     public void addLinks(Object... params) {
         PaginationRequest paginationRequest = new PaginationRequest(0,20);
         this.add(linkTo(methodOn(CommentController.class).getCommentsByDiscussion(this.id,paginationRequest)).withRel("comments").withName("comments"));
+        this.add(linkTo(methodOn(DiscussionLikeController.class).getDiscussionLikesByDiscussion(this.id,paginationRequest)).withRel("receivedLikes").withName("receivedLikes"));
     }
 }

@@ -1,6 +1,9 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.controllers.likes.PollLikeController;
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
+import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,6 +12,9 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +28,12 @@ public class PollDto extends GenericOutput<PollDto>
     private Integer minimumVotes;
     private Integer maximumVotes;
     private LocalDate expirationDate;
+    @AmountReference(name = "receivedLikes")
+    private Integer receivedLikes;
+
+    @Override
+    public void addLinks(Object... params) {
+        PaginationRequest paginationRequest = new PaginationRequest(0,20);
+        this.add(linkTo(methodOn(PollLikeController.class).getPollLikesByPoll(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("receivedLikes").withName("receivedLikes"));
+    }
 }

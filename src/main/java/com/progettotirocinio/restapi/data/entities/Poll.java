@@ -3,10 +3,10 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.Like;
+import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -37,10 +37,8 @@ public class Poll extends GenericEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "POLL_LIKES",joinColumns = @JoinColumn(name = "POLL_ID"),
-    inverseJoinColumns = @JoinColumn(name = "LIKE_ID"),uniqueConstraints = @UniqueConstraint(columnNames = {"POLL_ID","LIKE_ID"}))
-    private Set<Like> receivedLikes = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    private Set<PollLike> receivedLikes = new HashSet<>();
 
     @Column(name = "MINIMUM_VOTES",nullable = false)
     private Integer minimumVotes;

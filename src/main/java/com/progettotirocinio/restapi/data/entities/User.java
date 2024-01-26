@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.annotations.Specifi
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
+import com.progettotirocinio.restapi.data.entities.likes.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -87,5 +88,14 @@ public class User extends AmountEntity
     private Set<BoardMember> joinedBoards = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
-    private Set<Like> createdLikes = new HashSet<>();
+    private Set<TaskLike> likedTasks = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+    private Set<PollLike> likedPolls = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+    private Set<CommentLike> likedComments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+    private Set<DiscussionLike> likedDiscussions = new HashSet<>();
 }
