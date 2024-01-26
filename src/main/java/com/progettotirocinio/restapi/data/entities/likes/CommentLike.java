@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"USER_ID","COMMENT_ID"}))
 public class CommentLike extends Like
 {
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)

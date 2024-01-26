@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Table(name = "POLL_LIKES",uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID","POLL_ID"})})
 public class PollLike extends Like
 {
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
