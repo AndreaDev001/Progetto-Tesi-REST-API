@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
@@ -19,4 +20,6 @@ public class TaskGroupDto extends GenericOutput<TaskGroupDto>
     private String name;
     private UserRef publisher;
     private BoardRef board;
+    @AmountReference(name = "tasks")
+    private Integer amountOfTasks;
 }

@@ -32,7 +32,7 @@ public class Team extends GenericEntity implements OwnableEntity
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
-    private Board board;;
+    private Board board;
 
     @Override
     public UUID getOwnerID() {

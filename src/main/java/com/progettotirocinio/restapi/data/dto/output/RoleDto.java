@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.PermissionController;
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.RoleRef;
@@ -28,6 +29,7 @@ public class RoleDto extends GenericOutput<RoleDto>
     private String name;
     private UserRef publisher;
     private BoardRef board;
+    @AmountReference(name = "permissions")
     private Integer amountOfPermissions;
 
     @Override

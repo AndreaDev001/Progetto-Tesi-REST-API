@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.CommentController;
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class DiscussionDto extends GenericOutput<DiscussionDto>
     private String topic;
     private UserRef publisher;
     private LocalDate expirationDate;
+    @AmountReference(name = "comments")
     private Integer amountOfComments;
 
     @Override

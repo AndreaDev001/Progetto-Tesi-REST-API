@@ -4,10 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,11 +17,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Builder
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "DISCUSSIONS")
-public class Discussion extends GenericEntity implements OwnableEntity
+public class Discussion extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)

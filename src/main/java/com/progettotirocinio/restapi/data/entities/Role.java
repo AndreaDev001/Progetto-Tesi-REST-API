@@ -22,7 +22,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "ROLES")
-public class Role extends GenericEntity implements OwnableEntity
+public class Role extends AmountEntity implements OwnableEntity
 {
 
     @Column(name = "NAME",nullable = false,updatable = false)

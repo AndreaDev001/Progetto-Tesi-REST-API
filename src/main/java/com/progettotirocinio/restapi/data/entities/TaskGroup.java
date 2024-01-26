@@ -22,7 +22,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASK_GROUPS")
-public class TaskGroup extends GenericEntity implements OwnableEntity
+public class TaskGroup extends AmountEntity implements OwnableEntity
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
