@@ -38,6 +38,8 @@ public class BoardDto extends GenericOutput<BoardDto>
     private Integer amountOfRoles;
     @AmountReference(name = "tags")
     private Integer amountOfTags;
+    @AmountReference(name = "members")
+    private Integer members;
 
     @Override
     public void addLinks(Object... params) {

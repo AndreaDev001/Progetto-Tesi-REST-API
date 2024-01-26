@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.output.refs.TaskGroupRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.Task;
@@ -26,4 +27,6 @@ public class TaskDto extends GenericOutput<TaskDto>
     private Priority priority;
     private UserRef publisher;
     private TaskGroupRef taskGroup;
+    @AmountReference(name = "receivedLikes")
+    private Integer amountOfLikes;
 }

@@ -41,6 +41,10 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfCreatedRoles;
     @AmountReference(name = "rolesOwned")
     private Integer amountOfOwnedRoles;
+    @AmountReference(name = "joinedBoards")
+    private Integer amountOfJoinedBoards;
+    @AmountReference(name = "createdLikes")
+    private Integer amountOfCreatedLikes;
 
     @Override
     public void addLinks(Object... params) {

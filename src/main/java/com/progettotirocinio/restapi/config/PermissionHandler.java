@@ -2,8 +2,10 @@ package com.progettotirocinio.restapi.config;
 
 
 import com.progettotirocinio.restapi.data.dao.BoardDao;
+import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.BoardMember;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class PermissionHandler
 {
     private final UserDao userDao;
     private final BoardDao boardDao;
+    private final BoardMemberDao boardMemberDao;
 
     public boolean hasRole(String requiredRole) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,7 +45,9 @@ public class PermissionHandler
     }
 
     public boolean isMember(UUID boardID) {
-        Board board = this.boardDao.findById(boardID).orElseThrow();
+        UUID authenticatedID = this.getAuthenticatedID();
+        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(boardID,authenticatedID);
+        return boardMemberOptional.isPresent();
     }
 
     public boolean hasAccess(UUID userID) {

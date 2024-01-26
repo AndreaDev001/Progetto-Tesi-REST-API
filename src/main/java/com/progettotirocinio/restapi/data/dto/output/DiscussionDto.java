@@ -31,6 +31,8 @@ public class DiscussionDto extends GenericOutput<DiscussionDto>
     private LocalDate expirationDate;
     @AmountReference(name = "comments")
     private Integer amountOfComments;
+    @AmountReference(name = "receivedLikes")
+    private Integer amountOfLikes;
 
     @Override
     public void addLinks(Object... params) {

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.output.refs.DiscussionRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,6 @@ public class CommentDto extends GenericOutput<CommentDto>
     private String text;
     private UserRef publisher;
     private DiscussionRef discussion;
+    @AmountReference(name = "receivedLikes")
+    private Integer likes;
 }

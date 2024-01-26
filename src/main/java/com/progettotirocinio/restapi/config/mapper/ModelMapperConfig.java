@@ -53,6 +53,18 @@ public class ModelMapperConfig
             return new TeamRef(team);
         }
     };
+    private final Converter<Poll,PollRef> pollRefConverter = new AbstractConverter<Poll, PollRef>() {
+        @Override
+        protected PollRef convert(Poll poll) {
+            return new PollRef(poll);
+        }
+    };
+    private final Converter<Comment,CommentRef> commentRefConverter = new AbstractConverter<Comment, CommentRef>() {
+        @Override
+        protected CommentRef convert(Comment comment) {
+            return new CommentRef(comment);
+        }
+    };
     private final Converter<User,UserRef> userRefConverter = new AbstractConverter<User, UserRef>() {
         @Override
         protected UserRef convert(User user) {
@@ -71,6 +83,8 @@ public class ModelMapperConfig
         modelMapper.addConverter(taskRefConverter);
         modelMapper.addConverter(teamRefConverter);
         modelMapper.addConverter(userRefConverter);
+        modelMapper.addConverter(commentRefConverter);
+        modelMapper.addConverter(pollRefConverter);
         return modelMapper;
     }
 }

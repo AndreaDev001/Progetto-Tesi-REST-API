@@ -64,6 +64,9 @@ public class Board extends AmountEntity implements OwnableEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
     private Set<BoardInvite> invites = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
+    private Set<BoardMember> members = new HashSet<>();
+
     @Column(name = "MAX_MEMBERS",nullable = false)
     private Integer maxMembers;
 

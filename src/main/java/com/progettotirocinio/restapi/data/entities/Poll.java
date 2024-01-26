@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,7 +11,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.UUID;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +37,9 @@ public class Poll extends GenericEntity implements OwnableEntity
     @Column(name = "DESCRIPTION",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    private Set<PollLike> receivedLikes = new HashSet<>();
 
     @Column(name = "MINIMUM_VOTES",nullable = false)
     private Integer minimumVotes;

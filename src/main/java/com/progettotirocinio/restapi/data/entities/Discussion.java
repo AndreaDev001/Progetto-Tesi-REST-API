@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.DiscussionLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,6 +32,9 @@ public class Discussion extends AmountEntity implements OwnableEntity
     @Column(name = "TOPIC",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String topic;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "discussion")
+    private Set<DiscussionLike> receivedLikes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "discussion")
     private Set<Comment> comments = new HashSet<>();

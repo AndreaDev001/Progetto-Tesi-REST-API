@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.likes.CommentLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -11,6 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -21,7 +24,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "COMMENTS")
-public class Comment extends GenericEntity implements OwnableEntity
+public class Comment extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
@@ -30,6 +33,9 @@ public class Comment extends GenericEntity implements OwnableEntity
     @Column(name = "TEXT",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String text;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "comment")
+    private Set<CommentLike> receivedLikes = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = true)
     @JoinColumn(name = "DISCUSSION_ID",updatable = false)
