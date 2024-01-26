@@ -1,6 +1,6 @@
-package com.progettotirocinio.restapi.data.dto.output.likes;
+package com.progettotirocinio.restapi.data.dto.output;
 
-import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
+
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.enums.LikeType;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-
 public class LikeDto extends GenericOutput<LikeDto>
 {
-    protected UserRef user;
-    protected LikeType type;
+    private UserRef user;
+    private LikeType type;
 }

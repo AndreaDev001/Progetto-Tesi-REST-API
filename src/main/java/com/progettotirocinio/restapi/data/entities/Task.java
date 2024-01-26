@@ -8,7 +8,6 @@ import com.progettotirocinio.restapi.data.dao.specifications.annotations.Specifi
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
-import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -53,8 +52,10 @@ public class Task extends GenericEntity implements OwnableEntity
     @OneToOne(mappedBy = "task",fetch = FetchType.LAZY)
     private TaskImage taskImage;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "task")
-    private Set<TaskLike> receivedLikes = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "TASK_LIKES",joinColumns = @JoinColumn(name = "TASK_ID"),
+    inverseJoinColumns = @JoinColumn(name = "LIKE_ID"),uniqueConstraints = @UniqueConstraint(columnNames = {"LIKE_ID","TASK_ID"}))
+    private Set<Like> receivedLikes = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)

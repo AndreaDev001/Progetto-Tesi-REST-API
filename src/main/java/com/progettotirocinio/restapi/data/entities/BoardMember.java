@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.entities;
 
 
+import com.progettotirocinio.restapi.data.entities.enums.LikeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

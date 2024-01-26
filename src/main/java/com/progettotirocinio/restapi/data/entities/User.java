@@ -2,25 +2,19 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
-import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
-import com.progettotirocinio.restapi.data.entities.likes.Like;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)

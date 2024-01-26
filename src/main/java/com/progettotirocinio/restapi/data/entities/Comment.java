@@ -3,7 +3,6 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
-import com.progettotirocinio.restapi.data.entities.likes.CommentLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -34,8 +33,10 @@ public class Comment extends AmountEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     private String text;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "comment")
-    private Set<CommentLike> receivedLikes = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "COMMENT_LIKES",joinColumns = @JoinColumn(name = "COMMENT_ID"),
+    inverseJoinColumns = @JoinColumn(name = "LIKE_ID"),uniqueConstraints = @UniqueConstraint(columnNames = {"COMMENT_ID","LIKE_ID"}))
+    private Set<Like> receivedLikes = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = true)
     @JoinColumn(name = "DISCUSSION_ID",updatable = false)

@@ -1,8 +1,5 @@
-package com.progettotirocinio.restapi.data.entities.likes;
+package com.progettotirocinio.restapi.data.entities;
 
-
-import com.progettotirocinio.restapi.data.entities.GenericEntity;
-import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.LikeType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
