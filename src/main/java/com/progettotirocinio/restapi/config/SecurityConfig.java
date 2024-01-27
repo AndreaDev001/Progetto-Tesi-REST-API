@@ -1,8 +1,6 @@
 package com.progettotirocinio.restapi.config;
 
 
-import com.progettotirocinio.restapi.config.authentication.AuthenticationFilter;
-import com.progettotirocinio.restapi.config.authentication.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +13,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class SecurityConfig
 {
-    private final AuthenticationFilter authenticationFilter;
-    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(restAuthenticationEntryPoint));
         httpSecurity.authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/documentation/**").permitAll()
                         .requestMatchers("/tasks/public/**").permitAll()
@@ -50,7 +44,6 @@ public class SecurityConfig
                         .requestMatchers("/taskImages/public/**").permitAll()
                         .requestMatchers("/userImages/public/**").permitAll()
                         .anyRequest().permitAll());
-        httpSecurity.addFilterAfter(authenticationFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
