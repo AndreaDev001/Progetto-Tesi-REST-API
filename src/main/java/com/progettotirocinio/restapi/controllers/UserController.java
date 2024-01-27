@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
+import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,12 @@ public class UserController
     @GetMapping("/public/orderTypes")
     public ResponseEntity<CollectionModel<String>> getOrderTypes() {
         CollectionModel<String> values = this.userService.getOrderTypes();
+        return ResponseEntity.ok(values);
+    }
+
+    @GetMapping("/public/visibilities")
+    public ResponseEntity<CollectionModel<UserVisibility>> getVisibilities() {
+        CollectionModel<UserVisibility> values = this.userService.getVisibilities();
         return ResponseEntity.ok(values);
     }
 

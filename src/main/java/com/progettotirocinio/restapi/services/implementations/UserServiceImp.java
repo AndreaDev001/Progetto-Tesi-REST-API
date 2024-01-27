@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
+import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -78,6 +79,11 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     @Override
     public CollectionModel<Gender> getGenders() {
         return CollectionModel.of(Arrays.stream(Gender.values()).toList());
+    }
+
+    @Override
+    public CollectionModel<UserVisibility> getVisibilities() {
+        return CollectionModel.of(Arrays.stream(UserVisibility.values()).toList());
     }
 
     @Override

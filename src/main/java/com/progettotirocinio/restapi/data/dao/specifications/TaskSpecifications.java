@@ -48,6 +48,7 @@ public class TaskSpecifications
             this.description = task.getDescription();
             this.priority = task.getPriority();
             this.groupID = task.getGroup().getId();
+            this.excludedIDs.add(task.getId());
         }
     }
     public static Specification<Task> withFilter(TaskSpecifications.Filter filter) {

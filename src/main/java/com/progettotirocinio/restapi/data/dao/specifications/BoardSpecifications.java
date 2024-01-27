@@ -43,6 +43,7 @@ public class BoardSpecifications
             this.publisherName = board.getPublisher().getName();
             this.publisherSurname = board.getPublisher().getSurname();
             this.publisherGender = board.getPublisher().getGender();
+            this.excludedIDs.add(board.getId());
         }
     }
     public static Specification<Board> withFilter(BoardSpecifications.Filter filter) {

@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
+import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.hateoas.CollectionModel;
@@ -20,6 +21,7 @@ public interface UserService {
     PagedModel<UserDto> getSimilarUsers(UUID userID,Pageable pageable);
     CollectionModel<String> getOrderTypes();
     CollectionModel<Gender> getGenders();
+    CollectionModel<UserVisibility> getVisibilities();
     UserDto getUser(String username);
     UserDto getUser(UUID id);
     UserDto updateUser(UpdateUserDto updateUserDto);

@@ -5,13 +5,12 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
+import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import com.progettotirocinio.restapi.data.entities.likes.*;
+import com.progettotirocinio.restapi.data.entities.reports.Report;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
@@ -50,6 +49,10 @@ public class User extends AmountEntity
     @Column(name = "GENDER",nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Column(name = "VISIBILITY",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserVisibility visibility;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
     private UserImage user;
@@ -98,4 +101,10 @@ public class User extends AmountEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
     private Set<DiscussionLike> likedDiscussions = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "reporter")
+    private Set<Report> createdReports = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "reported")
+    private Set<Report> receivedReports = new HashSet<>();
 }
