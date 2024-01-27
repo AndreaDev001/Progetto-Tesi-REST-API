@@ -50,6 +50,13 @@ public class TaskLikeController
         return ResponseEntity.ok(taskLikeDto);
     }
 
+    @PostMapping("/private/{taskID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<TaskLikeDto> createLike(@PathVariable("taskID") UUID taskID) {
+        TaskLikeDto taskLikeDto = this.taskLikeService.createLike(taskID);
+        return ResponseEntity.ok(taskLikeDto);
+    }
+
     @GetMapping("/private/user/{userID}")
     @PreAuthorize("@permissionHandler.hasAccess(#userID)")
     public ResponseEntity<PagedModel<TaskLikeDto>> getTaskLikesByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {

@@ -42,6 +42,13 @@ public class DiscussionLikeController
         return ResponseEntity.ok(discussionLikes);
     }
 
+    @PostMapping("/private/{discussionID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<DiscussionLikeDto> createDiscussion(@PathVariable("discussionID") UUID discussionID) {
+        DiscussionLikeDto discussionLikeDto = this.discussionLikeService.createLike(discussionID);
+        return ResponseEntity.ok(discussionLikeDto);
+    }
+
     @GetMapping("/private/discussion/{discussionID}")
     @PreAuthorize("@permissionHandler.hasAccess(@discussionDao,#discussionID)")
     public ResponseEntity<PagedModel<DiscussionLikeDto>> getDiscussionLikesByDiscussion(@PathVariable("discussionID") UUID discussionID,@ParameterObject @Valid PaginationRequest paginationRequest) {

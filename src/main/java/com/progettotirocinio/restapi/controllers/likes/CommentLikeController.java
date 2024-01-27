@@ -43,6 +43,13 @@ public class CommentLikeController
         return ResponseEntity.ok(commentLikes);
     }
 
+    @PostMapping("/private/{commentID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CommentLikeDto> createLike(@PathVariable("commentID") UUID commentID) {
+        CommentLikeDto commentLikeDto = this.commentLikeService.createLike(commentID);
+        return ResponseEntity.ok(commentLikeDto);
+    }
+
     @GetMapping("/private/user/{userID}/comment/{commentID}")
     @PreAuthorize("@permissionHandler.hasAccess(#userID)")
     public ResponseEntity<CommentLikeDto> hasCommentLike(@PathVariable("userID") UUID userID,@PathVariable("commentID") UUID commentID) {

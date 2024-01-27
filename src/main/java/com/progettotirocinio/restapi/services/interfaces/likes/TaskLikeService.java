@@ -14,5 +14,6 @@ public interface TaskLikeService
     PagedModel<TaskLikeDto> getTaskLikesByTask(UUID taskID,Pageable pageable);
     TaskLikeDto getTaskLike(UUID taskLikeID);
     TaskLikeDto hasLike(UUID userID,UUID taskID);
+    TaskLikeDto createLike(UUID taskID);
     void deleteLike(UUID taskLikeID);
 }

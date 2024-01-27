@@ -13,5 +13,6 @@ public interface PollLikeService
     PagedModel<PollLikeDto> getPollLikesByPoll(UUID pollID,Pageable pageable);
     PollLikeDto getPollLike(UUID pollLikeID);
     PollLikeDto hasLike(UUID userID,UUID pollID);
+    PollLikeDto createLike(UUID pollID);
     void deletePollLike(UUID pollLikeID);
 }

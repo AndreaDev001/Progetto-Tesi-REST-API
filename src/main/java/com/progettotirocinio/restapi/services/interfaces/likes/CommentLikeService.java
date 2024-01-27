@@ -14,5 +14,6 @@ public interface CommentLikeService
     PagedModel<CommentLikeDto> getCommentsLikesByComment(UUID commentID,Pageable pageable);
     CommentLikeDto getCommentLike(UUID commentLikeID);
     CommentLikeDto hasLike(UUID userID,UUID likeID);
+    CommentLikeDto createLike(UUID commentID);
     void deleteCommentLike(UUID commentLikeID);
 }

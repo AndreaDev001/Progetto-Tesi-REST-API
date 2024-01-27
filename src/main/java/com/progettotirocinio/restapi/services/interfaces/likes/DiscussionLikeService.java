@@ -13,5 +13,6 @@ public interface DiscussionLikeService
     PagedModel<DiscussionLikeDto> getDiscussionLikesByDiscussion(UUID discussionID,Pageable pageable);
     DiscussionLikeDto getDiscussionLike(UUID discussionLikeID);
     DiscussionLikeDto hasLike(UUID userID,UUID discussionID);
+    DiscussionLikeDto createLike(UUID discussionID);
     void deleteLike(UUID discussionID);
 }
