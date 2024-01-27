@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.services.implementations.reports;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.reports.ReportDao;
+import com.progettotirocinio.restapi.data.dao.specifications.ReportSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.entities.User;
@@ -13,6 +14,7 @@ import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.reports.ReportService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
@@ -59,6 +61,20 @@ public class ReportServiceImp extends GenericServiceImp<Report, ReportDto> imple
     @Override
     public PagedModel<ReportDto> getReportsByReason(ReportReason reason, Pageable pageable) {
         Page<Report> reports = this.reportDao.getReportsByReason(reason,pageable);
+        return this.pagedResourcesAssembler.toModel(reports,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<ReportDto> getReportsBySpec(Specification<Report> specification, Pageable pageable) {
+        Page<Report> reports = this.reportDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(reports,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<ReportDto> getSimilarReports(UUID reportID, Pageable pageable) {
+        Report report = this.reportDao.findById(reportID).orElseThrow();
+        ReportSpecifications.Filter filter = new ReportSpecifications.Filter(report);
+        Page<Report> reports = this.reportDao.findAll(ReportSpecifications.withFilter(filter),pageable);
         return this.pagedResourcesAssembler.toModel(reports,modelAssembler);
     }
 

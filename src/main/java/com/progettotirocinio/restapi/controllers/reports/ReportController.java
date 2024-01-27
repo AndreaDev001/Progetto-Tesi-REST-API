@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.controllers.reports;
 
+import com.progettotirocinio.restapi.data.dao.specifications.ReportSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
@@ -64,6 +65,20 @@ public class ReportController
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<ReportDto>> getReportsByReason(@PathVariable("reason")ReportReason reason,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<ReportDto> reports = this.reportService.getReportsByReason(reason, paginationRequest.toPageRequest());
+        return ResponseEntity.ok(reports);
+    }
+
+    @GetMapping("/private/spec")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<ReportDto>> getReportsBySpec(@ParameterObject @Valid ReportSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<ReportDto> reports = this.reportService.getReportsBySpec(ReportSpecifications.withFilter(filter),paginationRequest.toPageRequest());
+        return ResponseEntity.ok(reports);
+    }
+
+    @GetMapping("/private/similar/{reportID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<ReportDto>> getSimilarReports(@PathVariable("reportID") UUID reportID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<ReportDto> reports = this.reportService.getSimilarReports(reportID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(reports);
     }
 
