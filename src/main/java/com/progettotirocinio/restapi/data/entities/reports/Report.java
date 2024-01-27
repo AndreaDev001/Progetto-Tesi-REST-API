@@ -24,7 +24,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "REPORTS")
+@Table(name = "REPORTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"REPORTER_ID","REPORTED_ID","TYPE"})})
 @SpecificationPrefix
 public class Report extends GenericEntity implements OwnableEntity
 {
@@ -39,12 +39,14 @@ public class Report extends GenericEntity implements OwnableEntity
     protected User reported;
 
     @Column(name = "TITLE",nullable = false)
+    @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
-    private String title;
+    protected String title;
 
     @Column(name = "DESCRIPTION",nullable = false)
+    @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
-    private String description;
+    protected String description;
 
     @Column(name = "REASON",nullable = false,updatable = false)
     @Enumerated(EnumType.STRING)

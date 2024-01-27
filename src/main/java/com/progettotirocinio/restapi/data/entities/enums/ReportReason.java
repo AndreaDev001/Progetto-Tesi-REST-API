@@ -5,5 +5,6 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "content")
 public enum ReportReason
 {
-
+    TOXICITY,
+    RACISM,
 }
