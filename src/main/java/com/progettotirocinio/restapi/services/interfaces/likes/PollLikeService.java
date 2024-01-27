@@ -15,4 +15,5 @@ public interface PollLikeService
     PollLikeDto hasLike(UUID userID,UUID pollID);
     PollLikeDto createLike(UUID pollID);
     void deletePollLike(UUID pollLikeID);
+    void deletePollLikeByPoll(UUID pollID);
 }

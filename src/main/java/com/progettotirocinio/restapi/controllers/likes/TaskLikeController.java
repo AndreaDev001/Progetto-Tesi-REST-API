@@ -70,4 +70,11 @@ public class TaskLikeController
         this.taskLikeService.deleteLike(taskLikeID);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/private/task/{taskID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<Void> deleteTaskLikeByTask(@PathVariable("taskID") UUID taskID) {
+        this.taskLikeService.deleteLikeByTask(taskID);
+        return ResponseEntity.noContent().build();
+    }
 }

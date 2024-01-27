@@ -15,4 +15,5 @@ public interface DiscussionLikeService
     DiscussionLikeDto hasLike(UUID userID,UUID discussionID);
     DiscussionLikeDto createLike(UUID discussionID);
     void deleteLike(UUID discussionID);
+    void deleteLikeByDiscussion(UUID discussionID);
 }

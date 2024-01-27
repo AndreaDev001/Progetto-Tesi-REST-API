@@ -83,4 +83,12 @@ public class PollLikeServiceImp extends GenericServiceImp<PollLike, PollLikeDto>
         this.pollLikeDao.findById(pollLikeID).orElseThrow();
         this.pollLikeDao.deleteById(pollLikeID);
     }
+
+    @Override
+    @Transactional
+    public void deletePollLikeByPoll(UUID pollID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        PollLike pollLike = this.pollLikeDao.hasLike(authenticatedUser.getId(),pollID).orElseThrow();
+        this.pollLikeDao.deleteById(pollLike.getId());
+    }
 }

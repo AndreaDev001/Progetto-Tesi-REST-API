@@ -83,4 +83,12 @@ public class CommentLikeServiceImp extends GenericServiceImp<CommentLike, Commen
         this.commentLikeDao.findById(commentLikeID).orElseThrow();
         this.commentLikeDao.deleteById(commentLikeID);
     }
+
+    @Override
+    @Transactional
+    public void deleteCommentLikeByComment(UUID commentID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        CommentLike commentLike = this.commentLikeDao.hasLike(authenticatedUser.getId(),commentID).orElseThrow();
+        this.commentLikeDao.deleteById(commentLike.getId());
+    }
 }

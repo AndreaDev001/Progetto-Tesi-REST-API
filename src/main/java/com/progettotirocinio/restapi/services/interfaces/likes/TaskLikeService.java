@@ -16,4 +16,5 @@ public interface TaskLikeService
     TaskLikeDto hasLike(UUID userID,UUID taskID);
     TaskLikeDto createLike(UUID taskID);
     void deleteLike(UUID taskLikeID);
+    void deleteLikeByTask(UUID taskID);
 }

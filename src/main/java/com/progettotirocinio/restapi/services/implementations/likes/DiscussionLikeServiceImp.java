@@ -83,4 +83,12 @@ public class DiscussionLikeServiceImp extends GenericServiceImp<DiscussionLike, 
         this.discussionLikeDao.findById(discussionID).orElseThrow();
         this.discussionLikeDao.deleteById(discussionID);
     }
+
+    @Override
+    @Transactional
+    public void deleteLikeByDiscussion(UUID discussionID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        DiscussionLike discussionLike = this.discussionLikeDao.hasLike(authenticatedUser.getId(),discussionID).orElseThrow();
+        this.discussionLikeDao.deleteById(discussionLike.getId());
+    }
 }

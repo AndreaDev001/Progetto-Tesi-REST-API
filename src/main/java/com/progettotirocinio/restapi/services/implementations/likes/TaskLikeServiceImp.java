@@ -83,4 +83,12 @@ public class TaskLikeServiceImp extends GenericServiceImp<TaskLike, TaskLikeDto>
         this.taskLikeDao.findById(taskLikeID);
         this.taskLikeDao.deleteById(taskLikeID);
     }
+
+    @Override
+    @Transactional
+    public void deleteLikeByTask(UUID taskID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        TaskLike taskLike = this.taskLikeDao.hasLike(authenticatedUser.getId(),taskID).orElseThrow();
+        this.taskLikeDao.deleteById(taskLike.getId());
+    }
 }

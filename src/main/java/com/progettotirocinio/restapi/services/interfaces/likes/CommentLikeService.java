@@ -16,4 +16,5 @@ public interface CommentLikeService
     CommentLikeDto hasLike(UUID userID,UUID likeID);
     CommentLikeDto createLike(UUID commentID);
     void deleteCommentLike(UUID commentLikeID);
+    void deleteCommentLikeByComment(UUID commentID);
 }

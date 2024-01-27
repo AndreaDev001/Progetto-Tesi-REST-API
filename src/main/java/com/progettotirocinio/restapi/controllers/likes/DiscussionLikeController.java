@@ -69,4 +69,11 @@ public class DiscussionLikeController
         this.discussionLikeService.deleteLike(discussionLikeID);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/private/discussion/{discussionID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<Void> deleteDiscussionLikeByDiscussion(@PathVariable("discussionID") UUID discussionID) {
+        this.discussionLikeService.deleteLikeByDiscussion(discussionID);
+        return ResponseEntity.noContent().build();
+    }
 }

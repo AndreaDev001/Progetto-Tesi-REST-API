@@ -70,4 +70,11 @@ public class CommentLikeController
         this.commentLikeService.deleteCommentLike(commentLikeID);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/private/comment/{commentID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<Void> deleteCommentLikeByComment(@PathVariable("commentID") UUID commentID) {
+        this.commentLikeService.deleteCommentLikeByComment(commentID);
+        return ResponseEntity.noContent().build();
+    }
 }
