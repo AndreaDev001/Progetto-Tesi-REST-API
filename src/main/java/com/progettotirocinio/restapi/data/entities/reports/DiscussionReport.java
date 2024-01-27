@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "DISCUSSION_REPORTS")
-public class DiscussionReport
+public class DiscussionReport extends Report
 {
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "DISCUSSION_ID",nullable = false,updatable = false)

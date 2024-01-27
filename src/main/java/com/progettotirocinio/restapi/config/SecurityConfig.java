@@ -41,11 +41,15 @@ public class SecurityConfig
                         .requestMatchers("/taskLikes/public/**").permitAll()
                         .requestMatchers("/pollLikes/public/**").permitAll()
                         .requestMatchers("/boardImages/public/**").permitAll()
+                        .requestMatchers("/reports/public/**").permitAll()
+                        .requestMatchers("/taskReports/public/**").permitAll()
+                        .requestMatchers("/pollReports/public/**").permitAll()
+                        .requestMatchers("/discussionReports/public/**").permitAll()
+                        .requestMatchers("/commentReports/public/**").permitAll()
                         .requestMatchers("/images/public/**").permitAll()
                         .requestMatchers("/taskImages/public/**").permitAll()
                         .requestMatchers("/userImages/public/**").permitAll()
                         .anyRequest().permitAll());
-        httpSecurity.oauth2ResourceServer(httpSecurityOAuth2ResourceServerConfigurer -> httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults()));
         httpSecurity.addFilterAfter(authenticationFilter, BasicAuthenticationFilter.class);
         return httpSecurity.build();
     }

@@ -17,8 +17,10 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "content")
 public class ReportDto extends GenericOutput<ReportDto>
 {
-    protected UserRef reporter;
-    protected UserRef reported;
+    protected String title;
+    protected String description;
     protected ReportReason reason;
     protected ReportType type;
+    protected UserRef reporter;
+    protected UserRef reported;
 }

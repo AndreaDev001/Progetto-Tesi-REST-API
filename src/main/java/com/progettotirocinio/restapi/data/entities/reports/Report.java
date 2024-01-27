@@ -8,11 +8,15 @@ import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.data.entities.enums.ReportType;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "REPORTS")
 @SpecificationPrefix
-public class Report extends GenericEntity
+public class Report extends GenericEntity implements OwnableEntity
 {
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "REPORTER_ID",nullable = false,updatable = false)
@@ -35,12 +39,10 @@ public class Report extends GenericEntity
     protected User reported;
 
     @Column(name = "TITLE",nullable = false)
-    @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String title;
 
     @Column(name = "DESCRIPTION",nullable = false)
-    @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String description;
 
@@ -51,4 +53,9 @@ public class Report extends GenericEntity
     @Column(name = "TYPE",nullable = false,updatable = false)
     @Enumerated(EnumType.STRING)
     protected ReportType type;
+
+    @Override
+    public UUID getOwnerID() {
+        return this.reporter.getId();
+    }
 }
