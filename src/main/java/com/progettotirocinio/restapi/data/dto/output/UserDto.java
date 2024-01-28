@@ -6,10 +6,12 @@ import com.progettotirocinio.restapi.controllers.likes.CommentLikeController;
 import com.progettotirocinio.restapi.controllers.likes.DiscussionLikeController;
 import com.progettotirocinio.restapi.controllers.likes.PollLikeController;
 import com.progettotirocinio.restapi.controllers.likes.TaskLikeController;
+import com.progettotirocinio.restapi.controllers.reports.ReportController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
+import com.progettotirocinio.restapi.data.entities.reports.Report;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -63,6 +65,10 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfCreatedReports;
     @AmountReference(name = "receivedReports")
     private Integer amountOfReceivedReports;
+    @AmountReference(name = "createdBans")
+    private Integer amountOfCreatedBans;
+    @AmountReference(name = "receivedBans")
+    private Integer receivedBans;
 
     @Override
     public void addLinks(Object... params) {
@@ -81,5 +87,7 @@ public class UserDto extends GenericOutput<UserDto>
         this.add(linkTo(methodOn(CommentLikeController.class).getCommentLikesByUser(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("likedComments").withName("likedComments"));
         this.add(linkTo(methodOn(DiscussionLikeController.class).getDiscussionLikesByUser(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("likedDiscussions").withName("likedDiscussions"));
         this.add(linkTo(methodOn(PollLikeController.class).getPollLikesByUser(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("likedPolls").withName("likedPolls"));
+        this.add(linkTo(methodOn(ReportController.class).getReportsByReporter(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdReports").withName("createdReports"));
+        this.add(linkTo(methodOn(ReportController.class).getReportsByReported(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("receivedReports").withName("receivedReports"));
     }
 }
