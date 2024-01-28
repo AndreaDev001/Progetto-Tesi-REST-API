@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces.bans;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BoardBanDto;
 import com.progettotirocinio.restapi.data.entities.bans.BoardBan;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,6 @@ public interface BoardBanService
     PagedModel<BoardBanDto> getBoardBansByBanned(UUID bannedID,Pageable pageable);
     PagedModel<BoardBanDto> getBoardBansByBoard(UUID boardID,Pageable pageable);
     BoardBanDto getBoardBan(UUID boardBanID);
+    BoardBanDto createBoardBan(CreateBanDto createBanDto,UUID boardID);
     void deleteBoardBan(UUID boardBanID);
 }

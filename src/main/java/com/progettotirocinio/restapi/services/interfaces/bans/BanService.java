@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces.bans;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
 import com.progettotirocinio.restapi.data.entities.bans.Ban;
 import com.progettotirocinio.restapi.data.entities.enums.BanType;
@@ -25,5 +26,6 @@ public interface BanService
     CollectionModel<BanType> getTypes();
     CollectionModel<String> getOrderTypes();
     BanDto getBan(UUID banID);
+    BanDto createBan(CreateBanDto createBanDto);
     void deleteBan(UUID banID);
 }

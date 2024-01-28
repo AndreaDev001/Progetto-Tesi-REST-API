@@ -13,5 +13,6 @@ public interface BoardMemberService
     PagedModel<BoardMemberDto> getBoardMembersByBoard(UUID boardID,Pageable pageable);
     BoardMemberDto getBoardMember(UUID boardMemberID);
     BoardMemberDto isMember(UUID userID,UUID boardID);
+    BoardMemberDto createMember(UUID boardID);
     void deleteMember(UUID boardMemberID);
 }

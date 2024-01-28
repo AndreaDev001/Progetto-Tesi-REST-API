@@ -1,22 +1,27 @@
 package com.progettotirocinio.restapi.services.implementations.bans;
 
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.bans.BanDao;
 import com.progettotirocinio.restapi.data.dao.specifications.BanSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.bans.Ban;
 import com.progettotirocinio.restapi.data.entities.enums.BanType;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.bans.BanService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -99,6 +104,27 @@ public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements Ban
     }
 
     @Override
+    @Transactional
+    public BanDto createBan(CreateBanDto createBanDto) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        User bannedUser = this.userDao.findById(createBanDto.getBannedID()).orElseThrow();
+        if(authenticatedUser.getId().equals(bannedUser.getId()))
+            throw new InvalidFormat("error.ban.invalidBanner");
+        Ban ban = new Ban();
+        ban.setTitle(createBanDto.getTitle());
+        ban.setDescription(createBanDto.getDescription());
+        ban.setReason(createBanDto.getReason());
+        ban.setBanner(authenticatedUser);
+        ban.setBanned(bannedUser);
+        ban.setType(BanType.BAN);
+        ban.setExpirationDate(createBanDto.getExpirationDate());
+        ban.setExpired(false);
+        ban = this.banDao.save(ban);
+        return this.modelMapper.map(ban,BanDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteBan(UUID banID) {
         this.banDao.findById(banID).orElseThrow();
         this.banDao.deleteById(banID);

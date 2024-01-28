@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces.reports;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.DiscussionReportDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +15,6 @@ public interface DiscussionReportService
     PagedModel<DiscussionReportDto> getDiscussionReportsByReported(UUID reportedID,Pageable pageable);
     PagedModel<DiscussionReportDto> getDiscussionReportsByDiscussion(UUID discussionID,Pageable pageable);
     DiscussionReportDto getDiscussionReport(UUID discussionReportID);
+    DiscussionReportDto createDiscussionReport(CreateReportDto createReportDto,UUID discussionID);
     void deleteDiscussionReport(UUID discussionReportID);
 }

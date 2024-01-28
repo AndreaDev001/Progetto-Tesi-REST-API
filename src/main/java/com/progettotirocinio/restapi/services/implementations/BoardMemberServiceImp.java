@@ -1,16 +1,21 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.bans.BoardBanDao;
 import com.progettotirocinio.restapi.data.dto.output.BoardMemberDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.BoardMember;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.interfaces.BoardMemberService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,10 +24,12 @@ import java.util.UUID;
 public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardMemberDto> implements BoardMemberService
 {
     private final BoardMemberDao boardMemberDao;
+    private final BoardDao boardDao;
 
-    public BoardMemberServiceImp(UserDao userDao,BoardMemberDao boardMemberDao, Mapper mapper,PagedResourcesAssembler<BoardMember> pagedResourcesAssembler) {
+    public BoardMemberServiceImp(BoardDao boardDao,UserDao userDao,BoardMemberDao boardMemberDao, Mapper mapper,PagedResourcesAssembler<BoardMember> pagedResourcesAssembler) {
         super(userDao, mapper, BoardMember.class,BoardMemberDto.class, pagedResourcesAssembler);
         this.boardMemberDao = boardMemberDao;
+        this.boardDao = boardDao;
     }
 
     @Override
@@ -56,6 +63,19 @@ public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardM
     }
 
     @Override
+    @Transactional
+    public BoardMemberDto createMember(UUID boardID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Board board = this.boardDao.findById(boardID).orElseThrow();
+        BoardMember boardMember = new BoardMember();
+        boardMember.setUser(authenticatedUser);
+        boardMember.setBoard(board);
+        boardMember = this.boardMemberDao.save(boardMember);
+        return this.modelMapper.map(boardMember,BoardMemberDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteMember(UUID boardMemberID) {
         this.boardMemberDao.findById(boardMemberID).orElseThrow();
         this.boardMemberDao.deleteById(boardMemberID);

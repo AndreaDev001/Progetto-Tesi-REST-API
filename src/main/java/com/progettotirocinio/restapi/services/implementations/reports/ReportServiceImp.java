@@ -1,10 +1,12 @@
 package com.progettotirocinio.restapi.services.implementations.reports;
 
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.reports.ReportDao;
 import com.progettotirocinio.restapi.data.dao.specifications.ReportSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
@@ -12,12 +14,14 @@ import com.progettotirocinio.restapi.data.entities.enums.ReportType;
 import com.progettotirocinio.restapi.data.entities.reports.Report;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.reports.ReportService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -101,6 +105,25 @@ public class ReportServiceImp extends GenericServiceImp<Report, ReportDto> imple
     }
 
     @Override
+    @Transactional
+    public ReportDto createReport(CreateReportDto createReportDto, UUID reportedID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        User reportedUser = this.userDao.findById(reportedID).orElseThrow();
+        if(authenticatedUser.getId().equals(reportedUser.getId()))
+            throw new InvalidFormat("error.report.invalidReporter");
+        Report report = new Report();
+        report.setTitle(createReportDto.getTitle());
+        report.setDescription(createReportDto.getDescription());
+        report.setReason(createReportDto.getReason());
+        report.setReporter(authenticatedUser);
+        report.setReported(reportedUser);
+        report.setType(ReportType.USER);
+        report = this.reportDao.save(report);
+        return this.modelMapper.map(report,ReportDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteReport(UUID reportID) {
         this.reportDao.findById(reportID).orElseThrow();
         this.reportDao.deleteById(reportID);
