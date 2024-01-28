@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.reports.TaskReportDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.TaskReportDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;

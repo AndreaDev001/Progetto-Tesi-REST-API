@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers.bans;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BoardBanDto;
 import com.progettotirocinio.restapi.data.entities.bans.BoardBan;
@@ -55,6 +56,13 @@ public class BoardBanController
     public ResponseEntity<PagedModel<BoardBanDto>> getBoardBansByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardBanDto> boardBans = this.boardBanService.getBoardBansByBoard(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(boardBans);
+    }
+
+    @PostMapping("/private/{boardID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<BoardBanDto> createBoardBan(@RequestBody @Valid CreateBanDto createBanDto,@PathVariable("boardID") UUID boardID) {
+        BoardBanDto boardBanDto = this.boardBanService.createBoardBan(createBanDto,boardID);
+        return ResponseEntity.status(201).body(boardBanDto);
     }
 
     @DeleteMapping("/private/{boardBanID}")

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers.reports;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.CommentReportDto;
 import com.progettotirocinio.restapi.data.entities.reports.CommentReport;
 import com.progettotirocinio.restapi.services.interfaces.reports.CommentReportService;
@@ -55,6 +56,13 @@ public class CommentReportController {
     public ResponseEntity<PagedModel<CommentReportDto>> getCommentReportsByComment(@PathVariable("commentID") UUID commentID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<CommentReportDto> commentReports = this.commentReportService.getCommentReportsByComment(commentID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(commentReports);
+    }
+
+    @PostMapping("/private/{commentID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CommentReportDto> createCommentReport(@RequestBody @Valid CreateReportDto createReportDto, @PathVariable("commentID") UUID commentID) {
+        CommentReportDto commentReportDto = this.commentReportService.createCommentReport(createReportDto,commentID);
+        return ResponseEntity.status(201).body(commentReportDto);
     }
 
     @DeleteMapping("/private/{commentReportID}")

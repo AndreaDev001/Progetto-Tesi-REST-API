@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.interfaces.reports;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.DiscussionReportDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces.reports;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.data.entities.enums.ReportType;
@@ -26,5 +27,6 @@ public interface ReportService
     CollectionModel<String> getOrderTypes();
     ReportDto getReport(UUID reportID);
     ReportDto createReport(CreateReportDto createReportDto,UUID reportedID);
+    ReportDto updateReport(UpdateReportDto updateReportDto);
     void deleteReport(UUID reportID);
 }

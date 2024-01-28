@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces.reports;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.TaskReportDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;

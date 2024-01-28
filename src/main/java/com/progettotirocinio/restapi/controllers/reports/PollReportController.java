@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers.reports;
 import com.progettotirocinio.restapi.data.dao.reports.PollReportDao;
 import com.progettotirocinio.restapi.data.dao.reports.ReportDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.PollReportDto;
 import com.progettotirocinio.restapi.services.interfaces.reports.PollReportService;
 import jakarta.validation.Valid;
@@ -57,6 +58,13 @@ public class PollReportController
     public ResponseEntity<PagedModel<PollReportDto>> getPollReportsByPoll(@PathVariable("pollID") UUID pollID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollReportDto> pollReports = this.pollReportService.getPollReportsByPoll(pollID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(pollReports);
+    }
+
+    @PostMapping("/private/{pollID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PollReportDto> createPoll(@RequestBody @Valid CreateReportDto createReportDto,@PathVariable("pollID") UUID pollID) {
+        PollReportDto pollReportDto = this.pollReportService.createPollReport(createReportDto,pollID);
+        return ResponseEntity.status(201).body(pollReportDto);
     }
 
     @DeleteMapping("/private/{pollID}")

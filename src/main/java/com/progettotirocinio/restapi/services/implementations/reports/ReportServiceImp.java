@@ -7,11 +7,14 @@ import com.progettotirocinio.restapi.data.dao.reports.ReportDao;
 import com.progettotirocinio.restapi.data.dao.specifications.ReportSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
+import com.progettotirocinio.restapi.data.dto.output.reports.TaskReportDto;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.data.entities.enums.ReportType;
 import com.progettotirocinio.restapi.data.entities.reports.Report;
+import com.progettotirocinio.restapi.data.entities.reports.TaskReport;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.reports.ReportService;
 import jakarta.transaction.Transactional;
@@ -120,6 +123,20 @@ public class ReportServiceImp extends GenericServiceImp<Report, ReportDto> imple
         report.setType(ReportType.USER);
         report = this.reportDao.save(report);
         return this.modelMapper.map(report,ReportDto.class);
+    }
+
+    @Override
+    @Transactional
+    public ReportDto updateReport(UpdateReportDto updateReportDto) {
+        Report report = this.reportDao.findById(updateReportDto.getReportID()).orElseThrow();
+        if(updateReportDto.getTitle() != null)
+            report.setTitle(updateReportDto.getTitle());
+        if(updateReportDto.getDescription() != null)
+            report.setDescription(updateReportDto.getDescription());
+        if(updateReportDto.getReason() != null)
+            report.setReason(updateReportDto.getReason());
+        report = this.reportDao.save(report);
+        return this.modelMapper.map(report, TaskReportDto.class);
     }
 
     @Override

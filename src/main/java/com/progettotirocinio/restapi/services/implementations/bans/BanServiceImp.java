@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dao.bans.BanDao;
 import com.progettotirocinio.restapi.data.dao.specifications.BanSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBanDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.bans.Ban;
@@ -119,6 +120,20 @@ public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements Ban
         ban.setType(BanType.BAN);
         ban.setExpirationDate(createBanDto.getExpirationDate());
         ban.setExpired(false);
+        ban = this.banDao.save(ban);
+        return this.modelMapper.map(ban,BanDto.class);
+    }
+
+    @Override
+    @Transactional
+    public BanDto updateBan(UpdateBanDto updateBanDto) {
+        Ban ban =  this.banDao.findById(updateBanDto.getBanID()).orElseThrow();
+        if(updateBanDto.getTitle() != null)
+            ban.setTitle(updateBanDto.getTitle());
+        if(updateBanDto.getDescription() != null)
+            ban.setDescription(updateBanDto.getDescription());
+        if(updateBanDto.getReason() != null)
+            ban.setReason(updateBanDto.getReason());
         ban = this.banDao.save(ban);
         return this.modelMapper.map(ban,BanDto.class);
     }

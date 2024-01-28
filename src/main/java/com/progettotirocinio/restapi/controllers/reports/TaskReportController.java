@@ -2,6 +2,8 @@ package com.progettotirocinio.restapi.controllers.reports;
 
 import com.progettotirocinio.restapi.data.dao.reports.ReportDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.TaskReportDto;
 import com.progettotirocinio.restapi.data.entities.reports.TaskReport;
@@ -56,6 +58,13 @@ public class TaskReportController
     public ResponseEntity<PagedModel<TaskReportDto>> getTaskReportsByTask(@PathVariable("taskID") UUID taskID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskReportDto> taskReports = this.taskReportService.getTaskReportsByTask(taskID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskReports);
+    }
+
+    @PostMapping("/private/{taskID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<TaskReportDto> createTaskReport(@RequestBody @Valid CreateReportDto createReportDto, @PathVariable("taskID") UUID taskID) {
+        TaskReportDto taskReportDto = this.taskReportService.createTaskReport(createReportDto,taskID);
+        return ResponseEntity.ok(taskReportDto);
     }
 
     @DeleteMapping("/private/{taskReportID}")

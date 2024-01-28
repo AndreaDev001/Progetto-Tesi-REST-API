@@ -3,6 +3,8 @@ package com.progettotirocinio.restapi.controllers.reports;
 import com.progettotirocinio.restapi.data.dao.specifications.ReportSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.data.entities.enums.ReportType;
@@ -80,6 +82,18 @@ public class ReportController
     public ResponseEntity<PagedModel<ReportDto>> getSimilarReports(@PathVariable("reportID") UUID reportID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<ReportDto> reports = this.reportService.getSimilarReports(reportID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(reports);
+    }
+
+    @PostMapping("/private/{reportedID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<ReportDto> createReport(@RequestBody @Valid CreateReportDto createReportDto,@PathVariable("reportedID") UUID reportedID) {
+        return ResponseEntity.status(201).body(this.reportService.createReport(createReportDto,reportedID));
+    }
+
+    @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasAccess(@reportDao,#updateReportDto.reporterID)")
+    public ResponseEntity<ReportDto> updateReport(@RequestBody @Valid UpdateReportDto updateReportDto) {
+        return ResponseEntity.ok(this.reportService.updateReport(updateReportDto));
     }
 
     @GetMapping("/public/reasons")
