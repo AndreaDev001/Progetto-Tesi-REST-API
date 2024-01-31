@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.RoleDao;
@@ -24,13 +26,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_ROLES")
 public class RoleServiceImp extends GenericServiceImp<Role, RoleDto> implements RoleService
 {
     private final RoleDao roleDao;
     private final BoardDao boardDao;
 
-    public RoleServiceImp(BoardDao boardDao, UserDao userDao, Mapper mapper, RoleDao roleDao, PagedResourcesAssembler<Role> pagedResourcesAssembler) {
-        super(userDao,mapper,Role.class,RoleDto.class, pagedResourcesAssembler);
+    public RoleServiceImp(CacheHandler cacheHandler,BoardDao boardDao, UserDao userDao, Mapper mapper, RoleDao roleDao, PagedResourcesAssembler<Role> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,Role.class,RoleDto.class, pagedResourcesAssembler);
         this.roleDao = roleDao;
         this.boardDao = boardDao;
     }

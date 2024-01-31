@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PermissionDao;
 import com.progettotirocinio.restapi.data.dao.RoleDao;
@@ -25,13 +27,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_PERMISSIONS")
 public class PermissionServiceImp extends GenericServiceImp<Permission, PermissionDto> implements PermissionService
 {
     private final PermissionDao permissionDao;
     private final RoleDao roleDao;
 
-    public PermissionServiceImp(UserDao userDao,RoleDao roleDao,Mapper mapper, PermissionDao permissionDao, PagedResourcesAssembler<Permission> pagedResourcesAssembler) {
-        super(userDao,mapper,Permission.class,PermissionDto.class, pagedResourcesAssembler);
+    public PermissionServiceImp(CacheHandler cacheHandler,UserDao userDao, RoleDao roleDao, Mapper mapper, PermissionDao permissionDao, PagedResourcesAssembler<Permission> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,Permission.class,PermissionDto.class, pagedResourcesAssembler);
         this.permissionDao = permissionDao;
         this.roleDao = roleDao;
     }

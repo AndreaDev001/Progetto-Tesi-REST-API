@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.BoardInviteDao;
@@ -23,13 +25,14 @@ import java.util.UUID;
 
 
 @Service
+@RequiresCaching(allCacheName = "BOARD_INVITES")
 public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardInviteDto> implements BoardInviteService {
 
     private final BoardInviteDao boardInviteDao;
     private final BoardDao boardDao;
 
-    public BoardInviteServiceImp(BoardDao boardDao,Mapper modelMapper, UserDao userDao, BoardInviteDao boardInviteDao, PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
-        super(userDao,modelMapper,BoardInvite.class,BoardInviteDto.class, pagedResourcesAssembler);
+    public BoardInviteServiceImp(CacheHandler cacheHandler,BoardDao boardDao, Mapper modelMapper, UserDao userDao, BoardInviteDao boardInviteDao, PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,modelMapper,BoardInvite.class,BoardInviteDto.class, pagedResourcesAssembler);
         this.boardInviteDao = boardInviteDao;
         this.boardDao = boardDao;
     }

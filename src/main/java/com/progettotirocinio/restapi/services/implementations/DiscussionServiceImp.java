@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -21,12 +23,13 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_DISCUSSIONS")
 public class DiscussionServiceImp extends GenericServiceImp<Discussion, DiscussionDto> implements DiscussionService {
 
     private final DiscussionDao discussionDao;
 
-    public DiscussionServiceImp(UserDao userDao,Mapper mapper, DiscussionDao discussionDao, PagedResourcesAssembler<Discussion> pagedResourcesAssembler) {
-        super(userDao,mapper, Discussion.class,DiscussionDto.class, pagedResourcesAssembler);
+    public DiscussionServiceImp(CacheHandler cacheHandler,UserDao userDao, Mapper mapper, DiscussionDao discussionDao, PagedResourcesAssembler<Discussion> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Discussion.class,DiscussionDto.class, pagedResourcesAssembler);
         this.discussionDao = discussionDao;
     }
 

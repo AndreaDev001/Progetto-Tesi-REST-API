@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
@@ -21,13 +23,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_BOARD_MEMBERS")
 public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardMemberDto> implements BoardMemberService
 {
     private final BoardMemberDao boardMemberDao;
     private final BoardDao boardDao;
 
-    public BoardMemberServiceImp(BoardDao boardDao,UserDao userDao,BoardMemberDao boardMemberDao, Mapper mapper,PagedResourcesAssembler<BoardMember> pagedResourcesAssembler) {
-        super(userDao, mapper, BoardMember.class,BoardMemberDto.class, pagedResourcesAssembler);
+    public BoardMemberServiceImp(CacheHandler cacheHandler,BoardDao boardDao, UserDao userDao, BoardMemberDao boardMemberDao, Mapper mapper, PagedResourcesAssembler<BoardMember> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper, BoardMember.class,BoardMemberDto.class, pagedResourcesAssembler);
         this.boardMemberDao = boardMemberDao;
         this.boardDao = boardDao;
     }

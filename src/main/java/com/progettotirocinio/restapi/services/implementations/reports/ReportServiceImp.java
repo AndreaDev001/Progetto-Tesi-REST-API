@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.reports;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -32,12 +34,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_REPORTS",allSearchName = "SEARCH_REPORTS",searchCachingRequired = true)
 public class ReportServiceImp extends GenericServiceImp<Report, ReportDto> implements ReportService {
 
     private final ReportDao reportDao;
 
-    public ReportServiceImp(ReportDao reportDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<Report> pagedResourcesAssembler) {
-        super(userDao, mapper,Report.class,ReportDto.class, pagedResourcesAssembler);
+    public ReportServiceImp(CacheHandler cacheHandler,ReportDao reportDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<Report> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,Report.class,ReportDto.class, pagedResourcesAssembler);
         this.reportDao = reportDao;
     }
 

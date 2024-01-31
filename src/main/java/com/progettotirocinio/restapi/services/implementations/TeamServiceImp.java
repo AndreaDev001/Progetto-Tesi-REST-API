@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
@@ -24,13 +26,14 @@ import java.util.UUID;
 
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TEAMS")
 public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements TeamService {
 
     private final TeamDao teamDao;
     private final BoardDao boardDao;
 
-    public TeamServiceImp(UserDao userDao,BoardDao boardDao,Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
-        super(userDao,mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
+    public TeamServiceImp(CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
         this.boardDao = boardDao;
         this.teamDao = teamDao;
     }

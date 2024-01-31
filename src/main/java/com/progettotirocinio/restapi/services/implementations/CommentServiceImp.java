@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
@@ -23,13 +25,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_COMMENTS")
 public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> implements CommentService  {
 
     private final CommentDao commentDao;
     private final DiscussionDao discussionDao;
 
-    public CommentServiceImp(UserDao userDao,DiscussionDao discussionDao,Mapper mapper, CommentDao commentDao, PagedResourcesAssembler<Comment> pagedResourcesAssembler) {
-        super(userDao,mapper, Comment.class,CommentDto.class, pagedResourcesAssembler);
+    public CommentServiceImp(CacheHandler cacheHandler,UserDao userDao, DiscussionDao discussionDao, Mapper mapper, CommentDao commentDao, PagedResourcesAssembler<Comment> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Comment.class,CommentDto.class, pagedResourcesAssembler);
         this.commentDao = commentDao;
         this.discussionDao = discussionDao;
     }

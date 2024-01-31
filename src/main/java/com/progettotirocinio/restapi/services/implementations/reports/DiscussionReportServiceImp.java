@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.reports;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
@@ -28,13 +30,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_DISCUSSION_REPORTS")
 public class DiscussionReportServiceImp extends GenericServiceImp<DiscussionReport, DiscussionReportDto> implements DiscussionReportService
 {
     private final DiscussionReportDao discussionReportDao;
     private final DiscussionDao discussionDao;
 
-    public DiscussionReportServiceImp(DiscussionDao discussionDao,DiscussionReportDao discussionReportDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<DiscussionReport> pagedResourcesAssembler) {
-        super(userDao, mapper,DiscussionReport.class,DiscussionReportDto.class, pagedResourcesAssembler);
+    public DiscussionReportServiceImp(CacheHandler cacheHandler,DiscussionDao discussionDao, DiscussionReportDao discussionReportDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<DiscussionReport> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,DiscussionReport.class,DiscussionReportDto.class, pagedResourcesAssembler);
         this.discussionReportDao = discussionReportDao;
         this.discussionDao = discussionDao;
     }

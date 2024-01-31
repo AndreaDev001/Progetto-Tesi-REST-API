@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -21,11 +23,12 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_POLLS")
 public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements PollService {
 
     private final PollDao pollDao;
-    public PollServiceImp(UserDao userDao,Mapper mapper, PollDao pollDao, PagedResourcesAssembler<Poll> pagedResourcesAssembler) {
-        super(userDao,mapper,Poll.class,PollDto.class, pagedResourcesAssembler);
+    public PollServiceImp(CacheHandler cacheHandler,UserDao userDao, Mapper mapper, PollDao pollDao, PagedResourcesAssembler<Poll> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,Poll.class,PollDto.class, pagedResourcesAssembler);
         this.pollDao = pollDao;
     }
 

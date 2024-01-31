@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
@@ -12,6 +14,7 @@ import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,10 +29,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_USERS",allSearchName = "SEARCH_USERS",searchCachingRequired = true)
 public class UserServiceImp extends GenericServiceImp<User, UserDto> implements UserService {
 
-    public UserServiceImp(UserDao userDao,Mapper mapper,PagedResourcesAssembler<User> pagedResourcesAssembler) {
-        super(userDao,mapper,User.class,UserDto.class, pagedResourcesAssembler);
+    public UserServiceImp(CacheHandler cacheHandler,UserDao userDao, Mapper mapper, PagedResourcesAssembler<User> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,User.class,UserDto.class, pagedResourcesAssembler);
+
     }
 
     @Override

@@ -40,6 +40,8 @@ public class SecurityConfig
                         .requestMatchers("/pollReports/public/**").permitAll()
                         .requestMatchers("/discussionReports/public/**").permitAll()
                         .requestMatchers("/commentReports/public/**").permitAll()
+                        .requestMatchers("/bans/public/**").permitAll()
+                        .requestMatchers("/boardBans/public/**").permitAll()
                         .requestMatchers("/images/public/**").permitAll()
                         .requestMatchers("/taskImages/public/**").permitAll()
                         .requestMatchers("/userImages/public/**").permitAll()

@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.likes;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
@@ -22,13 +24,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_DISCUSSION_LIKES")
 public class DiscussionLikeServiceImp extends GenericServiceImp<DiscussionLike, DiscussionLikeDto> implements DiscussionLikeService {
 
     private final DiscussionLikeDao discussionLikeDao;
     private final DiscussionDao discussionDao;
 
-    public DiscussionLikeServiceImp(DiscussionDao discussionDao,DiscussionLikeDao discussionLikeDao,UserDao userDao, Mapper mapper,PagedResourcesAssembler<DiscussionLike> pagedResourcesAssembler) {
-        super(userDao, mapper,DiscussionLike.class,DiscussionLikeDto.class, pagedResourcesAssembler);
+    public DiscussionLikeServiceImp(CacheHandler cacheHandler,DiscussionDao discussionDao, DiscussionLikeDao discussionLikeDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<DiscussionLike> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,DiscussionLike.class,DiscussionLikeDto.class, pagedResourcesAssembler);
         this.discussionLikeDao = discussionLikeDao;
         this.discussionDao = discussionDao;
     }

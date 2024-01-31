@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
 import com.progettotirocinio.restapi.data.dao.TeamMemberDao;
@@ -20,13 +22,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TEAM_MEMBERS")
 public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemberDto> implements TeamMemberService {
 
     private final TeamMemberDao teamMemberDao;
     private final TeamDao teamDao;
 
-    public TeamMemberServiceImp(Mapper mapper,TeamDao teamDao, UserDao userDao, TeamMemberDao teamMemberDao, PagedResourcesAssembler<TeamMember> pagedResourcesAssembler) {
-        super(userDao,mapper, TeamMember.class,TeamMemberDto.class, pagedResourcesAssembler);
+    public TeamMemberServiceImp(CacheHandler cacheHandler,Mapper mapper, TeamDao teamDao, UserDao userDao, TeamMemberDao teamMemberDao, PagedResourcesAssembler<TeamMember> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, TeamMember.class,TeamMemberDto.class, pagedResourcesAssembler);
         this.teamDao = teamDao;
         this.teamMemberDao = teamMemberDao;
     }

@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.reports;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.CommentDao;
@@ -24,13 +26,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_COMMENT_REPORTS")
 public class CommentReportServiceImp extends GenericServiceImp<CommentReport, CommentReportDto> implements CommentReportService
 {
     private final CommentReportDao commentReportDao;
     private final CommentDao commentDao;
 
-    public CommentReportServiceImp(CommentDao commentDao,CommentReportDao commentReportDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentReport> pagedResourcesAssembler) {
-        super(userDao, mapper, CommentReport.class,CommentReportDto.class, pagedResourcesAssembler);
+    public CommentReportServiceImp(CacheHandler cacheHandler,CommentDao commentDao, CommentReportDao commentReportDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentReport> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper, CommentReport.class,CommentReportDto.class, pagedResourcesAssembler);
         this.commentReportDao = commentReportDao;
         this.commentDao = commentDao;
     }

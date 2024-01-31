@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.likes;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
@@ -22,13 +24,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TASK_LIKES")
 public class TaskLikeServiceImp extends GenericServiceImp<TaskLike, TaskLikeDto> implements TaskLikeService
 {
     private final TaskLikeDao taskLikeDao;
     private final TaskDao taskDao;
 
-    public TaskLikeServiceImp(TaskDao taskDao,TaskLikeDao taskLikeDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<TaskLike> pagedResourcesAssembler) {
-        super(userDao, mapper, TaskLike.class,TaskLikeDto.class, pagedResourcesAssembler);
+    public TaskLikeServiceImp(CacheHandler cacheHandler,TaskDao taskDao, TaskLikeDao taskLikeDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<TaskLike> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper, TaskLike.class,TaskLikeDto.class, pagedResourcesAssembler);
         this.taskDao = taskDao;
         this.taskLikeDao = taskLikeDao;
     }

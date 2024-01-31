@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.services.implementations.images;
 
 
 import com.progettotirocinio.restapi.config.ImageUtils;
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -31,8 +32,8 @@ public class BoardImageServiceImp extends GenericServiceImp<BoardImage, BoardIma
     private final BoardDao boardDao;
     private final BoardImageDao boardImageDao;
 
-    public BoardImageServiceImp(BoardDao boardDao,UserDao userDao,Mapper mapper, BoardImageDao boardImageDao, PagedResourcesAssembler<BoardImage> pagedResourcesAssembler) {
-        super(userDao,mapper, BoardImage.class,BoardImageDto.class, pagedResourcesAssembler);
+    public BoardImageServiceImp(CacheHandler cacheHandler,BoardDao boardDao, UserDao userDao, Mapper mapper, BoardImageDao boardImageDao, PagedResourcesAssembler<BoardImage> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, BoardImage.class,BoardImageDto.class, pagedResourcesAssembler);
         this.boardImageDao = boardImageDao;
         this.boardDao = boardDao;
     }

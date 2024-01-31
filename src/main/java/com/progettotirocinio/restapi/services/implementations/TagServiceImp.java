@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TagDao;
@@ -25,12 +27,13 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TAGS")
 public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements TagService  {
     private final TagDao tagDao;
     private final BoardDao boardDao;
 
-    public TagServiceImp(UserDao userDao,BoardDao boardDao,Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
-        super(userDao,mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
+    public TagServiceImp(CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
         this.tagDao = tagDao;
         this.boardDao = boardDao;
     }

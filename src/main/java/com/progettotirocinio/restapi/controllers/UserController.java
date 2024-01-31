@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers;
 
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.data.dao.specifications.UserSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class UserController
 {
     private final UserService userService;
+
     @GetMapping("/private")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<UserDto>> getUsers(@ParameterObject @Valid PaginationRequest paginationRequest) {

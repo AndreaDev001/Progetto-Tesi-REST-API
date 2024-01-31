@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.implementations.likes;
 
 import com.nimbusds.jose.proc.SecurityContext;
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.CommentDao;
@@ -23,12 +25,13 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_COMMENT_LIKES")
 public class CommentLikeServiceImp extends GenericServiceImp<CommentLike, CommentLikeDto> implements CommentLikeService {
     private final CommentLikeDao commentLikeDao;
     private final CommentDao commentDao;
 
-    public CommentLikeServiceImp(CommentDao commentDao,CommentLikeDao commentLikeDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentLike> pagedResourcesAssembler) {
-        super(userDao, mapper, CommentLike.class, CommentLikeDto.class, pagedResourcesAssembler);
+    public CommentLikeServiceImp(CacheHandler cacheHandler,CommentDao commentDao, CommentLikeDao commentLikeDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentLike> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper, CommentLike.class, CommentLikeDto.class, pagedResourcesAssembler);
         this.commentDao = commentDao;
         this.commentLikeDao = commentLikeDao;
     }

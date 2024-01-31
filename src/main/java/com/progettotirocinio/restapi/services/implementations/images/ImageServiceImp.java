@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.implementations.images;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.images.ImageDao;
@@ -20,8 +21,8 @@ import java.util.UUID;
 @Service
 public class ImageServiceImp extends GenericServiceImp<Image, ImageDto> implements ImageService {
     private final ImageDao imageDao;
-    public ImageServiceImp(UserDao userDao,Mapper mapper, ImageDao imageDao, PagedResourcesAssembler<Image> pagedResourcesAssembler) {
-        super(userDao,mapper, Image.class,ImageDto.class, pagedResourcesAssembler);
+    public ImageServiceImp(CacheHandler cacheHandler,UserDao userDao, Mapper mapper, ImageDao imageDao, PagedResourcesAssembler<Image> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Image.class,ImageDto.class, pagedResourcesAssembler);
         this.imageDao = imageDao;
     }
 

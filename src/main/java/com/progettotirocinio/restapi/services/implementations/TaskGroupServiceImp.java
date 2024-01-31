@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.services.implementations;
 
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
@@ -24,14 +26,15 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TASK_GROUPS")
 public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupDto> implements TaskGroupService
 {
 
     private final TaskGroupDao taskGroupDao;
     private final BoardDao boardDao;
 
-    public TaskGroupServiceImp(Mapper mapper, UserDao userDao, BoardDao boardDao, TaskGroupDao taskGroupDao, PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
-        super(userDao,mapper,TaskGroup.class,TaskGroupDto.class, pagedResourcesAssembler);
+    public TaskGroupServiceImp(CacheHandler cacheHandler,Mapper mapper, UserDao userDao, BoardDao boardDao, TaskGroupDao taskGroupDao, PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,TaskGroup.class,TaskGroupDto.class, pagedResourcesAssembler);
         this.taskGroupDao = taskGroupDao;
         this.boardDao = boardDao;
     }

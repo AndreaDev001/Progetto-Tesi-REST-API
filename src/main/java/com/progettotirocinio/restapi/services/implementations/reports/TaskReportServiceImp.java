@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.reports;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
@@ -25,13 +27,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TASK_REPORTS")
 public class TaskReportServiceImp extends GenericServiceImp<TaskReport, TaskReportDto> implements TaskReportService {
 
     private final TaskReportDao taskReportDao;
     private final TaskDao taskDao;
 
-    public TaskReportServiceImp(TaskDao taskDao,TaskReportDao taskReportDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<TaskReport> pagedResourcesAssembler) {
-        super(userDao, mapper, TaskReport.class,TaskReportDto.class, pagedResourcesAssembler);
+    public TaskReportServiceImp(CacheHandler cacheHandler,TaskDao taskDao, TaskReportDao taskReportDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<TaskReport> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper, TaskReport.class,TaskReportDto.class, pagedResourcesAssembler);
         this.taskReportDao = taskReportDao;
         this.taskDao = taskDao;
     }

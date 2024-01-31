@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -28,11 +30,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_TASKS",allSearchName = "SEARCH_TASKS",searchCachingRequired = true)
 public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements TaskService {
     private final TaskDao taskDao;
 
-    public TaskServiceImp(Mapper mapper,UserDao userDao, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
-        super(userDao,mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
+    public TaskServiceImp(CacheHandler cacheHandler,Mapper mapper, UserDao userDao, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
         this.taskDao = taskDao;
     }
 

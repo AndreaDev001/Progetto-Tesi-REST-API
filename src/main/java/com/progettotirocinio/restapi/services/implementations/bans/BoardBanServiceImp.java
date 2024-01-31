@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.bans;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
@@ -23,13 +25,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_BOARD_BANS")
 public class BoardBanServiceImp extends GenericServiceImp<BoardBan, BoardBanDto> implements BoardBanService
 {
     private final BoardBanDao boardBanDao;
     private final BoardDao boardDao;
 
-    public BoardBanServiceImp(BoardBanDao boardBanDao,BoardDao boardDao,UserDao userDao, Mapper mapper, PagedResourcesAssembler<BoardBan> pagedResourcesAssembler) {
-        super(userDao, mapper,BoardBan.class,BoardBanDto.class, pagedResourcesAssembler);
+    public BoardBanServiceImp(CacheHandler cacheHandler,BoardBanDao boardBanDao, BoardDao boardDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<BoardBan> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,BoardBan.class,BoardBanDto.class, pagedResourcesAssembler);
         this.boardBanDao = boardBanDao;
         this.boardDao = boardDao;
     }

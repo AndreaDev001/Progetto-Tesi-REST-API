@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.bans;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
@@ -29,12 +31,13 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_BANS",allSearchName = "SEARCH_BANS",searchCachingRequired = true)
 public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements BanService
 {
     private final BanDao banDao;
 
-    public BanServiceImp(BanDao banDao,UserDao userDao, Mapper mapper,PagedResourcesAssembler<Ban> pagedResourcesAssembler) {
-        super(userDao, mapper,Ban.class,BanDto.class, pagedResourcesAssembler);
+    public BanServiceImp(CacheHandler cacheHandler,BanDao banDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<Ban> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,Ban.class,BanDto.class, pagedResourcesAssembler);
         this.banDao = banDao;
     }
 

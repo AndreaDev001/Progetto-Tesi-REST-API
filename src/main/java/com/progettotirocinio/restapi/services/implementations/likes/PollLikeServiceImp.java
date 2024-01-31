@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations.likes;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
@@ -22,13 +24,14 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_POLL_LIKES")
 public class PollLikeServiceImp extends GenericServiceImp<PollLike, PollLikeDto> implements PollLikeService
 {
     private final PollLikeDao pollLikeDao;
     private final PollDao pollDao;
 
-    public PollLikeServiceImp(PollDao pollDao,PollLikeDao pollLikeDao,UserDao userDao, Mapper mapper,PagedResourcesAssembler<PollLike> pagedResourcesAssembler) {
-        super(userDao, mapper,PollLike.class,PollLikeDto.class, pagedResourcesAssembler);
+    public PollLikeServiceImp(CacheHandler cacheHandler,PollDao pollDao, PollLikeDao pollLikeDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<PollLike> pagedResourcesAssembler) {
+        super(cacheHandler,userDao, mapper,PollLike.class,PollLikeDto.class, pagedResourcesAssembler);
         this.pollLikeDao = pollLikeDao;
         this.pollDao = pollDao;
     }

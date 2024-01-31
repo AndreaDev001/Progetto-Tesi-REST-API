@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.implementations;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
@@ -30,11 +32,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiresCaching(allCacheName = "ALL_BOARDS",allSearchName = "SEARCH_BOARDS",searchCachingRequired = true)
 public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implements BoardService  {
 
     private final BoardDao boardDao;
-    public BoardServiceImp(UserDao userDao,BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
-        super(userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
+    public BoardServiceImp(CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
         this.boardDao = boardDao;
     }
 

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.*;
+import com.progettotirocinio.restapi.controllers.bans.BanController;
 import com.progettotirocinio.restapi.controllers.likes.CommentLikeController;
 import com.progettotirocinio.restapi.controllers.likes.DiscussionLikeController;
 import com.progettotirocinio.restapi.controllers.likes.PollLikeController;
@@ -89,5 +90,7 @@ public class UserDto extends GenericOutput<UserDto>
         this.add(linkTo(methodOn(PollLikeController.class).getPollLikesByUser(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("likedPolls").withName("likedPolls"));
         this.add(linkTo(methodOn(ReportController.class).getReportsByReporter(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdReports").withName("createdReports"));
         this.add(linkTo(methodOn(ReportController.class).getReportsByReported(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("receivedReports").withName("receivedReports"));
+        this.add(linkTo(methodOn(BanController.class).getBansByBanner(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdBans").withName("createdBans"));
+        this.add(linkTo(methodOn(BanController.class).getBansByBanned(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("receivedBans").withName("receivedBans"));
     }
 }
