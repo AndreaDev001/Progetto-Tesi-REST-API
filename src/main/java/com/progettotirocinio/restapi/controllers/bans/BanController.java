@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
 import com.progettotirocinio.restapi.data.entities.enums.BanType;
 import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.services.interfaces.bans.BanService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/bans")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class BanController
 {
     private final BanService banService;

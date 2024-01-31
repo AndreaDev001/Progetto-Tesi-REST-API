@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.likes.TaskLikeDto;
 import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import com.progettotirocinio.restapi.services.interfaces.likes.TaskLikeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/taskLikes")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class TaskLikeController
 {
     private final TaskLikeService taskLikeService;

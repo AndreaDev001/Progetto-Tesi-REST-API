@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/polls")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class PollController
 {
     private final PollService pollService;

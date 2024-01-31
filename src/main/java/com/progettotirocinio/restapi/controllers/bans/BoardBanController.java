@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.output.bans.BanDto;
 import com.progettotirocinio.restapi.data.dto.output.bans.BoardBanDto;
 import com.progettotirocinio.restapi.data.entities.bans.BoardBan;
 import com.progettotirocinio.restapi.services.interfaces.bans.BoardBanService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/boardBans")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class BoardBanController
 {
     private final BoardBanService boardBanService;

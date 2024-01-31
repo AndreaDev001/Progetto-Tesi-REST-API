@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.likes.CommentLikeDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.services.interfaces.likes.CommentLikeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(name = "/commentLikes")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class CommentLikeController
 {
     private final CommentLikeService commentLikeService;

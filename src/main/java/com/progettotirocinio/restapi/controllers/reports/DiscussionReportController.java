@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.DiscussionReportDto;
 import com.progettotirocinio.restapi.data.entities.reports.DiscussionReport;
 import com.progettotirocinio.restapi.services.interfaces.reports.DiscussionReportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/discussionsReports")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class DiscussionReportController
 {
     private final DiscussionReportService discussionReportService;

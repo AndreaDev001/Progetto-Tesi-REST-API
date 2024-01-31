@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
+@SecurityRequirement(name = "Authorization")
 @RequiredArgsConstructor
 public class TaskController
 {

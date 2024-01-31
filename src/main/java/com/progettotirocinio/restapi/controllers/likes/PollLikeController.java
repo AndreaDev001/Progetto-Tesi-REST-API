@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.controllers.likes;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.likes.PollLikeDto;
 import com.progettotirocinio.restapi.services.interfaces.likes.PollLikeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/pollLikes")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class PollLikeController
 {
     private final PollLikeService pollLikeService;

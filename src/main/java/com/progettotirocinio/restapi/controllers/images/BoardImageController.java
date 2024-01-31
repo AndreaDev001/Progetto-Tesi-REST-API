@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.images.CreateBoardImageDto;
 import com.progettotirocinio.restapi.data.dto.output.images.BoardImageDto;
 import com.progettotirocinio.restapi.services.interfaces.images.BoardImageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/boardImages")
+@SecurityRequirement(name = "Authorization")
 public class BoardImageController
 {
     private final BoardImageService boardImageService;

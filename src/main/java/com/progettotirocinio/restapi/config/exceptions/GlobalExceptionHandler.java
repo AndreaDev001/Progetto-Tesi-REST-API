@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
         return errorResponse(HttpStatus.TOO_MANY_REQUESTS,Date.from(Instant.now()),"error.http.tooManyRequests",request.getRequestURI());
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler({HttpServerErrorException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> serverError(HttpServerErrorException serverErrorException, HttpServletRequest request) {
         return errorResponse(HttpStatus.INTERNAL_SERVER_ERROR,Date.from(Instant.now()),"error.http.internalServerError",request.getRequestURI());
@@ -98,7 +98,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({BannedException.class})
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> bannedException(BannedException exception,HttpServletRequest request) {
-        return errorResponse(HttpStatus.UNAUTHORIZED,Date.from(Instant.now()),"error.user.banned",request.getRequestURI()));
+        return errorResponse(HttpStatus.UNAUTHORIZED,Date.from(Instant.now()),"error.user.banned",request.getRequestURI());
     }
 
     @ExceptionHandler({MultipartException.class, MaxUploadSizeExceededException.class})

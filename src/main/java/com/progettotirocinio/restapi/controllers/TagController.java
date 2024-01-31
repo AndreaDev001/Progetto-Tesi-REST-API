@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateTagDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.dto.output.TagDto;
 import com.progettotirocinio.restapi.services.interfaces.TagService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 @RequestMapping("/tags")
 public class TagController
 {

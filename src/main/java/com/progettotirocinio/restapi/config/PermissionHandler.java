@@ -25,7 +25,6 @@ import java.util.List;
 public class PermissionHandler
 {
     private final UserDao userDao;
-    private final BoardDao boardDao;
     private final BoardMemberDao boardMemberDao;
 
     public boolean hasRole(String requiredRole) {

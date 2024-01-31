@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class BoardController
 {
     private final BoardService boardService;

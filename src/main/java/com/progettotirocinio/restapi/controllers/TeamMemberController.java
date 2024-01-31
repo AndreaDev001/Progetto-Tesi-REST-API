@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.controllers;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.TeamMemberDto;
 import com.progettotirocinio.restapi.services.interfaces.TeamMemberService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/teamMembers")
+@SecurityRequirement(name = "Authorization")
 public class TeamMemberController
 {
     private final TeamMemberService teamMemberService;

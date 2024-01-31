@@ -75,7 +75,7 @@ public class ModelMapperConfig
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setFieldMatchingEnabled(true);
-        modelMapper.getConfiguration().setSkipNullEnabled(false);
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.addConverter(boardRefConverter);
         modelMapper.addConverter(discussionRefConverter);
         modelMapper.addConverter(roleRefConverter);

@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 @RequestMapping("/taskGroups")
 public class TaskGroupController
 {

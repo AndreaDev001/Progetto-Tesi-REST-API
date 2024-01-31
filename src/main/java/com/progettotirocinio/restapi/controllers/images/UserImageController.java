@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.images.CreateUserImag
 import com.progettotirocinio.restapi.data.dto.output.images.UserImageDto;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import com.progettotirocinio.restapi.services.interfaces.images.UserImageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/userImages")
+@SecurityRequirement(name = "Authorization")
 public class UserImageController
 {
     private final UserImageService userImageService;

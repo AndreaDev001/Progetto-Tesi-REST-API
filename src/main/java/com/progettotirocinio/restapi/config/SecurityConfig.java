@@ -1,9 +1,14 @@
 package com.progettotirocinio.restapi.config;
 
 
+import com.progettotirocinio.restapi.authentication.AuthenticationFilter;
+import com.progettotirocinio.restapi.authentication.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,8 +18,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class SecurityConfig
 {
+    private final AuthenticationFilter authenticationFilter;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
     @Bean
     public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.exceptionHandling(customizer -> customizer.authenticationEntryPoint(restAuthenticationEntryPoint));
         httpSecurity.authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/documentation/**").permitAll()
                         .requestMatchers("/tasks/public/**").permitAll()
@@ -45,7 +54,15 @@ public class SecurityConfig
                         .requestMatchers("/images/public/**").permitAll()
                         .requestMatchers("/taskImages/public/**").permitAll()
                         .requestMatchers("/userImages/public/**").permitAll()
-                        .anyRequest().permitAll());
+                        .anyRequest().authenticated());
+        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+        httpSecurity.addFilterAfter(authenticationFilter,BasicAuthenticationFilter.class);
         return httpSecurity.build();
+    }
+
+
+    @Bean
+    public AuthenticationEventPublisher authenticationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        return new DefaultAuthenticationEventPublisher(applicationEventPublisher);
     }
 }

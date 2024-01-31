@@ -10,6 +10,7 @@ import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
 import com.progettotirocinio.restapi.data.entities.enums.ReportType;
 import com.progettotirocinio.restapi.data.entities.reports.Report;
 import com.progettotirocinio.restapi.services.interfaces.reports.ReportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/reports")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class ReportController
 {
     private final ReportService reportService;

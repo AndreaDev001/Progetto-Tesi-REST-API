@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -26,6 +27,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@SecurityRequirement(name = "Authorization")
 public class UserController
 {
     private final UserService userService;

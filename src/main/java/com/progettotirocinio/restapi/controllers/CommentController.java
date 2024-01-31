@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.CommentDto;
 import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.services.interfaces.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class CommentController
 {
     private final CommentService commentService;

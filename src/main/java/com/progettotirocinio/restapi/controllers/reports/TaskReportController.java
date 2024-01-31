@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dto.output.reports.ReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.TaskReportDto;
 import com.progettotirocinio.restapi.data.entities.reports.TaskReport;
 import com.progettotirocinio.restapi.services.interfaces.reports.TaskReportService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/taskReports")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class TaskReportController
 {
     private final TaskReportService taskReportService;

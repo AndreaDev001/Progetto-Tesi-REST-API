@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.images.CreateTaskImag
 import com.progettotirocinio.restapi.data.dto.output.images.TaskImageDto;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.services.interfaces.images.TaskImageService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/taskImages")
+@SecurityRequirement(name = "Authorization")
 public class TaskImageController
 {
     private final TaskImageService taskImageService;
