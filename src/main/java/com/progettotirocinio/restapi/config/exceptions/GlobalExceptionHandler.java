@@ -95,6 +95,12 @@ public class GlobalExceptionHandler {
         return errorResponse(HttpStatus.METHOD_NOT_ALLOWED,Date.from(Instant.now()),"error.http.unsupported",request.getRequestURI());
     }
 
+    @ExceptionHandler({BannedException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponse> bannedException(BannedException exception,HttpServletRequest request) {
+        return errorResponse(HttpStatus.UNAUTHORIZED,Date.from(Instant.now()),"error.user.banned",request.getRequestURI()));
+    }
+
     @ExceptionHandler({MultipartException.class, MaxUploadSizeExceededException.class})
     @ResponseStatus(value = HttpStatus.PAYLOAD_TOO_LARGE)
     public ResponseEntity<ErrorResponse> maxUploadSizeException(MaxUploadSizeExceededException exception,HttpServletRequest request) {
