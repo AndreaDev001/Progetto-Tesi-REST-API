@@ -34,6 +34,8 @@ public class TaskDto extends GenericOutput<TaskDto>
     private TaskGroupRef taskGroup;
     @AmountReference(name = "receivedLikes")
     private Integer amountOfLikes;
+    @AmountReference(name = "assignments")
+    private Integer amountOfAssignments;
 
     @Override
     public void addLinks(Object... params) {

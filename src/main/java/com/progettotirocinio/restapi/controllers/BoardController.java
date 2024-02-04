@@ -52,8 +52,7 @@ public class BoardController
         return ResponseEntity.ok(boards);
     }
 
-    @GetMapping("/private/spec")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    @GetMapping("/public/spec")
     public ResponseEntity<PagedModel<BoardDto>> getBoardsBySpec(@ParameterObject @Valid BoardSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardDto> boards = this.boardService.getBoardsBySpec(BoardSpecifications.withFilter(filter),paginationRequest.toPageRequest());
         return ResponseEntity.ok(boards);

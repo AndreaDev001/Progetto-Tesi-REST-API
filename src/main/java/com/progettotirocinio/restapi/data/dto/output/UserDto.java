@@ -56,12 +56,6 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfJoinedBoards;
     @AmountReference(name = "likedTasks")
     private Integer amountOfCreatedLikes;
-    @AmountReference(name = "likedPolls")
-    private Integer amountOfLikedPolls;
-    @AmountReference(name = "likedComments")
-    private Integer amountOfLikedComments;
-    @AmountReference(name = "likedDiscussions")
-    private Integer amountOfLikedDiscussions;
     @AmountReference(name = "createdReports")
     private Integer amountOfCreatedReports;
     @AmountReference(name = "receivedReports")
@@ -70,6 +64,10 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfCreatedBans;
     @AmountReference(name = "receivedBans")
     private Integer amountOfReceivedBans;
+    @AmountReference(name = "assignedTasks")
+    private Integer assignedTasks;
+    @AmountReference(name = "createdAssignments")
+    private Integer amountOfCreatedAssignments;
 
     @Override
     public void addLinks(Object... params) {

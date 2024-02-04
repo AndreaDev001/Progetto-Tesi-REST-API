@@ -24,15 +24,15 @@ public class BoardSpecifications
         private String title;
         @SpecificationPath(path = "description",comparison = SpecificationComparison.LIKE)
         private String description;
-        @SpecificationPath(path = "email",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.email",comparison = SpecificationComparison.LIKE)
         private String publisherEmail;
-        @SpecificationPath(path = "username",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.username",comparison = SpecificationComparison.LIKE)
         private String publisherUsername;
-        @SpecificationPath(path = "name",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.name",comparison = SpecificationComparison.LIKE)
         private String publisherName;
-        @SpecificationPath(path = "surname",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.surname",comparison = SpecificationComparison.LIKE)
         private String publisherSurname;
-        @SpecificationPath(path = "gender",comparison = SpecificationComparison.EQUAL)
+        @SpecificationPath(path = "publisher.gender",comparison = SpecificationComparison.EQUAL)
         private Gender publisherGender;
 
         public Filter(Board board) {

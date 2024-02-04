@@ -7,7 +7,6 @@ import com.progettotirocinio.restapi.data.dao.specifications.annotations.Specifi
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
-import com.progettotirocinio.restapi.data.entities.likes.Like;
 import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,6 +52,9 @@ public class Task extends GenericEntity implements OwnableEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskLike> receivedLikes = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<TaskAssignment> assignments =  new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
