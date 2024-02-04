@@ -37,8 +37,7 @@ public class BoardMemberController
         return ResponseEntity.ok(boardMemberDto);
     }
 
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @GetMapping("/public/user/{userID}")
     public ResponseEntity<PagedModel<BoardMemberDto>> getBoardMembersByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardMemberDto> boardMembers = this.boardMemberService.getBoardMembersByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(boardMembers);

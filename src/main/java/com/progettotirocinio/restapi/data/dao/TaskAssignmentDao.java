@@ -13,12 +13,12 @@ import java.util.UUID;
 
 @Repository
 public interface TaskAssignmentDao extends JpaRepository<TaskAssignment, UUID> {
-    @Query("select t from TaskAssigment t where t.publisher.id = :requiredID")
-    Page<TaskAssignment> getTaskAssigmentsByPublisher(@Param("requiredID") UUID publisherID, Pageable pageable);
-    @Query("select t from TaskAssigment t where t.user.id = :requiredID")
-    Page<TaskAssignment> getTaskAssigmentsByUser(@Param("requiredID") UUID userID, Pageable pageable);
-    @Query("select t from TaskAssigment t where t.task.id = :requiredID")
-    Page<TaskAssignment> getTaskAssigmentsByTask(@Param("requiredID") UUID taskID, Pageable pageable);
-    @Query("select t from TaskAssigment t where t.user.id = :requiredUserID and t.task.id = :requiredTaskID")
-    Optional<TaskAssignment> getTaskAssigment(@Param("requiredUserID") UUID userID, @Param("requiredTaskID") UUID taskID);
+    @Query("select t from TaskAssignment t where t.publisher.id = :requiredID")
+    Page<TaskAssignment> getTaskAssignmentsByPublisher(@Param("requiredID") UUID publisherID, Pageable pageable);
+    @Query("select t from TaskAssignment t where t.user.id = :requiredID")
+    Page<TaskAssignment> getTaskAssignmentsByUser(@Param("requiredID") UUID userID, Pageable pageable);
+    @Query("select t from TaskAssignment t where t.task.id = :requiredID")
+    Page<TaskAssignment> getTaskAssignmentsByTask(@Param("requiredID") UUID taskID, Pageable pageable);
+    @Query("select t from TaskAssignment t where t.user.id = :requiredUserID and t.task.id = :requiredTaskID")
+    Optional<TaskAssignment> getTaskAssignment(@Param("requiredUserID") UUID userID, @Param("requiredTaskID") UUID taskID);
 }

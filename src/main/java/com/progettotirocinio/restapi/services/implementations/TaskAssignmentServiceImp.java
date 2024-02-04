@@ -29,8 +29,8 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
     private final TaskDao taskDao;
     private final BoardMemberDao boardMemberDao;
 
-    public TaskAssignmentServiceImp(BoardMemberDao boardMember, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper, Class<TaskAssignment> source, Class<TaskAssignmentDto> destination, PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
-        super(cacheHandler, userDao, mapper, source, destination, pagedResourcesAssembler);
+    public TaskAssignmentServiceImp(BoardMemberDao boardMember, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper,PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
+        super(cacheHandler, userDao, mapper,TaskAssignment.class,TaskAssignmentDto.class, pagedResourcesAssembler);
         this.taskAssignmentDao = taskAssignmentDao;
         this.taskDao = taskDao;
         this.boardMemberDao = boardMember;
@@ -50,19 +50,19 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
 
     @Override
     public PagedModel<TaskAssignmentDto> getTaskAssignmentsByPublisher(UUID publisherID, Pageable pageable) {
-        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssigmentsByPublisher(publisherID,pageable);
+        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByPublisher(publisherID,pageable);
         return this.pagedResourcesAssembler.toModel(taskAssignments,modelAssembler);
     }
 
     @Override
     public PagedModel<TaskAssignmentDto> getTaskAssignmentsByTask(UUID taskID, Pageable pageable) {
-        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssigmentsByTask(taskID,pageable);
+        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByTask(taskID,pageable);
         return this.pagedResourcesAssembler.toModel(taskAssignments,modelAssembler);
     }
 
     @Override
     public PagedModel<TaskAssignmentDto> getTaskAssignmentsByUser(UUID userID, Pageable pageable) {
-        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssigmentsByUser(userID,pageable);
+        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByUser(userID,pageable);
         return this.pagedResourcesAssembler.toModel(taskAssignments,modelAssembler);
     }
 
@@ -92,7 +92,7 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
 
     @Override
     public TaskAssignmentDto getTaskAssignment(UUID userID, UUID taskID) {
-        TaskAssignment taskAssignment = this.taskAssignmentDao.getTaskAssigment(userID,taskID).orElseThrow();
+        TaskAssignment taskAssignment = this.taskAssignmentDao.getTaskAssignment(userID,taskID).orElseThrow();
         return this.modelMapper.map(taskAssignment,TaskAssignmentDto.class);
     }
 }

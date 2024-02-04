@@ -17,10 +17,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 
@@ -46,6 +49,12 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
     @Override
     public PagedModel<BoardInviteDto> getBoardInvitesByPublisher(UUID publisherID, Pageable pageable) {
         Page<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByPublisher(publisherID,pageable);
+        return this.pagedResourcesAssembler.toModel(boardInvites,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<BoardInviteDto> getBoardInvitesByReceiver(UUID receiverID, Pageable pageable) {
+        Page<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByReceiver(receiverID,pageable);
         return this.pagedResourcesAssembler.toModel(boardInvites,modelAssembler);
     }
 
@@ -80,6 +89,11 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
         boardInvite.setPublisher(publisher);
         boardInvite = this.boardInviteDao.save(boardInvite);
         return this.modelMapper.map(boardInvite,BoardInviteDto.class);
+    }
+
+    @Override
+    public CollectionModel<BoardInviteStatus> getStatues() {
+        return CollectionModel.of(Arrays.stream(BoardInviteStatus.values()).toList());
     }
 
     @Override

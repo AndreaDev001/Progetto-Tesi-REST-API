@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,6 +62,17 @@ public class BoardInviteController
     public ResponseEntity<PagedModel<BoardInviteDto>> getBoardInvitesByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardInviteDto> boardInvites = this.boardInviteService.getBoardInvitesByBoard(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(boardInvites);
+    }
+
+    @GetMapping("/public/receiver/{receiverID}")
+    public ResponseEntity<PagedModel<BoardInviteDto>> getBoardInvitesByReceiver(@PathVariable("receiverID") UUID receiverID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<BoardInviteDto> boardInvites = this.boardInviteService.getBoardInvitesByReceiver(receiverID,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(boardInvites);
+    }
+
+    @GetMapping("/public/statues")
+    public ResponseEntity<CollectionModel<BoardInviteStatus>> getStatues() {
+        return ResponseEntity.ok(this.boardInviteService.getStatues());
     }
 
     @GetMapping("/private/status/{status}")

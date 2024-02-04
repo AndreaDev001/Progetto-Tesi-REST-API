@@ -20,6 +20,8 @@ public interface BoardInviteDao extends JpaRepository<BoardInvite,UUID>
 {
     @Query("select b from BoardInvite b where b.publisher.id = :publisherID")
     Page<BoardInvite> getBoardInvitesByPublisher(@Param("publisherID") UUID publisherID,Pageable pageable);
+    @Query("select b from BoardInvite b where b.receiver.id = :requiredID")
+    Page<BoardInvite> getBoardInvitesByReceiver(@Param("requiredID") UUID receiverID,Pageable pageable);
     @Query("select b from BoardInvite b where b.board.id =: boardID")
     Page<BoardInvite> getBoardInvitesByBoard(@Param("boardID") UUID boardID, Pageable pageable);
 
