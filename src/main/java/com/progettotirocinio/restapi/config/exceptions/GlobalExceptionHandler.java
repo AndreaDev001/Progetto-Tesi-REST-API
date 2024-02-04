@@ -28,7 +28,7 @@ import java.util.*;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class EGlobalExceptionHandler {
+public class GlobalExceptionHandler {
 
     private final MessageGetter messageGetter;
 
