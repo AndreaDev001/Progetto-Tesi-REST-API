@@ -120,4 +120,7 @@ public class User extends AmountEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
     private Set<TaskAssignment> createdAssignments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+    private Set<PollVote> createdVotes = new HashSet<>();
 }

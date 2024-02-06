@@ -68,6 +68,8 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer assignedTasks;
     @AmountReference(name = "createdAssignments")
     private Integer amountOfCreatedAssignments;
+    @AmountReference(name = "createdVotes")
+    private Integer amountOfCreatedVotes;
 
     @Override
     public void addLinks(Object... params) {

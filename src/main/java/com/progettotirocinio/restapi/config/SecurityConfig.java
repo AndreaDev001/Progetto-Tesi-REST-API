@@ -75,6 +75,8 @@ public class SecurityConfig
                         .requestMatchers("/taskImages/public/**").permitAll()
                         .requestMatchers("/userImages/public/**").permitAll()
                         .requestMatchers("/taskAssignments/public/**").permitAll()
+                        .requestMatchers("/pollOptions/public/**").permitAll()
+                        .requestMatchers("/pollVotes/public/**").permitAll()
                         .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         httpSecurity.addFilterAfter(authenticationFilter,BasicAuthenticationFilter.class);

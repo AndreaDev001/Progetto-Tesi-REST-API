@@ -5,12 +5,14 @@ import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
+import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,6 +40,11 @@ public class PollController
     public ResponseEntity<PagedModel<PollDto>> getPollsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollDto> polls = this.pollService.getPollsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(polls);
+    }
+
+    @GetMapping("/public/statues")
+    public ResponseEntity<CollectionModel<PollStatus>> getStatues() {
+        return ResponseEntity.ok(this.pollService.getStatues());
     }
 
     @GetMapping("/private/{pollID}")

@@ -10,16 +10,20 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
 import com.progettotirocinio.restapi.data.entities.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -66,6 +70,11 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     public PagedModel<PollDto> getPollsByMaximumVotes(Integer votes, Pageable pageable) {
         Page<Poll> polls = this.pollDao.getPollsByMaximumVotes(votes,pageable);
         return this.pagedResourcesAssembler.toModel(polls,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<PollStatus> getStatues() {
+        return CollectionModel.of(Arrays.stream(PollStatus.values()).toList());
     }
 
     @Override

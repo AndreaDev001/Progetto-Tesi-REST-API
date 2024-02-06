@@ -1,7 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
-import com.progettotirocinio.restapi.data.dto.output.refs.TaskRef;
-import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
+import com.progettotirocinio.restapi.data.dto.output.refs.PollRef;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +13,10 @@ import org.springframework.hateoas.server.core.Relation;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Relation(collectionRelation = "content")
-public class TaskAssignmentDto extends GenericOutput<TaskAssignmentDto>
+public class PollOptionDto extends GenericOutput<PollOptionDto>
 {
-    public UserRef user;
-    public TaskRef task;
-    public UserRef publisher;
+    private String name;
+    private PollRef poll;
+    @AmountReference(name = "receivedVotes")
+    private Integer amountOfVotes;
 }

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.Like;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "POLLS")
-public class Poll extends GenericEntity implements OwnableEntity
+public class Poll extends AmountEntity implements OwnableEntity
 {
 
     @Column(name = "TITLE",nullable = false,updatable = false)
@@ -40,11 +41,18 @@ public class Poll extends GenericEntity implements OwnableEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
     private Set<PollLike> receivedLikes = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    private Set<PollOption> options = new HashSet<>();
+
     @Column(name = "MINIMUM_VOTES",nullable = false)
     private Integer minimumVotes;
 
     @Column(name = "MAXIMUM_VOTES",nullable = false)
     private Integer maximumVotes;
+
+    @Column(name = "STATUS",nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private PollStatus status;
 
     @Column(name = "EXPIRATION_DATE",nullable = false)
     private LocalDate expirationDate;

@@ -29,7 +29,9 @@ public class PollDto extends GenericOutput<PollDto>
     private Integer maximumVotes;
     private LocalDate expirationDate;
     @AmountReference(name = "receivedLikes")
-    private Integer receivedLikes;
+    private Integer amountOfReceivedLikes;
+    @AmountReference(name = "options")
+    private Integer amountOfOptions;
 
     @Override
     public void addLinks(Object... params) {
