@@ -12,7 +12,9 @@ import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.BoardInvite;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
+import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.services.interfaces.BoardInviteService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +24,10 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -94,6 +98,22 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
     @Override
     public CollectionModel<BoardInviteStatus> getStatues() {
         return CollectionModel.of(Arrays.stream(BoardInviteStatus.values()).toList());
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredInvites() {
+        List<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByDate(LocalDate.now());
+        for(BoardInvite boardInvite : boardInvites)
+            boardInvite.setStatus(BoardInviteStatus.EXPIRED);
+        this.boardInviteDao.saveAll(boardInvites);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredInvites() {
+        List<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByStatus(TaskStatus.EXPIRED);
+        this.boardInviteDao.deleteAll(boardInvites);
     }
 
     @Override

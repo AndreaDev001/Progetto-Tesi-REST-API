@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dto.output.refs.TaskGroupRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
+import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ public class TaskDto extends GenericOutput<TaskDto>
     private String name;
     private String description;
     private Priority priority;
+    private TaskStatus status;
     private UserRef publisher;
     private TaskGroupRef taskGroup;
     @AmountReference(name = "receivedLikes")

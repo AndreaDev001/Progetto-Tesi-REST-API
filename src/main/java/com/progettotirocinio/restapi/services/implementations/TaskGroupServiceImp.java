@@ -13,16 +13,22 @@ import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -64,6 +70,17 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     }
 
     @Override
+    public CollectionModel<TaskGroupStatus> getStatues() {
+        return CollectionModel.of(Arrays.stream(TaskGroupStatus.values()).toList());
+    }
+
+    @Override
+    public PagedModel<TaskGroupDto> getTaskGroupsByStatus(TaskGroupStatus taskGroupStatus, Pageable pageable) {
+        Page<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByStatus(taskGroupStatus,pageable);
+        return this.pagedResourcesAssembler.toModel(taskGroups,modelAssembler);
+    }
+
+    @Override
     public TaskGroupDto getTaskGroup(UUID id) {
         TaskGroup taskGroup = this.taskGroupDao.findById(id).orElseThrow();
         return this.modelMapper.map(taskGroup,TaskGroupDto.class);
@@ -93,6 +110,22 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
             taskGroup.setExpirationDate(updateTaskGroupDto.getExpirationDate());
         taskGroup = this.taskGroupDao.save(taskGroup);
         return this.modelMapper.map(taskGroup,TaskGroupDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredTaskGroups() {
+        List<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByDate(LocalDate.now());
+        for(TaskGroup current : taskGroups)
+            current.setStatus(TaskGroupStatus.EXPIRED);
+        this.taskGroupDao.saveAll(taskGroups);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredTaskGroups() {
+        List<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByStatus(TaskGroupStatus.EXPIRED);
+        this.taskGroupDao.deleteAll(taskGroups);
     }
 
     @Override

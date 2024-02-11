@@ -3,9 +3,9 @@ package com.progettotirocinio.restapi.data.entities.enums;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "content")
-public enum PollStatus
+public enum TaskStatus
 {
     OPEN,
-    CLOSED,
+    COMPLETED,
     EXPIRED
 }

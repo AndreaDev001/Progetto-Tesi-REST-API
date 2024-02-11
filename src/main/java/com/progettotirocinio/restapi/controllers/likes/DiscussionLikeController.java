@@ -37,8 +37,7 @@ public class DiscussionLikeController
         return ResponseEntity.ok(discussionLikeDto);
     }
 
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @GetMapping("/public/user/{userID}")
     public ResponseEntity<PagedModel<DiscussionLikeDto>> getDiscussionLikesByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<DiscussionLikeDto> discussionLikes = this.discussionLikeService.getDiscussionLikesByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(discussionLikes);

@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
+import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
@@ -46,6 +47,10 @@ public class Task extends GenericEntity implements OwnableEntity
     @Column(name = "PRIORITY",nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Priority priority;
+
+    @Column(name = "STATUS",nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private TaskStatus status;
 
     @OneToOne(mappedBy = "task",fetch = FetchType.LAZY)
     private TaskImage taskImage;

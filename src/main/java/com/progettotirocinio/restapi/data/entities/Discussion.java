@@ -42,9 +42,6 @@ public class Discussion extends AmountEntity implements OwnableEntity
     @JoinColumn(name = "PUBLISHER_ID",updatable = false)
     private User publisher;
 
-    @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
-    private LocalDate expirationDate;
-
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();

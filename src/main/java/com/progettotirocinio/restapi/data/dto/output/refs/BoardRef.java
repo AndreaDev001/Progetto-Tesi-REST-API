@@ -15,13 +15,20 @@ import java.util.UUID;
 public class BoardRef extends GenericOutput<BoardRef>
 {
     private String title;
-    private Integer minMembers;
+    private String description;
     private Integer maxMembers;
+    private Integer amountOfMembers;
+    private Integer amountOfGroups;
+    private UserRef publisher;
 
     public BoardRef(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
+        this.description = board.getDescription();
         this.maxMembers = board.getMaxMembers();
+        this.amountOfMembers = board.getMembers() != null ? board.getMembers().size() : 0;
+        this.amountOfGroups = board.getGroups() != null ? board.getGroups().size() : 0;
+        this.publisher = new UserRef(board.getPublisher());
         this.createdDate = board.getCreatedDate();
     }
 }

@@ -29,7 +29,7 @@ public class PollOptionController
     }
 
     @GetMapping("/private/{optionID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PollOptionDto> getPollOption(@PathVariable("optionID") UUID optionID) {
         PollOptionDto pollOptionDto = this.pollOptionService.getPollOption(optionID);
         return ResponseEntity.ok(pollOptionDto);

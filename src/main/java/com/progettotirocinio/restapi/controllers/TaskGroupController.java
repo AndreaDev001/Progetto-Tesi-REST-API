@@ -6,12 +6,14 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
+import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.repository.query.Param;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -66,6 +68,18 @@ public class TaskGroupController
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByName(@PathVariable("name") String name, @ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByName(name,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(taskGroups);
+    }
+
+    @GetMapping("/public/statues")
+    public ResponseEntity<CollectionModel<TaskGroupStatus>> getStatues() {
+        return ResponseEntity.ok(this.taskGroupService.getStatues());
+    }
+
+    @GetMapping("/private/status/{status}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroups(@PathVariable("status") TaskGroupStatus status,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByStatus(status,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskGroups);
     }
 

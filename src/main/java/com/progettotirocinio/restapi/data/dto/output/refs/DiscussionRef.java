@@ -16,11 +16,13 @@ public class DiscussionRef extends GenericOutput<DiscussionRef>
 {
     private String title;
     private String topic;
+    private UserRef publisher;
 
     public DiscussionRef(Discussion discussion) {
         this.id = discussion.getId();
         this.title = discussion.getTitle();
         this.topic = discussion.getTopic();
+        this.publisher = new UserRef(discussion.getPublisher());
         this.createdDate = discussion.getCreatedDate();
     }
 }

@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -52,7 +53,8 @@ public class BoardController
         return ResponseEntity.ok(boards);
     }
 
-    @GetMapping("/public/spec")
+    @GetMapping("/private/spec")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<BoardDto>> getBoardsBySpec(@ParameterObject @Valid BoardSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardDto> boards = this.boardService.getBoardsBySpec(BoardSpecifications.withFilter(filter),paginationRequest.toPageRequest());
         return ResponseEntity.ok(boards);
@@ -82,6 +84,12 @@ public class BoardController
     public ResponseEntity<CollectionModel<String>> getOrderTypes() {
         CollectionModel<String> orderTypes = this.boardService.getOrderTypes();
         return ResponseEntity.ok(orderTypes);
+    }
+
+    @GetMapping("/public/statues")
+    public ResponseEntity<CollectionModel<BoardStatus>> getStatues() {
+        CollectionModel<BoardStatus> statuses = this.boardService.getStatues();
+        return ResponseEntity.ok(statuses);
     }
 
     @PutMapping("/private")

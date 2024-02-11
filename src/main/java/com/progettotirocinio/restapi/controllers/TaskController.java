@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
+import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -73,6 +74,19 @@ public class TaskController
         return ResponseEntity.ok(tasks);
     }
 
+    @GetMapping("/public/statues")
+    public ResponseEntity<CollectionModel<TaskStatus>> getStatues() {
+        CollectionModel<TaskStatus> taskStatuses = this.taskService.getStatues();
+        return ResponseEntity.ok(taskStatuses);
+    }
+
+    @GetMapping("/private/status/{status}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<TaskDto>> getTasksByStatus(@PathVariable("status") TaskStatus status,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskDto> tasks = this.taskService.getTasksByStatus(status,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(tasks);
+    }
+
     @GetMapping("/private/similar/{taskID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<TaskDto>> getSimilarTasks(@PathVariable("taskID") UUID taskID,@ParameterObject @Valid PaginationRequest paginationRequest) {
@@ -91,6 +105,7 @@ public class TaskController
         CollectionModel<String> orderTypes = this.taskService.getOrderTypes();
         return ResponseEntity.ok(orderTypes);
     }
+
 
     @GetMapping("/private/publisher/{publisherID}")
     @PreAuthorize("@permissionHandler.hasAccess(#publisherID)")

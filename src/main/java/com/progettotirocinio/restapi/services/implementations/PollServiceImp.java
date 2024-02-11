@@ -22,8 +22,10 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -112,6 +114,22 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
             poll.setMinimumVotes(updatePollDto.getMinimumVotes());
         poll = this.pollDao.save(poll);
         return this.modelMapper.map(poll,PollDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredPolls() {
+        List<Poll> polls = this.pollDao.getPollsByDate(LocalDate.now());
+        for(Poll poll : polls)
+            poll.setStatus(PollStatus.EXPIRED);
+        this.pollDao.saveAll(polls);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredPolls() {
+        List<Poll> polls = this.pollDao.getPollsByStatus(PollStatus.EXPIRED);
+        this.pollDao.deleteAll(polls);
     }
 
     @Override

@@ -60,6 +60,8 @@ public class SecurityConfig
                         .requestMatchers("/teams/public/**").permitAll()
                         .requestMatchers("/teamMembers/public/**").permitAll()
                         .requestMatchers("/commentLikes/public/**").permitAll()
+                        .requestMatchers("/discussions/public/**").permitAll()
+                        .requestMatchers("/polls/public/**").permitAll()
                         .requestMatchers("/discussionLikes/public/**").permitAll()
                         .requestMatchers("/taskLikes/public/**").permitAll()
                         .requestMatchers("/pollLikes/public/**").permitAll()

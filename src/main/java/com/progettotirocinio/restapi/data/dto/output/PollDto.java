@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 import com.progettotirocinio.restapi.controllers.likes.PollLikeController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,7 @@ public class PollDto extends GenericOutput<PollDto>
     private Integer minimumVotes;
     private Integer maximumVotes;
     private LocalDate expirationDate;
+    private PollStatus status;
     @AmountReference(name = "receivedLikes")
     private Integer amountOfReceivedLikes;
     @AmountReference(name = "options")

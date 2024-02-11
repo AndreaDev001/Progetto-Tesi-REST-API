@@ -51,7 +51,7 @@ public class TaskAssignmentController
     }
 
     @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<TaskAssignmentDto>> getTaskAssignmentsByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.getTaskAssignmentsByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskAssignments);

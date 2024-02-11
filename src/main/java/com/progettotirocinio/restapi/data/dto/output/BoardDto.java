@@ -6,6 +6,8 @@ import com.progettotirocinio.restapi.controllers.TagController;
 import com.progettotirocinio.restapi.controllers.TaskGroupController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
+import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,8 @@ public class BoardDto extends GenericOutput<BoardDto>
     private Integer maxMembers;
     private LocalDate expirationDate;
     private BoardVisibility visibility;
+    private BoardStatus status;
+    private UserRef publisher;
     @AmountReference(name = "groups")
     private Integer amountOfGroups;
     @AmountReference(name = "roles")

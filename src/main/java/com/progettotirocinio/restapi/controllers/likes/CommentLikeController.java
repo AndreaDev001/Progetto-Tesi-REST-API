@@ -38,8 +38,7 @@ public class CommentLikeController
         return ResponseEntity.ok(commentLikeDto);
     }
 
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @GetMapping("/public/user/{userID}")
     public ResponseEntity<PagedModel<CommentLikeDto>> getCommentLikesByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<CommentLikeDto> commentLikes = this.commentLikeService.getCommentsLikesByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(commentLikes);

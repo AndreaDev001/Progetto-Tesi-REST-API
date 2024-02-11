@@ -22,5 +22,7 @@ public interface BoardInviteService
     BoardInviteDto getBoardInvite(UUID inviteID);
     BoardInviteDto createBoardInvite(CreateBoardInviteDto createBoardInviteDto);
     CollectionModel<BoardInviteStatus> getStatues();
+    void handleExpiredInvites();
+    void deleteExpiredInvites();
     void deleteBoardInvite(UUID inviteID);
 }

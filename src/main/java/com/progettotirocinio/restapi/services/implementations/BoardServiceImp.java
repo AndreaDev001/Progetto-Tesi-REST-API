@@ -13,6 +13,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -80,9 +82,20 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     }
 
     @Override
+    public PagedModel<BoardDto> getBoardsByStatus(BoardStatus status, Pageable pageable) {
+        Page<Board> boards = this.boardDao.getBoardsByStatus(status,pageable);
+        return this.pagedResourcesAssembler.toModel(boards,modelAssembler);
+    }
+
+    @Override
     public CollectionModel<BoardVisibility> getVisibilities() {
         List<BoardVisibility> visibilities = Arrays.stream(BoardVisibility.values()).toList();
         return CollectionModel.of(visibilities);
+    }
+
+    @Override
+    public CollectionModel<BoardStatus> getStatues() {
+        return CollectionModel.of(Arrays.stream(BoardStatus.values()).toList());
     }
 
     @Override
@@ -126,6 +139,22 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
             board.setMaxMembers(updateBoardDto.getMaxMembers());
         board = this.boardDao.save(board);
         return this.modelMapper.map(board,BoardDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredBoards() {
+        List<Board> boards = this.boardDao.getBoardsByDate(LocalDate.now());
+        for(Board current : boards)
+            current.setStatus(BoardStatus.EXPIRED);
+        this.boardDao.saveAll(boards);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredBoards() {
+        List<Board> boards = this.boardDao.getBoardsByStatus(BoardStatus.EXPIRED);
+        this.boardDao.deleteAll(boards);
     }
 
     @Override

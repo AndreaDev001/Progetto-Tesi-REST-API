@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,10 @@ public class TaskGroup extends AmountEntity implements OwnableEntity
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS",nullable = false)
+    private TaskGroupStatus status;
 
     @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
     private LocalDate expirationDate;

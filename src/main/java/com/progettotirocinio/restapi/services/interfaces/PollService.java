@@ -22,5 +22,7 @@ public interface PollService {
     PollDto getPoll(UUID pollID);
     PollDto createPoll(CreatePollDto createPollDto);
     PollDto updatePoll(UpdatePollDto updatePollDto);
+    void handleExpiredPolls();
+    void deleteExpiredPolls();
     void deletePoll(UUID pollID);
 }

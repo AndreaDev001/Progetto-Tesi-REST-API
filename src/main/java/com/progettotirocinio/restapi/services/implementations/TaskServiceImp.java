@@ -13,6 +13,7 @@ import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
+import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.services.interfaces.TaskService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -25,6 +26,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -96,6 +98,12 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     }
 
     @Override
+    public PagedModel<TaskDto> getTasksByStatus(TaskStatus status, Pageable pageable) {
+        Page<Task> tasks = this.taskDao.getTasksByStatus(status,pageable);
+        return this.pagedResourcesAssembler.toModel(tasks,modelAssembler);
+    }
+
+    @Override
     public CollectionModel<Priority> getPriorities() {
         List<Priority> priorities = Arrays.stream(Priority.values()).toList();
         return CollectionModel.of(priorities);
@@ -143,6 +151,27 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
             task.setPriority(updateTaskDto.getPriority());
         task = this.taskDao.save(task);
         return this.modelMapper.map(task,TaskDto.class);
+    }
+
+    @Override
+    public CollectionModel<TaskStatus> getStatues() {
+        return CollectionModel.of(Arrays.stream(TaskStatus.values()).toList());
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredTasks() {
+        List<Task> expiredTasks = this.taskDao.getExpiredTasks(LocalDate.now());
+        for(Task current : expiredTasks)
+            current.setStatus(TaskStatus.EXPIRED);
+        this.taskDao.saveAll(expiredTasks);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredTasks() {
+        List<Task> expiredTasks = this.taskDao.getTasksByStatus(TaskStatus.EXPIRED);
+        this.taskDao.deleteAll(expiredTasks);
     }
 
     @Override

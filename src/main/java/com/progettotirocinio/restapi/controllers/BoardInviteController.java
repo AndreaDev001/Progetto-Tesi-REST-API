@@ -64,7 +64,8 @@ public class BoardInviteController
         return ResponseEntity.ok(boardInvites);
     }
 
-    @GetMapping("/public/receiver/{receiverID}")
+    @GetMapping("/private/receiver/{receiverID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#receiverID)")
     public ResponseEntity<PagedModel<BoardInviteDto>> getBoardInvitesByReceiver(@PathVariable("receiverID") UUID receiverID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<BoardInviteDto> boardInvites = this.boardInviteService.getBoardInvitesByReceiver(receiverID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(boardInvites);

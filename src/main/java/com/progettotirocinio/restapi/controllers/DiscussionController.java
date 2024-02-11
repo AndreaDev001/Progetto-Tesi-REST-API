@@ -35,7 +35,7 @@ public class DiscussionController
     }
 
     @GetMapping("/private/{discussionID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@discussionDao,#discussionID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<DiscussionDto> getDiscussion(@PathVariable("discussionID") UUID discussionID) {
         DiscussionDto discussion = this.discussionService.getDiscussion(discussionID);
         return ResponseEntity.ok(discussion);
@@ -56,7 +56,7 @@ public class DiscussionController
     }
 
     @GetMapping("/private/publisher/{publisherID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#publisherID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<DiscussionDto>> getDiscussionsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<DiscussionDto> discussions = this.discussionService.getDiscussionsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(discussions);

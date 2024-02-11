@@ -2,6 +2,8 @@ package com.progettotirocinio.restapi.data.dto.output.bans;
 
 import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
+import com.progettotirocinio.restapi.data.entities.enums.ReportReason;
+import com.progettotirocinio.restapi.data.entities.enums.ReportType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 public class BanDto extends GenericOutput<BanDto> {
     protected String title;
     protected String description;
+    protected ReportReason reason;
+    protected ReportType type;
     protected LocalDate expirationDate;
     protected boolean expired;
     protected UserRef banner;

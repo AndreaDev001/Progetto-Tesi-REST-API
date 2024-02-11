@@ -36,8 +36,7 @@ public class PollLikeController
         return ResponseEntity.ok(pollLikeDto);
     }
 
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @GetMapping("/public/user/{userID}")
     public ResponseEntity<PagedModel<PollLikeDto>> getPollLikesByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollLikeDto> pollLikes = this.pollLikeService.getPollLikesByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(pollLikes);
