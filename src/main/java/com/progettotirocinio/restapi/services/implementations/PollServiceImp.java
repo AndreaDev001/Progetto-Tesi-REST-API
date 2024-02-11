@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.specifications.PollSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
@@ -79,6 +80,14 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     @Override
     public PagedModel<PollDto> getPollsBySpec(Specification<Poll> specification, Pageable pageable) {
         Page<Poll> polls = this.pollDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(polls,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<PollDto> getSimilarPolls(UUID pollID, Pageable pageable) {
+        Poll poll = this.pollDao.findById(pollID).orElseThrow();
+        PollSpecifications.Filter filter = new PollSpecifications.Filter(poll);
+        Page<Poll> polls = this.pollDao.findAll(PollSpecifications.withFilter(filter),pageable);
         return this.pagedResourcesAssembler.toModel(polls,modelAssembler);
     }
 

@@ -69,6 +69,13 @@ public class PollController
         return ResponseEntity.ok(polls);
     }
 
+    @GetMapping("/private/similar/{pollID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<PollDto>> getSimilarPolls(@PathVariable("pollID") UUID pollID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<PollDto> polls = this.pollService.getSimilarPolls(pollID,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(polls);
+    }
+
     @GetMapping("/public/orderTypes")
     public ResponseEntity<CollectionModel<String>> getOrderTypes() {
         return ResponseEntity.ok(this.pollService.getOrderTypes());

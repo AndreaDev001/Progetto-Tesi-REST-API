@@ -21,6 +21,7 @@ public interface PollService {
     PagedModel<PollDto> getPollsByMinimumVotes(Integer votes,Pageable pageable);
     PagedModel<PollDto> getPollsByMaximumVotes(Integer votes,Pageable pageable);
     PagedModel<PollDto> getPollsBySpec(Specification<Poll> specification,Pageable pageable);
+    PagedModel<PollDto> getSimilarPolls(UUID pollID,Pageable pageable);
     CollectionModel<String> getOrderTypes();
     CollectionModel<PollStatus> getStatues();
     PollDto getPoll(UUID pollID);

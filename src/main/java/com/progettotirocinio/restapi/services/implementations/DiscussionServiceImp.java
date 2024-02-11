@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.specifications.DiscussionSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
@@ -63,6 +64,14 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     @Override
     public PagedModel<DiscussionDto> getDiscussionsBySpec(Specification<Discussion> specification, Pageable pageable) {
         Page<Discussion> discussions = this.discussionDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<DiscussionDto> getSimilarDiscussions(UUID discussionID, Pageable pageable) {
+        Discussion discussion = this.discussionDao.findById(discussionID).orElseThrow();
+        DiscussionSpecifications.Filter filter = new DiscussionSpecifications.Filter(discussion);
+        Page<Discussion> discussions = this.discussionDao.findAll(DiscussionSpecifications.withFilter(filter),pageable);
         return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
     }
 

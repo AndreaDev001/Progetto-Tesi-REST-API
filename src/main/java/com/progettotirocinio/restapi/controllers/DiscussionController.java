@@ -52,6 +52,13 @@ public class DiscussionController
         return ResponseEntity.ok(discussions);
     }
 
+    @GetMapping("/private/similar/{discussionID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<DiscussionDto>> getSimilarDiscussions(@PathVariable("discussionID") UUID discussionID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<DiscussionDto> discussions = this.discussionService.getSimilarDiscussions(discussionID,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(discussions);
+    }
+
     @GetMapping("/public/orderTypes")
     public ResponseEntity<CollectionModel<String>> getOrderTypes() {
         return ResponseEntity.ok(this.discussionService.getOrderTypes());

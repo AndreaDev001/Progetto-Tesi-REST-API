@@ -18,6 +18,7 @@ public interface DiscussionService {
     PagedModel<DiscussionDto> getDiscussionsByTopic(String topic,Pageable pageable);
     PagedModel<DiscussionDto> getDiscussionsByTitle(String title,Pageable pageable);
     PagedModel<DiscussionDto> getDiscussionsBySpec(Specification<Discussion> specification,Pageable pageable);
+    PagedModel<DiscussionDto> getSimilarDiscussions(UUID discussionID,Pageable pageable);
     CollectionModel<String> getOrderTypes();
     DiscussionDto getDiscussion(UUID discussionID);
     DiscussionDto createDiscussion(CreateDiscussionDto createDiscussionDto);
