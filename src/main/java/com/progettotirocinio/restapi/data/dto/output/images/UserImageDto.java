@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UserImageDto extends GenericOutput<UserImageDto>
+public class UserImageDto extends ImageDto
 {
     private UserRef user;
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class BoardImageDto extends GenericOutput<BoardImageDto>
+public class BoardImageDto extends ImageDto
 {
     private BoardRef board;
 }

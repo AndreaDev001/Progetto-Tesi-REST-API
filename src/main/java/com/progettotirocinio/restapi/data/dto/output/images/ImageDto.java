@@ -1,7 +1,10 @@
 package com.progettotirocinio.restapi.data.dto.output.images;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +21,7 @@ public class ImageDto extends GenericOutput<ImageDto>
 {
     protected UUID id;
     protected ImageType type;
+    protected ImageOwnerType owner;
+    @JsonIgnore
+    protected byte[] image;
 }

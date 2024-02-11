@@ -30,6 +30,6 @@ public interface PollDao extends JpaRepository<Poll, UUID> {
     Page<Poll> getPollsByStatus(@Param("requiredStatus")PollStatus status,Pageable pageable);
     @Query("select p from Poll p where p.status = :requiredStatus")
     List<Poll> getPollsByStatus(@Param("requiredStatus") PollStatus status);
-    @Query("select p from Poll p where p.expiredDate > :requiredDate")
+    @Query("select p from Poll p where p.expirationDate > :requiredDate")
     List<Poll> getPollsByDate(@Param("requiredDate")LocalDate date);
 }

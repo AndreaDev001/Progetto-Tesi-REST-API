@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.entities;
 
 
+import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,12 +17,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(value = AuditingEntityListener.class)
+@EntityListeners(value = {UUIDEntityListener.class, AuditingEntityListener.class})
 @MappedSuperclass
 public abstract class GenericEntity
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID",nullable = false,updatable = false)
     protected UUID id;
 
     @Column(name = "CREATED_DATE",nullable = false,updatable = false)

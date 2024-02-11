@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.entities.images;
 
 
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,10 @@ public class Image
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE",nullable = false,updatable = false)
     protected ImageType type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OWNER_TYPE",nullable = false,updatable = false)
+    protected ImageOwnerType owner;
 
     @Column(name = "IMAGE",nullable = false,updatable = false)
     protected byte[] image;

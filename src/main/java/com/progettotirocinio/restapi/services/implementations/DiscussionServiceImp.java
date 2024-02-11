@@ -71,7 +71,6 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
         discussion.setTitle(createDiscussionDto.getTitle());
         discussion.setTitle(createDiscussionDto.getTopic());
         discussion.setPublisher(publisher);
-        discussion.setExpirationDate(createDiscussionDto.getExpirationDate());
         discussion = this.discussionDao.save(discussion);
         return this.modelMapper.map(discussion,DiscussionDto.class);
     }
@@ -85,8 +84,6 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
             discussion.setTitle(updateDiscussionDto.getTitle());
         if(discussion.getTopic() != null)
             discussion.setTopic(updateDiscussionDto.getTopic());
-        if(discussion.getExpirationDate() != null)
-            discussion.setExpirationDate(updateDiscussionDto.getExpirationDate());
         discussion = this.discussionDao.save(discussion);
         return this.modelMapper.map(discussion,DiscussionDto.class);
     }

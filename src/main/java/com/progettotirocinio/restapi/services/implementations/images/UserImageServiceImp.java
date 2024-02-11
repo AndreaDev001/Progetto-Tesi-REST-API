@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dao.images.UserImageDao;
 import com.progettotirocinio.restapi.data.dto.input.create.images.CreateUserImageDto;
 import com.progettotirocinio.restapi.data.dto.output.images.UserImageDto;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
@@ -75,6 +76,7 @@ public class UserImageServiceImp extends GenericServiceImp<UserImage, UserImageD
         UserImage userImage = userImageOptional.orElseGet(UserImage::new);
         userImage.setImage(createUserImageDto.getFile().getBytes());
         userImage.setType(ImageUtils.getImageType(createUserImageDto.getFile().getContentType()));
+        userImage.setOwner(ImageOwnerType.USER);
         userImage.setUser(requiredUser);
         userImage = this.userImageDao.save(userImage);
         UserImageDto userImageDto = this.modelMapper.map(userImage,UserImageDto.class);
