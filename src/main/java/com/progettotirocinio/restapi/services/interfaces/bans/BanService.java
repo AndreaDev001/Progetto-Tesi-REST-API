@@ -29,5 +29,7 @@ public interface BanService
     BanDto getBan(UUID banID);
     BanDto createBan(CreateBanDto createBanDto);
     BanDto updateBan(UpdateBanDto updateBanDto);
+    void handleExpiredBans();
+    void deleteExpiredBans();
     void deleteBan(UUID banID);
 }

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers;
 
 
+import com.progettotirocinio.restapi.data.dao.specifications.PollSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
@@ -59,6 +60,18 @@ public class PollController
     public ResponseEntity<PagedModel<PollDto>> getPollsByTitle(@PathVariable("title") String title,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollDto> polls = this.pollService.getPollsByTitle(title,paginationRequest.toPageRequest());
         return ResponseEntity.ok(polls);
+    }
+
+    @GetMapping("/private/spec")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<PollDto>> getPollsBySpec(@ParameterObject @Valid PollSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<PollDto> polls = this.pollService.getPollsBySpec(PollSpecifications.withFilter(filter),paginationRequest.toPageRequest());
+        return ResponseEntity.ok(polls);
+    }
+
+    @GetMapping("/public/orderTypes")
+    public ResponseEntity<CollectionModel<String>> getOrderTypes() {
+        return ResponseEntity.ok(this.pollService.getOrderTypes());
     }
 
     @PostMapping("/private")

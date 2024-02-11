@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers;
 
 
+import com.progettotirocinio.restapi.data.dao.specifications.DiscussionSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
@@ -10,13 +11,16 @@ import com.progettotirocinio.restapi.services.interfaces.DiscussionService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -39,6 +43,18 @@ public class DiscussionController
     public ResponseEntity<DiscussionDto> getDiscussion(@PathVariable("discussionID") UUID discussionID) {
         DiscussionDto discussion = this.discussionService.getDiscussion(discussionID);
         return ResponseEntity.ok(discussion);
+    }
+
+    @GetMapping("/private/spec")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<DiscussionDto>> getDiscussionsBySpec(@ParameterObject @Valid DiscussionSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<DiscussionDto> discussions = this.discussionService.getDiscussionsBySpec(DiscussionSpecifications.withFilter(filter),paginationRequest.toPageRequest());
+        return ResponseEntity.ok(discussions);
+    }
+
+    @GetMapping("/public/orderTypes")
+    public ResponseEntity<CollectionModel<String>> getOrderTypes() {
+        return ResponseEntity.ok(this.discussionService.getOrderTypes());
     }
 
     @PostMapping("/private")

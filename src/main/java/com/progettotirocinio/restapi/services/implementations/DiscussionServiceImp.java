@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.DiscussionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.output.DiscussionDto;
@@ -15,7 +16,9 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -55,6 +58,17 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     public PagedModel<DiscussionDto> getDiscussionsByTitle(String title, Pageable pageable) {
         Page<Discussion> discussions = this.discussionDao.getDiscussionsByTitle(title,pageable);
         return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<DiscussionDto> getDiscussionsBySpec(Specification<Discussion> specification, Pageable pageable) {
+        Page<Discussion> discussions = this.discussionDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<String> getOrderTypes() {
+        return CollectionModel.of(SpecificationsUtils.generateOrderTypes(Discussion.class));
     }
 
     @Override

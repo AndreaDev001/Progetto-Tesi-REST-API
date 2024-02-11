@@ -27,7 +27,9 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -139,6 +141,22 @@ public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements Ban
             ban.setReason(updateBanDto.getReason());
         ban = this.banDao.save(ban);
         return this.modelMapper.map(ban,BanDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void handleExpiredBans() {
+        List<Ban> bans = this.banDao.getBansByDate(LocalDate.now());
+        for(Ban current : bans)
+            current.setExpired(true);
+        this.banDao.saveAll(bans);
+    }
+
+    @Override
+    @Transactional
+    public void deleteExpiredBans() {
+        List<Ban> bans = this.banDao.getBansByExpired(true);
+        this.banDao.deleteAll(bans);
     }
 
     @Override

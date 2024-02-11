@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
@@ -16,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
@@ -72,6 +74,17 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     public PagedModel<PollDto> getPollsByMaximumVotes(Integer votes, Pageable pageable) {
         Page<Poll> polls = this.pollDao.getPollsByMaximumVotes(votes,pageable);
         return this.pagedResourcesAssembler.toModel(polls,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<PollDto> getPollsBySpec(Specification<Poll> specification, Pageable pageable) {
+        Page<Poll> polls = this.pollDao.findAll(specification,pageable);
+        return this.pagedResourcesAssembler.toModel(polls,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<String> getOrderTypes() {
+        return CollectionModel.of(SpecificationsUtils.generateOrderTypes(Poll.class));
     }
 
     @Override
