@@ -50,6 +50,18 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfCreatedTags;
     @AmountReference(name = "createdRoles")
     private Integer amountOfCreatedRoles;
+    @AmountReference(name = "createdDiscussions")
+    private Integer amountOfCreatedDiscussions;
+    @AmountReference(name = "createdComments")
+    private Integer amountOfCreatedComments;
+    @AmountReference(name = "likedComments")
+    private Integer amountOfLikedComments;
+    @AmountReference(name = "likedPolls")
+    private Integer amountOfLikedPolls;
+    @AmountReference(name = "likedDiscussions")
+    private Integer amountOfLikedDiscussions;
+    @AmountReference(name = "likedTasks")
+    private Integer amountOfLikedTasks;
     @AmountReference(name = "rolesOwned")
     private Integer amountOfOwnedRoles;
     @AmountReference(name = "joinedBoards")

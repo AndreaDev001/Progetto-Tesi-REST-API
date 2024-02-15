@@ -39,7 +39,8 @@ public class UserController
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/public/{userID}")
+    @GetMapping("/private/{userID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<UserDto> getUser(@PathVariable("userID") UUID userID) {
         UserDto user = this.userService.getUser(userID);
         return ResponseEntity.ok(user);

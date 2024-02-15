@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
