@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
+import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
@@ -13,6 +14,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.BoardMember;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
@@ -42,11 +44,13 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
 
     private final BoardDao boardDao;
     private final TaskGroupDao taskGroupDao;
+    private final BoardMemberDao boardMemberDao;
 
-    public BoardServiceImp(TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+    public BoardServiceImp(BoardMemberDao boardMemberDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
         this.boardDao = boardDao;
         this.taskGroupDao = taskGroupDao;
+        this.boardMemberDao = boardMemberDao;
     }
 
     @Override
@@ -128,13 +132,17 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         board.setExpirationDate(createBoardDto.getExpirationDate());
         board.setStatus(BoardStatus.OPEN);
         board.setPublisher(publisher);
+        board = this.boardDao.save(board);
         TaskGroup firstGroup = createDefaultGroup("TO DO",0,board,publisher);
         TaskGroup secondGroup = createDefaultGroup("IN PROGRESS",1,board,publisher);
         TaskGroup thirdGroup = createDefaultGroup("COMPLETED",2,board,publisher);
-        board = this.boardDao.save(board);
         this.taskGroupDao.save(firstGroup);
         this.taskGroupDao.save(secondGroup);
         this.taskGroupDao.save(thirdGroup);
+        BoardMember boardMember = new BoardMember();
+        boardMember.setUser(publisher);
+        boardMember.setBoard(board);
+        this.boardMemberDao.save(boardMember);
         return this.modelMapper.map(board,BoardDto.class);
     }
 
