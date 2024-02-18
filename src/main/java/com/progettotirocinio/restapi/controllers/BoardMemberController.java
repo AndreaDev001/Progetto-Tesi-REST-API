@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,10 +46,10 @@ public class BoardMemberController
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@boardDao,#boardID)")
-    public ResponseEntity<PagedModel<BoardMemberDto>> getBoardMembersByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<BoardMemberDto> boardMembers = this.boardMemberService.getBoardMembersByBoard(boardID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(boardMembers);
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CollectionModel<BoardMemberDto>> getBoardMembersByBoard(@PathVariable("boardID") UUID boardID) {
+        CollectionModel<BoardMemberDto> collectionModel = this.boardMemberService.getBoardMembersByBoard(boardID);
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/user/{userID}/board/{boardID}")

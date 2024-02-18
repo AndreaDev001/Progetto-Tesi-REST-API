@@ -19,7 +19,7 @@ public interface TaskService {
     PagedModel<TaskDto> getTasksByTitle(String title,Pageable pageable);
     PagedModel<TaskDto> getTasksByDescription(String description,Pageable pageable);
     PagedModel<TaskDto> getTasksByPublisher(UUID publisherID,Pageable pageable);
-    PagedModel<TaskDto> getTasksByGroup(UUID groupID,Pageable pageable);
+    CollectionModel<TaskDto> getTasksByGroup(UUID groupID);
     PagedModel<TaskDto> getTasksByPriority(Priority priority,Pageable pageable);
     PagedModel<TaskDto> getTasksBySpec(Specification<Task> specification,Pageable pageable);
     PagedModel<TaskDto> getSimilarTasks(UUID taskID,Pageable pageable);

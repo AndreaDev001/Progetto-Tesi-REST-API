@@ -16,11 +16,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiresCaching(allCacheName = "ALL_BOARD_MEMBERS")
@@ -48,9 +51,9 @@ public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardM
     }
 
     @Override
-    public PagedModel<BoardMemberDto> getBoardMembersByBoard(UUID boardID, Pageable pageable) {
-        Page<BoardMember> boardMembers = this.boardMemberDao.getBoardMembersByBoard(boardID,pageable);
-        return this.pagedResourcesAssembler.toModel(boardMembers,modelAssembler);
+    public CollectionModel<BoardMemberDto> getBoardMembersByBoard(UUID boardID) {
+        List<BoardMember> boardMembers = this.boardMemberDao.getBoardMembersByBoard(boardID);
+        return CollectionModel.of(boardMembers.stream().map(boardMember -> this.modelMapper.map(boardMember,BoardMemberDto.class)).collect(Collectors.toList()));
     }
 
     @Override

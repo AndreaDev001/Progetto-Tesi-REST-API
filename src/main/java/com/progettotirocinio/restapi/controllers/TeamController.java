@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,9 +44,9 @@ public class TeamController
 
     @GetMapping("/private/board/{boardID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<PagedModel<TeamDto>> getTeamsByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TeamDto> teams = this.teamService.getTeamsByBoard(boardID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(teams);
+    public ResponseEntity<CollectionModel<TeamDto>> getTeamsByBoard(@PathVariable("boardID") UUID boardID) {
+        CollectionModel<TeamDto> collectionModel = this.teamService.getTeamsByBoard(boardID);
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/name/{name}")

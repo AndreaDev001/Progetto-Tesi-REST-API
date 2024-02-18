@@ -18,11 +18,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -51,10 +54,11 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
     }
 
     @Override
-    public PagedModel<TeamDto> getTeamsByBoard(UUID boardID, Pageable pageable) {
-        Page<Team> teams = this.teamDao.getTeamsByBoard(boardID,pageable);
-        return this.pagedResourcesAssembler.toModel(teams,modelAssembler);
+    public CollectionModel<TeamDto> getTeamsByBoard(UUID boardID) {
+        List<Team> teams = this.teamDao.getTeamsByBoard(boardID);
+        return CollectionModel.of(teams.stream().map(team -> this.modelMapper.map(team,TeamDto.class)).collect(Collectors.toList()));
     }
+
 
     @Override
     public PagedModel<TeamDto> getTeamsByName(String name, Pageable pageable) {

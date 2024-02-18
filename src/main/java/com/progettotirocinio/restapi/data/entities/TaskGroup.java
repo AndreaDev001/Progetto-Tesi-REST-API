@@ -29,6 +29,9 @@ public class TaskGroup extends AmountEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     private String name;
 
+    @Column(name = "CURRENT_ORDER",nullable = false)
+    private Integer currentOrder;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "STATUS",nullable = false)
     private TaskGroupStatus status;

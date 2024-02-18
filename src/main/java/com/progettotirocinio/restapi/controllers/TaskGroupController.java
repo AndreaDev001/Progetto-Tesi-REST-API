@@ -59,9 +59,9 @@ public class TaskGroupController
 
     @GetMapping("/private/board/{boardID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<PagedModel<TaskGroupDto>> getTaskGroupsByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TaskGroupDto> taskGroups = this.taskGroupService.getTaskGroupsByBoard(boardID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(taskGroups);
+    public ResponseEntity<CollectionModel<TaskGroupDto>> getTaskGroupsByBoard(@PathVariable("boardID") UUID boardID) {
+        CollectionModel<TaskGroupDto> collectionModel = this.taskGroupService.getTaskGroupsByBoard(boardID);
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/name/{name}")

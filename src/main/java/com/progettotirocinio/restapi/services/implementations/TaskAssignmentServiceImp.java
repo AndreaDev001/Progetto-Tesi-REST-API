@@ -15,12 +15,15 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, TaskAssignmentDto> implements TaskAssignmentService {
@@ -55,9 +58,9 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
     }
 
     @Override
-    public PagedModel<TaskAssignmentDto> getTaskAssignmentsByTask(UUID taskID, Pageable pageable) {
-        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByTask(taskID,pageable);
-        return this.pagedResourcesAssembler.toModel(taskAssignments,modelAssembler);
+    public CollectionModel<TaskAssignmentDto> getTaskAssignmentsByTask(UUID taskID) {
+        List<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByTask(taskID);
+        return CollectionModel.of(taskAssignments.stream().map(taskAssignment -> this.modelMapper.map(taskAssignment,TaskAssignmentDto.class)).collect(Collectors.toList()));
     }
 
     @Override

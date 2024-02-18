@@ -92,7 +92,7 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Discussion discussion = new Discussion();
         discussion.setTitle(createDiscussionDto.getTitle());
-        discussion.setTitle(createDiscussionDto.getTopic());
+        discussion.setTopic(createDiscussionDto.getTopic());
         discussion.setPublisher(publisher);
         discussion = this.discussionDao.save(discussion);
         return this.modelMapper.map(discussion,DiscussionDto.class);

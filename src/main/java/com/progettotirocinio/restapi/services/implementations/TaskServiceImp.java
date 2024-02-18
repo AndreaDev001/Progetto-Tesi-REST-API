@@ -3,7 +3,9 @@ package com.progettotirocinio.restapi.services.implementations;
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.TaskDao;
+import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dao.specifications.TaskSpecifications;
@@ -11,6 +13,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.entities.Task;
+import com.progettotirocinio.restapi.data.entities.TaskGroup;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
@@ -30,14 +33,17 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiresCaching(allCacheName = "ALL_TASKS",allSearchName = "SEARCH_TASKS",searchCachingRequired = true)
 public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements TaskService {
     private final TaskDao taskDao;
+    private final TaskGroupDao taskGroupDao;
 
-    public TaskServiceImp(CacheHandler cacheHandler,Mapper mapper, UserDao userDao, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
+    public TaskServiceImp(CacheHandler cacheHandler,TaskGroupDao taskGroupDao,Mapper mapper, UserDao userDao, TaskDao taskDao, PagedResourcesAssembler<Task> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,Task.class,TaskDto.class, pagedResourcesAssembler);
+        this.taskGroupDao = taskGroupDao;
         this.taskDao = taskDao;
     }
 
@@ -72,9 +78,9 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     }
 
     @Override
-    public PagedModel<TaskDto> getTasksByGroup(UUID groupID, Pageable pageable) {
-        Page<Task> tasks = this.taskDao.getTasksByGroup(groupID,pageable);
-        return this.pagedResourcesAssembler.toModel(tasks,modelAssembler);
+    public CollectionModel<TaskDto> getTasksByGroup(UUID groupID) {
+        List<Task> tasks = this.taskDao.getTasksByGroup(groupID);
+        return CollectionModel.of(tasks.stream().map(task -> this.modelMapper.map(task,TaskDto.class)).collect(Collectors.toList()));
     }
 
     @Override
@@ -139,16 +145,23 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     @Transactional
     public TaskDto updateTask(UpdateTaskDto updateTaskDto) {
         Task task = this.taskDao.findById(updateTaskDto.getTaskID()).orElseThrow();
-        if(task.getName() != null)
+        if(updateTaskDto.getName() != null)
              task.setName(updateTaskDto.getName());
-        if(task.getDescription() != null)
-            task.setDescription(updateTaskDto.getDescription());
-        if(task.getTitle() != null)
-            task.setTitle(updateTaskDto.getTitle());
-        if(task.getExpirationDate() != null)
-            task.setExpirationDate(updateTaskDto.getExpirationDate());
-        if(task.getPriority() != null)
+        if(updateTaskDto.getDescription() != null)
+            updateTaskDto.setDescription(updateTaskDto.getDescription());
+        if(updateTaskDto.getTitle() != null)
+            updateTaskDto.setTitle(updateTaskDto.getTitle());
+        if(updateTaskDto.getExpirationDate() != null)
+            updateTaskDto.setExpirationDate(updateTaskDto.getExpirationDate());
+        if(updateTaskDto.getPriority() != null)
             task.setPriority(updateTaskDto.getPriority());
+        if(updateTaskDto.getGroupID() != null) {
+            UUID requiredID = updateTaskDto.getGroupID();
+            TaskGroup taskGroup = this.taskGroupDao.findById(requiredID).orElseThrow();
+            if(taskGroup.getBoard().getId().equals(task.getGroup().getBoard().getId())) {
+                task.setGroup(taskGroup);
+            }
+        }
         task = this.taskDao.save(task);
         return this.modelMapper.map(task,TaskDto.class);
     }

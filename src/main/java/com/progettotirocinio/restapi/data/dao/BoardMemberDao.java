@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public interface BoardMemberDao extends JpaRepository<BoardMember, UUID> {
     @Query("select b from BoardMember b where b.user.id = :requiredID")
     Page<BoardMember> getBoardMembers(@Param("requiredID") UUID userID, Pageable pageable);
     @Query("select b from BoardMember b where b.board.id = :requiredID")
-    Page<BoardMember> getBoardMembersByBoard(@Param("requiredID") UUID boardID,Pageable pageable);
+    List<BoardMember> getBoardMembersByBoard(@Param("requiredID") UUID boardID);
     @Query("select b from BoardMember b where b.board.id = :requiredBoardID and b.user.id = :requiredUserID")
     Optional<BoardMember> getBoardMember(@Param("requiredBoardID") UUID boardID, @Param("requiredUserID") UUID userID);
 }

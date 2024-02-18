@@ -24,8 +24,4 @@ public class CreateDiscussionDto
     @NotNull
     @NotBlank
     private String topic;
-
-    @NotNull
-    @Future
-    private LocalDate expirationDate;
 }

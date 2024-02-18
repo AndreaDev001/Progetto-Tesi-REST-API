@@ -31,8 +31,8 @@ public class Tag extends GenericEntity implements OwnableEntity
     private User publisher;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "BOARD_ID",updatable = false,nullable = false)
-    private Board board;
+    @JoinColumn(name = "TASK_ID",updatable = false,nullable = false)
+    private Task task;
 
     @Override
     public UUID getOwnerID() {

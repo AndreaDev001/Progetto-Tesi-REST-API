@@ -20,5 +20,5 @@ public class CreateTagDto
     @NotBlank
     private String name;
     @NotNull
-    private UUID boardID;
+    private UUID taskID;
 }

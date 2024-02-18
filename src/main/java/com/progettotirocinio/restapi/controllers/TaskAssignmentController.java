@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,10 +45,10 @@ public class TaskAssignmentController
     }
 
     @GetMapping("/private/task/{taskID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@taskDao,#taskID)")
-    public ResponseEntity<PagedModel<TaskAssignmentDto>> getTaskAssignmentsByTask(@PathVariable("taskID") UUID taskID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.getTaskAssignmentsByTask(taskID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(taskAssignments);
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CollectionModel<TaskAssignmentDto>> getTaskAssignmentsByTask(@PathVariable("taskID") UUID taskID) {
+        CollectionModel<TaskAssignmentDto> collectionModel = this.taskAssignmentService.getTaskAssignmentsByTask(taskID);
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/user/{userID}")

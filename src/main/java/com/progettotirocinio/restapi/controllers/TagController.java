@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,6 +50,14 @@ public class TagController
         return ResponseEntity.status(201).body(tagDto);
     }
 
+
+    @GetMapping("/private/task/{taskID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CollectionModel<TagDto>> getTagsByTask(@PathVariable("taskID") UUID taskID) {
+        CollectionModel<TagDto> collectionModel = this.tagService.getTagsByTask(taskID);
+        return ResponseEntity.ok(collectionModel);
+    }
+
     @PutMapping("/private")
     @PreAuthorize("@permissionHandler.hasAccess(@tagDao,#updateTagDto.tagID)")
     public ResponseEntity<TagDto> updateTag(@RequestBody @Valid UpdateTagDto updateTagDto) {
@@ -60,13 +69,6 @@ public class TagController
     @PreAuthorize("@permissionHandler.hasAccess(#publisherID)")
     public ResponseEntity<PagedModel<TagDto>> getTagsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TagDto> tags = this.tagService.getTagsByPublisher(publisherID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(tags);
-    }
-
-    @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<PagedModel<TagDto>> getTagsByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TagDto> tags = this.tagService.getTagsByBoard(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tags);
     }
 

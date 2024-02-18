@@ -27,7 +27,7 @@ import java.util.UUID;
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASKS")
 @SpecificationPrefix
-public class Task extends GenericEntity implements OwnableEntity
+public class Task extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
@@ -60,6 +60,9 @@ public class Task extends GenericEntity implements OwnableEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskAssignment> assignments =  new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<Tag> tags = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)

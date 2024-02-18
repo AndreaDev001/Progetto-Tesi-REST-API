@@ -15,7 +15,7 @@ public interface TaskGroupService
 {
     PagedModel<TaskGroupDto> getTasks(Pageable pageable);
     PagedModel<TaskGroupDto> getTaskGroupsByPublisher(UUID publisherID,Pageable pageable);
-    PagedModel<TaskGroupDto> getTaskGroupsByBoard(UUID boardID,Pageable pageable);
+    CollectionModel<TaskGroupDto> getTaskGroupsByBoard(UUID boardID);
     PagedModel<TaskGroupDto> getTaskGroupsByName(String name,Pageable pageable);
     CollectionModel<TaskGroupStatus> getStatues();
     PagedModel<TaskGroupDto> getTaskGroupsByStatus(TaskGroupStatus taskGroupStatus,Pageable pageable);

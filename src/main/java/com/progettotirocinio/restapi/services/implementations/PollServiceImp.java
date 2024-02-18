@@ -116,6 +116,7 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
         poll.setDescription(createPollDto.getDescription());
         poll.setMaximumVotes(createPollDto.getMaximumVotes());
         poll.setMinimumVotes(createPollDto.getMinimumVotes());
+        poll.setStatus(PollStatus.OPEN);
         poll.setPublisher(publisher);
         poll.setExpirationDate(createPollDto.getExpirationDate());
         poll = this.pollDao.save(poll);

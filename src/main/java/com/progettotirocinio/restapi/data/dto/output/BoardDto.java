@@ -40,8 +40,6 @@ public class BoardDto extends GenericOutput<BoardDto>
     private Integer amountOfGroups;
     @AmountReference(name = "roles")
     private Integer amountOfRoles;
-    @AmountReference(name = "tags")
-    private Integer amountOfTags;
     @AmountReference(name = "members")
     private Integer members;
 
@@ -50,6 +48,5 @@ public class BoardDto extends GenericOutput<BoardDto>
         PaginationRequest paginationRequest = new PaginationRequest(0,20);
         this.add(linkTo(methodOn(TaskGroupController.class).getTaskGroupsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("taskGroups").withName("taskGroups"));
         this.add(linkTo(methodOn(RoleController.class).getRoles(paginationRequest)).slash(paginationRequest.toString()).withRel("roles").withName("roles"));
-        this.add(linkTo(methodOn(TagController.class).getTagsByBoard(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("tags").withName("tags"));
     }
 }

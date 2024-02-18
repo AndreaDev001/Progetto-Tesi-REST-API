@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -15,8 +16,8 @@ import java.util.UUID;
 public interface TagDao extends JpaRepository<Tag, UUID> {
     @Query("select t from Tag t where t.publisher.id = :requiredPublisherID")
     Page<Tag> getTagsByPublisher(@Param("requiredPublisherID") UUID publisherID, Pageable pageable);
-    @Query("select t from Tag t where t.board.id = :requiredBoardID")
-    Page<Tag> getTagsByBoard(@Param("requiredBoardID") UUID boardID,Pageable pageable);
     @Query("select t from Tag t where t.name = :requiredName")
     Page<Tag> getTagsByName(@Param("requiredName") String name,Pageable pageable);
+    @Query("select t from Tag t where t.task.id = :requiredID")
+    List<Tag> getTagsByTask(@Param("requiredID") UUID taskID);
 }

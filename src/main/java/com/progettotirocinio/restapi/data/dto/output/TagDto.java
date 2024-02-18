@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
+import com.progettotirocinio.restapi.data.dto.output.refs.TaskRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,5 @@ public class TagDto extends GenericOutput<TagDto>
 {
     private String name;
     private UserRef publisher;
-    private BoardRef board;
+    private TaskRef task;
 }

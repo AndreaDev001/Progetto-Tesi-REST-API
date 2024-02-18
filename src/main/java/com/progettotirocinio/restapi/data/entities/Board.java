@@ -61,9 +61,6 @@ public class Board extends AmountEntity implements OwnableEntity
     private Set<TaskGroup> groups = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
-    private Set<Tag> tags = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
@@ -75,7 +72,7 @@ public class Board extends AmountEntity implements OwnableEntity
     @Column(name = "MAX_MEMBERS",nullable = false)
     private Integer maxMembers;
 
-    @Column(name = "EXPIRATION_DATE",nullable = false)
+    @Column(name = "EXPIRATION_DATE")
     private LocalDate expirationDate;
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public interface TaskAssignmentDao extends JpaRepository<TaskAssignment, UUID> {
     @Query("select t from TaskAssignment t where t.user.id = :requiredID")
     Page<TaskAssignment> getTaskAssignmentsByUser(@Param("requiredID") UUID userID, Pageable pageable);
     @Query("select t from TaskAssignment t where t.task.id = :requiredID")
-    Page<TaskAssignment> getTaskAssignmentsByTask(@Param("requiredID") UUID taskID, Pageable pageable);
+    List<TaskAssignment> getTaskAssignmentsByTask(@Param("requiredID") UUID taskID);
     @Query("select t from TaskAssignment t where t.user.id = :requiredUserID and t.task.id = :requiredTaskID")
     Optional<TaskAssignment> getTaskAssignment(@Param("requiredUserID") UUID userID, @Param("requiredTaskID") UUID taskID);
 }

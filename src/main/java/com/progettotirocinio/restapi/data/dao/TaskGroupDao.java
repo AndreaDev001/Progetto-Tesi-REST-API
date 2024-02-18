@@ -22,8 +22,8 @@ public interface TaskGroupDao extends JpaRepository<TaskGroup, UUID> {
     Page<TaskGroup> getTaskGroupsByPublisher(@Param("requiredPublisherID") UUID publisherID, Pageable pageable);
     @Query("select t from TaskGroup t where t.name = :requiredName")
     Page<TaskGroup> getTaskGroupsByName(@Param("requiredName") String name,Pageable pageable);
-    @Query("select t from TaskGroup t where t.board.id = :requiredBoardID")
-    Page<TaskGroup> getTaskGroupsByBoard(@Param("requiredBoardID") UUID boardID,Pageable pageable);
+    @Query("select t from TaskGroup t where t.board.id = :requiredBoardID order by t.currentOrder asc")
+    List<TaskGroup> getTaskGroupsByBoard(@Param("requiredBoardID") UUID boardID);
     @Query("select t from TaskGroup t where t.status = :requiredStatus")
     Page<TaskGroup> getTaskGroupsByStatus(@Param("requiredStatus")TaskGroupStatus status,Pageable pageable);
     @Query("select t from TaskGroup t where t.status = :requiredStatus")

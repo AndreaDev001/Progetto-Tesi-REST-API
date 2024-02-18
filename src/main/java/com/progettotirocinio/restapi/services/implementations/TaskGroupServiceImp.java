@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiresCaching(allCacheName = "ALL_TASK_GROUPS")
@@ -58,9 +59,9 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     }
 
     @Override
-    public PagedModel<TaskGroupDto> getTaskGroupsByBoard(UUID boardID, Pageable pageable) {
-        Page<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByBoard(boardID,pageable);
-        return this.pagedResourcesAssembler.toModel(taskGroups,modelAssembler);
+    public CollectionModel<TaskGroupDto> getTaskGroupsByBoard(UUID boardID) {
+        List<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByBoard(boardID);
+        return CollectionModel.of(taskGroups.stream().map(current -> this.modelMapper.map(current,TaskGroupDto.class)).collect(Collectors.toList()));
     }
 
     @Override
@@ -103,11 +104,13 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     @Override
     @Transactional
     public TaskGroupDto updateTaskGroup(UpdateTaskGroupDto updateTaskGroupDto) {
-        TaskGroup taskGroup = this.taskGroupDao.findById(updateTaskGroupDto.getTaskGroupID()).orElseThrow();
+        TaskGroup taskGroup = this.taskGroupDao.findById(updateTaskGroupDto.getGroupID()).orElseThrow();
         if(updateTaskGroupDto.getName() != null)
             taskGroup.setName(updateTaskGroupDto.getName());
         if(updateTaskGroupDto.getExpirationDate() != null)
             taskGroup.setExpirationDate(updateTaskGroupDto.getExpirationDate());
+        if(updateTaskGroupDto.getOrder() != null)
+            taskGroup.setCurrentOrder(updateTaskGroupDto.getOrder());
         taskGroup = this.taskGroupDao.save(taskGroup);
         return this.modelMapper.map(taskGroup,TaskGroupDto.class);
     }

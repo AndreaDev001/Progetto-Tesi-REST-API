@@ -21,6 +21,7 @@ public class TaskGroupDto extends GenericOutput<TaskGroupDto>
 {
     private String name;
     private TaskGroupStatus status;
+    private Integer currentOrder;
     private LocalDate expirationDate;
     private UserRef publisher;
     private BoardRef board;

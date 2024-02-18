@@ -23,4 +23,5 @@ public class UpdateTaskDto
     private String description;
     private Priority priority;
     private LocalDate expirationDate;
+    private UUID groupID;
 }

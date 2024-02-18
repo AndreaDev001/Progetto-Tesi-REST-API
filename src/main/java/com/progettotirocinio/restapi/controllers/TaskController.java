@@ -61,7 +61,7 @@ public class TaskController
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole(@taskDao,#updateTaskDto.taskID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<TaskDto> updateTask(@RequestBody @Valid UpdateTaskDto updateTaskDto) {
         TaskDto taskDto = this.taskService.updateTask(updateTaskDto);
         return ResponseEntity.ok(taskDto);
@@ -123,8 +123,8 @@ public class TaskController
 
     @GetMapping("/private/group/{groupID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<PagedModel<TaskDto>> getTasksByGroup(@PathVariable("groupID") UUID groupID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TaskDto> tasks = this.taskService.getTasksByGroup(groupID,paginationRequest.toPageRequest());
+    public ResponseEntity<CollectionModel<TaskDto>> getTasksByGroup(@PathVariable("groupID") UUID groupID) {
+        CollectionModel<TaskDto> tasks = this.taskService.getTasksByGroup(groupID);
         return ResponseEntity.ok(tasks);
     }
 
