@@ -60,6 +60,13 @@ public class UserController
         return ResponseEntity.ok(user);
     }
 
+    @GetMapping("/private/username/{username}/like")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<UserDto>> getUsersByUsername(@PathVariable("username") String username,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<UserDto> pagedModel = this.userService.getUsersByUsername(username,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(pagedModel);
+    }
+
     @GetMapping("/private/spec")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<UserDto>> getUsers(@ParameterObject @Valid UserSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {

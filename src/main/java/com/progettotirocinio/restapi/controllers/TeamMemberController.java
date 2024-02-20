@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,14 +53,14 @@ public class TeamMemberController
     }
 
     @GetMapping("/private/team/{teamID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@teamDao,#teamID)")
-    public ResponseEntity<PagedModel<TeamMemberDto>> getTeamMembersByTeam(@PathVariable("teamID") UUID teamID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TeamMemberDto> teamMembers = this.teamMemberService.getTeamMembersByTeam(teamID,paginationRequest.toPageRequest());
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CollectionModel<TeamMemberDto>> getTeamMembersByTeam(@PathVariable("teamID") UUID teamID) {
+        CollectionModel<TeamMemberDto> teamMembers = this.teamMemberService.getTeamMembersByTeam(teamID);
         return ResponseEntity.ok(teamMembers);
     }
 
     @DeleteMapping("/private/{teamMemberID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@teamMemberDao,#teamMemberID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<Void> deleteTeamMember(@PathVariable("teamMemberID") UUID teamMemberID) {
         this.teamMemberService.deleteTeamMember(teamMemberID);
         return ResponseEntity.noContent().build();

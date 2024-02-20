@@ -51,7 +51,7 @@ public class TaskGroupController
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasAccess(@taskGroupDao,#updateTaskGroupDto.groupID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<TaskGroupDto> updateTaskGroup(@RequestBody @Valid UpdateTaskGroupDto updateTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.updateTaskGroup(updateTaskGroupDto);
         return ResponseEntity.ok(taskGroupDto);

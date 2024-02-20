@@ -21,11 +21,11 @@ import java.util.UUID;
 @Table(name = "TEAM_MEMBERS")
 public class TeamMember extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "MEMBER_ID",nullable = false,updatable = false)
     private User member;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "TEAM_ID",nullable = false,updatable = false)
     private Team team;
     @Override

@@ -17,6 +17,7 @@ public interface UserService {
     PagedModel<UserDto> getUsersByEmail(String email,Pageable pageable);
     PagedModel<UserDto> getUsersByName(String name,Pageable pageable);
     PagedModel<UserDto> getUsersBySurname(String surname,Pageable pageable);
+    PagedModel<UserDto> getUsersByUsername(String username,Pageable pageable);
     PagedModel<UserDto> getUsersBySpec(Specification<User> specification,Pageable pageable);
     PagedModel<UserDto> getSimilarUsers(UUID userID,Pageable pageable);
     CollectionModel<String> getOrderTypes();

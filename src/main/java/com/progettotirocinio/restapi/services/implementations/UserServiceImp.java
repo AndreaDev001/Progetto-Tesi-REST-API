@@ -13,6 +13,7 @@ import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -62,6 +63,12 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     }
 
     @Override
+    public PagedModel<UserDto> getUsersByUsername(String username, Pageable pageable) {
+        Page<User> users = this.userDao.findByUsernameContaining(username,pageable);
+        return this.pagedResourcesAssembler.toModel(users,modelAssembler);
+    }
+
+    @Override
     public PagedModel<UserDto> getUsersBySpec(Specification<User> specification, Pageable pageable) {
         Page<User> users = this.userDao.findAll(specification,pageable);
         return this.pagedResourcesAssembler.toModel(users,modelAssembler);
@@ -104,6 +111,7 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(UpdateUserDto updateUserDto) {
         User user = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         user.setName(updateUserDto.getName());
@@ -114,6 +122,7 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     }
 
     @Override
+    @Transactional
     public void deleteUser(UUID id) {
         this.userDao.findById(id).orElseThrow();
         this.userDao.deleteById(id);

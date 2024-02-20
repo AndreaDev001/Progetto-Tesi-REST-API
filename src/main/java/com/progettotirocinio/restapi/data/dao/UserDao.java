@@ -21,6 +21,7 @@ public interface UserDao extends JpaRepository<User, UUID>, JpaSpecificationExec
     Page<User> getUsersByName(@Param("requiredName") String name, Pageable pageable);
     @Query("select u from User u where u.surname = :requiredSurname")
     Page<User> getUsersBySurname(@Param("requiredSurname") String surname,Pageable pageable);
+    Page<User> findByUsernameContaining(String username,Pageable pageable);
     @Query("select u from User u where u.email = :requiredEmail")
     Page<User> getUsersByEmail(@Param("requiredEmail") String email,Pageable pageable);
 }

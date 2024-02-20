@@ -25,7 +25,7 @@ import java.util.UUID;
 @Table(name = "TASK_GROUPS")
 public class TaskGroup extends AmountEntity implements OwnableEntity
 {
-    @Column(name = "NAME",nullable = false,updatable = false)
+    @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String name;
 

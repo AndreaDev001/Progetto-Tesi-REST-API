@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
 import com.progettotirocinio.restapi.data.dao.BoardInviteDao;
@@ -84,12 +85,15 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
     public BoardInviteDto createBoardInvite(CreateBoardInviteDto createBoardInviteDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         User invitedUser = this.userDao.findById(createBoardInviteDto.getUserID()).orElseThrow();
+        if(publisher.getId().equals(invitedUser.getId()))
+            throw new InvalidFormat("error.boardInvite.invalidPublisher");
         Board requiredBoard = this.boardDao.findById(createBoardInviteDto.getBoardID()).orElseThrow();
         BoardInvite boardInvite = new BoardInvite();
         boardInvite.setBoard(requiredBoard);
-        boardInvite.setPublisher(invitedUser);
         boardInvite.setStatus(BoardInviteStatus.ACTIVE);
         boardInvite.setText(createBoardInviteDto.getText());
+        boardInvite.setExpirationDate(createBoardInviteDto.getExpirationDate());
+        boardInvite.setReceiver(invitedUser);
         boardInvite.setPublisher(publisher);
         boardInvite = this.boardInviteDao.save(boardInvite);
         return this.modelMapper.map(boardInvite,BoardInviteDto.class);

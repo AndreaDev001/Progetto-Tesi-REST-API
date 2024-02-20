@@ -16,12 +16,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiresCaching(allCacheName = "ALL_TEAM_MEMBERS")
@@ -51,9 +54,9 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
     }
 
     @Override
-    public PagedModel<TeamMemberDto> getTeamMembersByTeam(UUID teamID, Pageable pageable) {
-        Page<TeamMember> teamMembers = this.teamMemberDao.getTeamMembersByTeam(teamID,pageable);
-        return this.pagedResourcesAssembler.toModel(teamMembers,modelAssembler);
+    public CollectionModel<TeamMemberDto> getTeamMembersByTeam(UUID teamID) {
+        List<TeamMember> teamMembers = this.teamMemberDao.getTeamMembersByTeam(teamID);
+        return CollectionModel.of(teamMembers.stream().map(member -> this.modelMapper.map(member,TeamMemberDto.class)).collect(Collectors.toList()));
     }
 
     @Override
@@ -80,7 +83,10 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
     @Override
     @Transactional
     public void deleteTeamMember(UUID memberID) {
-        this.teamMemberDao.findById(memberID).orElseThrow();
-        this.teamMemberDao.deleteById(memberID);
+        TeamMember teamMember = this.teamMemberDao.findById(memberID).orElseThrow();
+        this.teamMemberDao.deleteById(teamMember.getId());
+        List<TeamMember> remainingMembers = this.teamMemberDao.getTeamMembersByTeam(teamMember.getTeam().getId());
+        if(remainingMembers.isEmpty())
+            this.teamDao.deleteById(teamMember.getTeam().getId());
     }
 }
