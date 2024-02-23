@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
+import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
 import com.progettotirocinio.restapi.services.interfaces.TaskGroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -91,9 +92,16 @@ public class TaskGroupController
     }
 
     @DeleteMapping("/private/{taskGroupID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@taskGroupDao,#taskGroupID)")
-    public ResponseEntity<TaskGroupDto> deleteTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<Void> deleteTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         this.taskGroupService.deleteTaskGroup(taskGroupID);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/private/clear/{taskGroupID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<TaskGroupDto> clearTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
+        TaskGroupDto taskGroupDto =  this.taskGroupService.clearTaskGroup(taskGroupID);
+        return ResponseEntity.ok(taskGroupDto);
     }
 }

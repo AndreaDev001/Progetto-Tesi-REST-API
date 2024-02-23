@@ -18,10 +18,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
@@ -52,7 +52,7 @@ public class Task extends AmountEntity implements OwnableEntity
     @Enumerated(value = EnumType.STRING)
     private TaskStatus status;
 
-    @OneToOne(mappedBy = "task",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "task",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private TaskImage taskImage;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
@@ -64,13 +64,14 @@ public class Task extends AmountEntity implements OwnableEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     @SpecificationOrderType(allowDepth = true)
     private User publisher;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "GROUP_ID",nullable = false)
+    @EqualsAndHashCode.Exclude
     private TaskGroup group;
 
     @Column(name = "EXPIRATION_DATE")

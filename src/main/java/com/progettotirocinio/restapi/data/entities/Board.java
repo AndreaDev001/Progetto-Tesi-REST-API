@@ -57,6 +57,7 @@ public class Board extends AmountEntity implements OwnableEntity
     @SpecificationOrderType(allowDepth = true)
     private User publisher;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
     private Set<TaskGroup> groups = new HashSet<>();
 

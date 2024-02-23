@@ -101,7 +101,7 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
         taskGroup.setName(createTaskGroupDto.getName());
         taskGroup.setExpirationDate(createTaskGroupDto.getExpirationDate());
         taskGroup.setStatus(TaskGroupStatus.OPEN);
-        taskGroup.setCurrentOrder(order + 1);
+        taskGroup.setCurrentOrder(order == null ? 0 : order + 1);
         taskGroup = this.taskGroupDao.save(taskGroup);
         return this.modelMapper.map(taskGroup,TaskGroupDto.class);
     }
@@ -139,7 +139,7 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     @Override
     @Transactional
     public void deleteTaskGroup(UUID id) {
-        this.taskGroupDao.findById(id).orElseThrow();
+        this.taskGroupDao.findById(id);
         this.taskGroupDao.deleteById(id);
     }
 

@@ -12,10 +12,10 @@ import org.springframework.hateoas.server.core.Relation;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Relation(collectionRelation = "content")
 public class TaskGroupDto extends GenericOutput<TaskGroupDto>
 {

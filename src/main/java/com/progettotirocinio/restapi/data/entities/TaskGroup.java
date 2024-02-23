@@ -15,10 +15,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
@@ -39,15 +39,17 @@ public class TaskGroup extends AmountEntity implements OwnableEntity
     @Column(name = "EXPIRATION_DATE",updatable = false)
     private LocalDate expirationDate;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false)
     private User publisher;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
+    @EqualsAndHashCode.Exclude
     private Board board;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "group",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "group",orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
     @Override
     public UUID getOwnerID() {
