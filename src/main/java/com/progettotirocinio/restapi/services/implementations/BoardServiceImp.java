@@ -4,21 +4,17 @@ import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
-import com.progettotirocinio.restapi.data.dao.BoardDao;
-import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
-import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
-import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
-import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.BoardMember;
-import com.progettotirocinio.restapi.data.entities.TaskGroup;
-import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.dto.output.RoleOwnerDto;
+import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
+import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import jakarta.transaction.Transactional;
@@ -31,11 +27,13 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -43,14 +41,18 @@ import java.util.UUID;
 public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implements BoardService  {
 
     private final BoardDao boardDao;
+    private final RoleDao roleDao;
+    private final RoleOwnerDao roleOwnerDao;
     private final TaskGroupDao taskGroupDao;
     private final BoardMemberDao boardMemberDao;
 
-    public BoardServiceImp(BoardMemberDao boardMemberDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+    public BoardServiceImp(BoardMemberDao boardMemberDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
         this.boardDao = boardDao;
         this.taskGroupDao = taskGroupDao;
         this.boardMemberDao = boardMemberDao;
+        this.roleDao = roleDao;
+        this.roleOwnerDao = roleOwnerDao;
     }
 
     @Override
@@ -143,7 +145,67 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         boardMember.setUser(publisher);
         boardMember.setBoard(board);
         this.boardMemberDao.save(boardMember);
+        Role adminRole = new Role();
+        Role memberRole = new Role();
+        adminRole.setName("ADMIN");
+        adminRole.setPublisher(publisher);
+        adminRole.setBoard(board);
+        adminRole.setPermissions(createAdminPermissions(adminRole));
+        memberRole.setName("MEMBER");
+        memberRole.setPublisher(publisher);
+        memberRole.setBoard(board);
+        memberRole.setPermissions(createMemberPermissions(memberRole));
+        adminRole = this.roleDao.save(adminRole);
+        this.roleDao.save(memberRole);
+        RoleOwner roleOwner = new RoleOwner();
+        roleOwner.setRole(adminRole);
+        roleOwner.setOwner(publisher);
+        this.roleOwnerDao.save(roleOwner);
         return this.modelMapper.map(board,BoardDto.class);
+    }
+
+    private Set<Permission> createAdminPermissions(Role requiredRole) {
+        Permission writeBoardPermission = new Permission();
+        writeBoardPermission.setName("WRITE_BOARD");
+        writeBoardPermission.setType(PermissionType.WRITE_BOARD);
+        writeBoardPermission.setRole(requiredRole);
+        Permission readBoardPermission = new Permission();
+        readBoardPermission.setName("READ_BOARD");
+        readBoardPermission.setType(PermissionType.READ_BOARD);
+        readBoardPermission.setRole(requiredRole);
+        Permission writeTasks = new Permission();
+        writeTasks.setName("WRITE_TASKS");
+        writeTasks.setType(PermissionType.WRITE_TASKS);
+        writeTasks.setRole(requiredRole);
+        Permission readTasks = new Permission();
+        readTasks.setName("READ_TASKS");
+        readTasks.setType(PermissionType.READ_TASKS);
+        readTasks.setRole(requiredRole);
+        Permission writeAssignedTaskPermission = new Permission();
+        writeAssignedTaskPermission.setName("WRITE_ASSIGNED_TASK");
+        writeAssignedTaskPermission.setType(PermissionType.WRITE_ASSIGNED_TASK);
+        writeAssignedTaskPermission.setRole(requiredRole);
+        Permission readAssignedTaskPermission = new Permission();
+        readAssignedTaskPermission.setName("READ_ASSIGNED_TASK");
+        readAssignedTaskPermission.setType(PermissionType.READ_ASSIGNED_TASK);
+        readAssignedTaskPermission.setRole(requiredRole);
+        return Set.of(writeBoardPermission,readBoardPermission,writeTasks,readTasks,writeAssignedTaskPermission,readAssignedTaskPermission);
+    }
+
+    private Set<Permission> createMemberPermissions(Role requiredRole)
+    {
+        Permission writeAssignedTaskPermission = new Permission();
+        writeAssignedTaskPermission.setName("WRITE_ASSIGNED_TASK");
+        writeAssignedTaskPermission.setType(PermissionType.WRITE_ASSIGNED_TASK);
+        writeAssignedTaskPermission.setRole(requiredRole);
+        Permission readAssignedTaskPermission = new Permission();
+        readAssignedTaskPermission.setName("READ_ASSIGNED_TASK");
+        readAssignedTaskPermission.setType(PermissionType.READ_ASSIGNED_TASK);
+        readAssignedTaskPermission.setRole(requiredRole);
+        Permission readTasksPermission = new Permission();
+        readTasksPermission.setType(PermissionType.READ_TASKS);
+        readTasksPermission.setRole(requiredRole);
+        return Set.of(writeAssignedTaskPermission,readAssignedTaskPermission,readTasksPermission);
     }
 
     private TaskGroup createDefaultGroup(String name,Integer order,Board board,User publisher) {

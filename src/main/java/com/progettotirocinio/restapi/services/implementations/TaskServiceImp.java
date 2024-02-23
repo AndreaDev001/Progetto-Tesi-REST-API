@@ -131,6 +131,7 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
     @Transactional
     public TaskDto createTask(CreateTaskDto createTaskDto) {
         User publisher  = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        TaskGroup taskGroup = this.taskGroupDao.findById(createTaskDto.getGroupID()).orElseThrow();
         Task task = new Task();
         task.setTitle(createTaskDto.getTitle());
         task.setName(createTaskDto.getName());
@@ -138,6 +139,9 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
         task.setPriority(createTaskDto.getPriority());
         task.setExpirationDate(createTaskDto.getExpirationDate());
         task.setPublisher(publisher);
+        task.setGroup(taskGroup);
+        task.setStatus(TaskStatus.OPEN);
+        task = this.taskDao.save(task);
         return this.modelMapper.map(task,TaskDto.class);
     }
 

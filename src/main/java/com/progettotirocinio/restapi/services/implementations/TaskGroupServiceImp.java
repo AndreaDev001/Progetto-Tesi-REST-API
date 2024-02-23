@@ -92,11 +92,14 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     public TaskGroupDto createTaskGroup(CreateTaskGroupDto createTaskGroupDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = this.boardDao.findById(createTaskGroupDto.getBoardID()).orElseThrow();
+        Integer order = this.taskGroupDao.getMaxOrderInBoard(board.getId());
         TaskGroup taskGroup = new TaskGroup();
         taskGroup.setBoard(board);
         taskGroup.setPublisher(publisher);
         taskGroup.setName(createTaskGroupDto.getName());
         taskGroup.setExpirationDate(createTaskGroupDto.getExpirationDate());
+        taskGroup.setStatus(TaskGroupStatus.OPEN);
+        taskGroup.setCurrentOrder(order + 1);
         taskGroup = this.taskGroupDao.save(taskGroup);
         return this.modelMapper.map(taskGroup,TaskGroupDto.class);
     }

@@ -38,7 +38,6 @@ public class CreateTaskDto
     @NotNull
     private UUID groupID;
 
-    @NotNull
     @Future
     private LocalDate expirationDate;
 }

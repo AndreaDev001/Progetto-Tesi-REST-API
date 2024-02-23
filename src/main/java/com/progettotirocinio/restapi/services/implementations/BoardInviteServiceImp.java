@@ -4,14 +4,11 @@ import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
-import com.progettotirocinio.restapi.data.dao.BoardDao;
-import com.progettotirocinio.restapi.data.dao.BoardInviteDao;
-import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardInviteDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardInviteDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardInviteDto;
-import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.BoardInvite;
-import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.services.interfaces.BoardInviteService;
@@ -37,12 +34,18 @@ import java.util.UUID;
 public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardInviteDto> implements BoardInviteService {
 
     private final BoardInviteDao boardInviteDao;
+    private final RoleDao roleDao;
+    private final RoleOwnerDao roleOwnerDao;
+    private final BoardMemberDao boardMemberDao;
     private final BoardDao boardDao;
 
-    public BoardInviteServiceImp(CacheHandler cacheHandler,BoardDao boardDao, Mapper modelMapper, UserDao userDao, BoardInviteDao boardInviteDao, PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
+    public BoardInviteServiceImp(CacheHandler cacheHandler,BoardDao boardDao,BoardMemberDao boardMemberDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao, Mapper modelMapper, UserDao userDao, BoardInviteDao boardInviteDao, PagedResourcesAssembler<BoardInvite> pagedResourcesAssembler) {
         super(cacheHandler,userDao,modelMapper,BoardInvite.class,BoardInviteDto.class, pagedResourcesAssembler);
         this.boardInviteDao = boardInviteDao;
         this.boardDao = boardDao;
+        this.roleDao = roleDao;
+        this.roleOwnerDao = roleOwnerDao;
+        this.boardMemberDao = boardMemberDao;
     }
 
     @Override
@@ -82,6 +85,7 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
     }
 
     @Override
+    @Transactional
     public BoardInviteDto createBoardInvite(CreateBoardInviteDto createBoardInviteDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         User invitedUser = this.userDao.findById(createBoardInviteDto.getUserID()).orElseThrow();
@@ -96,6 +100,32 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
         boardInvite.setReceiver(invitedUser);
         boardInvite.setPublisher(publisher);
         boardInvite = this.boardInviteDao.save(boardInvite);
+        return this.modelMapper.map(boardInvite,BoardInviteDto.class);
+    }
+
+    @Override
+    @Transactional
+    public BoardInviteDto updateBoardInvite(UpdateBoardInviteDto updateBoardInviteDto) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        BoardInvite boardInvite = this.boardInviteDao.findById(updateBoardInviteDto.getInviteID()).orElseThrow();
+        if(boardInvite.getStatus() != BoardInviteStatus.ACTIVE)
+            throw new InvalidFormat("error.boardInvite.update.invalidCurrentStatus");
+        if(authenticatedUser.getId().equals(boardInvite.getPublisher().getId()))
+            throw new InvalidFormat("error.boardInvite.update.invalidUser");
+        if(updateBoardInviteDto.getText() != null)
+            boardInvite.setText(updateBoardInviteDto.getText());
+        if(updateBoardInviteDto.getStatus().equals(BoardInviteStatus.ACCEPTED))
+        {
+            BoardMember boardMember = new BoardMember();
+            boardMember.setUser(authenticatedUser);
+            boardMember.setBoard(boardInvite.getBoard());
+            this.boardMemberDao.save(boardMember);
+            Role role = this.roleDao.getRoleByNameAndBoard("MEMBER",boardInvite.getBoard().getId()).orElseThrow();
+            RoleOwner roleOwner = new RoleOwner();
+            roleOwner.setOwner(authenticatedUser);
+            roleOwner.setRole(role);
+            this.roleOwnerDao.save(roleOwner);
+        }
         return this.modelMapper.map(boardInvite,BoardInviteDto.class);
     }
 
@@ -121,6 +151,7 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
     }
 
     @Override
+    @Transactional
     public void deleteBoardInvite(UUID inviteID) {
         this.boardInviteDao.findById(inviteID).orElseThrow();
         this.boardInviteDao.deleteById(inviteID);

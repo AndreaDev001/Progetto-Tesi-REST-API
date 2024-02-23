@@ -36,7 +36,7 @@ public class TaskGroup extends AmountEntity implements OwnableEntity
     @Column(name = "STATUS",nullable = false)
     private TaskGroupStatus status;
 
-    @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
+    @Column(name = "EXPIRATION_DATE",updatable = false)
     private LocalDate expirationDate;
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
