@@ -5,12 +5,14 @@ import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
+import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.TaskGroupDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTaskGroupDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskGroupDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.TaskGroup;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
@@ -27,9 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,12 +38,14 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
 {
 
     private final TaskGroupDao taskGroupDao;
+    private final TaskDao taskDao;
     private final BoardDao boardDao;
 
-    public TaskGroupServiceImp(CacheHandler cacheHandler,Mapper mapper, UserDao userDao, BoardDao boardDao, TaskGroupDao taskGroupDao, PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
+    public TaskGroupServiceImp(CacheHandler cacheHandler,Mapper mapper, UserDao userDao,TaskDao taskDao, BoardDao boardDao, TaskGroupDao taskGroupDao, PagedResourcesAssembler<TaskGroup> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,TaskGroup.class,TaskGroupDto.class, pagedResourcesAssembler);
         this.taskGroupDao = taskGroupDao;
         this.boardDao = boardDao;
+        this.taskDao = taskDao;
     }
 
     @Override
@@ -139,5 +141,17 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
     public void deleteTaskGroup(UUID id) {
         this.taskGroupDao.findById(id).orElseThrow();
         this.taskGroupDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public TaskGroupDto clearTaskGroup(UUID id) {
+        TaskGroup taskGroup = this.taskGroupDao.findById(id).orElseThrow();
+        if(taskGroup.getTasks() != null)
+        {
+            Set<Task> tasks = taskGroup.getTasks();
+            this.taskDao.deleteAll(tasks);
+        }
+        return this.modelMapper.map(taskGroup,TaskGroupDto.class);
     }
 }

@@ -3,10 +3,7 @@ package com.progettotirocinio.restapi.services.implementations;
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
-import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
-import com.progettotirocinio.restapi.data.dao.TaskAssignmentDao;
-import com.progettotirocinio.restapi.data.dao.TaskDao;
-import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTaskAssignmentDto;
 import com.progettotirocinio.restapi.data.dto.output.TaskAssignmentDto;
 import com.progettotirocinio.restapi.data.entities.*;
@@ -20,6 +17,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,14 +27,16 @@ import java.util.stream.Collectors;
 public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, TaskAssignmentDto> implements TaskAssignmentService {
 
     private final TaskAssignmentDao taskAssignmentDao;
+    private final TeamDao teamDao;
     private final TaskDao taskDao;
     private final BoardMemberDao boardMemberDao;
 
-    public TaskAssignmentServiceImp(BoardMemberDao boardMember, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper,PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
+    public TaskAssignmentServiceImp(BoardMemberDao boardMember,TeamDao teamDao, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper,PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
         super(cacheHandler, userDao, mapper,TaskAssignment.class,TaskAssignmentDto.class, pagedResourcesAssembler);
         this.taskAssignmentDao = taskAssignmentDao;
         this.taskDao = taskDao;
         this.boardMemberDao = boardMember;
+        this.teamDao = teamDao;
     }
 
     @Override
@@ -84,6 +84,26 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
         taskAssignment.setTask(task);
         taskAssignment = this.taskAssignmentDao.save(taskAssignment);
         return this.modelMapper.map(taskAssignment,TaskAssignmentDto.class);
+    }
+
+    @Override
+    @Transactional
+    public CollectionModel<TaskAssignmentDto> createTaskAssignmentFromTeam(UUID taskID, UUID teamID) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Task task = this.taskDao.findById(taskID).orElseThrow();
+        Team team = this.teamDao.findById(teamID).orElseThrow();
+        if(!team.getBoard().getId().equals(task.getGroup().getBoard().getId()))
+            throw new InvalidFormat("error.taskAssignment.invalidTeam");
+        List<TaskAssignment> taskAssignments = new ArrayList<>();
+        for(TeamMember member : team.getMembers()) {
+            TaskAssignment taskAssignment = new TaskAssignment();
+            taskAssignment.setUser(member.getMember());
+            taskAssignment.setTask(task);
+            taskAssignment.setPublisher(authenticatedUser);
+            taskAssignments.add(taskAssignment);
+        }
+        taskAssignments = this.taskAssignmentDao.saveAll(taskAssignments);
+        return CollectionModel.of(taskAssignments.stream().map(assignment -> this.modelMapper.map(assignment,TaskAssignmentDto.class)).collect(Collectors.toList()));
     }
 
     @Override

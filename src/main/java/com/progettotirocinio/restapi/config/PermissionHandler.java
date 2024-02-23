@@ -1,12 +1,9 @@
 package com.progettotirocinio.restapi.config;
 
 
-import com.progettotirocinio.restapi.data.dao.BoardDao;
-import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
-import com.progettotirocinio.restapi.data.dao.UserDao;
-import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.BoardMember;
-import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.dao.*;
+import com.progettotirocinio.restapi.data.entities.*;
+import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import com.progettotirocinio.restapi.data.entities.interfaces.MultiOwnableEntity;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +14,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.List;
 
@@ -26,6 +24,7 @@ public class PermissionHandler
 {
     private final UserDao userDao;
     private final BoardMemberDao boardMemberDao;
+    private final RoleOwnerDao roleOwnerDao;
 
     public boolean hasRole(String requiredRole) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,12 +43,6 @@ public class PermissionHandler
         return ownableEntityOptional.map(ownableEntity -> ownableEntity.getOwnerID().equals(userID)).orElse(false);
     }
 
-    public boolean isMember(UUID boardID) {
-        UUID authenticatedID = this.getAuthenticatedID();
-        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(boardID,authenticatedID);
-        return boardMemberOptional.isPresent();
-    }
-
     public boolean hasAccess(UUID userID) {
         UUID authenticatedID = this.getAuthenticatedID();
         if(authenticatedID != null)
@@ -62,6 +55,30 @@ public class PermissionHandler
         if(multiOwnableEntityOptional.isPresent()) {
             List<UUID> values = multiOwnableEntityOptional.get().getOwnersID();
             return values.contains(resourceID);
+        }
+        return false;
+    }
+
+
+    public boolean isMember(UUID boardID)
+    {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Optional<BoardMember> requiredBoardMember = this.boardMemberDao.getBoardMember(boardID,authenticatedUser.getId());
+        return requiredBoardMember.isPresent();
+    }
+
+    public boolean hasPermission(UUID boardID,PermissionType permissionType)
+    {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        if(!isMember(boardID))
+            return false;
+        List<RoleOwner> roleOwners = this.roleOwnerDao.getRoleOwnersByUserAndBoard(authenticatedUser.getId(),boardID);
+        for(RoleOwner current : roleOwners) {
+            Set<Permission> permissions = current.getRole().getPermissions();
+            for(Permission currentPermission : permissions) {
+                if(currentPermission.getType().equals(permissionType))
+                    return true;
+            }
         }
         return false;
     }

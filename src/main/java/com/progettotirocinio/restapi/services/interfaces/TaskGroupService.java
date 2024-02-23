@@ -25,4 +25,5 @@ public interface TaskGroupService
     void handleExpiredTaskGroups();
     void deleteExpiredTaskGroups();
     void deleteTaskGroup(UUID id);
+    TaskGroupDto clearTaskGroup(UUID id);
 }
