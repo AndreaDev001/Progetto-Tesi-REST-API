@@ -22,6 +22,10 @@ public interface RoleOwnerDao extends JpaRepository<RoleOwner, UUID> {
     Page<RoleOwner> getOwnerByRole(@Param("requiredID") UUID roleID,Pageable pageable);
     @Query("select r from RoleOwner r where r.role.id = :requiredRoleID and r.owner.id = :requiredOwnerID")
     Optional<RoleOwner> getOwner(@Param("requiredRoleID") UUID roleID, @Param("requiredOwnerID") UUID ownerID);
+    @Query("select r from RoleOwner r where r.owner.id = :requiredUserID and r.role.board.id = :requiredBoardID and r.role.name = :requiredName")
+    Optional<RoleOwner> getOwnerByNameAndBoardAndUser(@Param("requiredUserID") UUID userID,@Param("requiredBoardID") UUID boardID,@Param("requiredName") String name);
+    @Query("select r from RoleOwner r where r.role.name = :requiredName and r.role.board.id = :requiredBoardID and r.owner.id = :requiredOwnerID")
+    Optional<RoleOwner> hasRole(@Param("requiredName") String name,@Param("requiredBoardID") UUID boardID,@Param("requiredOwnerID") UUID ownerID);
     @Query("select r from RoleOwner r where r.owner.id = :requiredUserID and r.role.board.id = :requiredRoleID")
     List<RoleOwner> getRoleOwnersByUserAndBoard(@Param("requiredUserID") UUID userID, @Param("requiredRoleID") UUID boardID);
 }

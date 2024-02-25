@@ -25,7 +25,7 @@ public class TeamMember extends GenericEntity implements OwnableEntity
     @JoinColumn(name = "MEMBER_ID",nullable = false,updatable = false)
     private User member;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "TEAM_ID",nullable = false,updatable = false)
     private Team team;
     @Override

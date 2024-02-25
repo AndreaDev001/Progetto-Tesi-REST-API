@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface TeamService {

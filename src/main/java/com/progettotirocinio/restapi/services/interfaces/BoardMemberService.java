@@ -16,4 +16,5 @@ public interface BoardMemberService
     BoardMemberDto isMember(UUID userID,UUID boardID);
     BoardMemberDto createMember(UUID boardID);
     void deleteMember(UUID boardMemberID);
+    void deleteMemberFromBoard(UUID boardID,UUID userID);
 }

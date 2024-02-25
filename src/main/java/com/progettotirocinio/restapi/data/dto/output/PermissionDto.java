@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.controllers.PermissionController;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.refs.RoleRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
+import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,4 +28,5 @@ public class PermissionDto extends GenericOutput<PermissionDto>
     private String name;
     private UserRef publisher;
     private RoleRef role;
+    private PermissionType type;
 }

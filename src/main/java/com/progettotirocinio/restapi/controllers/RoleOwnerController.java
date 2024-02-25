@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateRoleOwnerDto;
 import com.progettotirocinio.restapi.data.dto.output.RoleOwnerDto;
 import com.progettotirocinio.restapi.services.interfaces.RoleOwnerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Authorization")
-@RequestMapping("/roleOwner")
+@RequestMapping("/roleOwners")
 public class RoleOwnerController
 {
     private final RoleOwnerService roleOwnerService;
@@ -44,11 +45,23 @@ public class RoleOwnerController
         return ResponseEntity.status(201).body(roleOwnerDto);
     }
 
+    @PostMapping("/private")
+    public ResponseEntity<RoleOwnerDto> createRoleOwner(@RequestBody @Valid CreateRoleOwnerDto createRoleOwnerDto) {
+        RoleOwnerDto roleOwnerDto = this.roleOwnerService.createRoleOwner(createRoleOwnerDto);
+        return ResponseEntity.status(201).body(roleOwnerDto);
+    }
+
     @GetMapping("/private/owner/{ownerID}")
     @PreAuthorize("@permissionHandler.hasAccess(#ownerID)")
     public ResponseEntity<PagedModel<RoleOwnerDto>> getRoleOwnersByOwner(@PathVariable("ownerID") UUID ownerID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<RoleOwnerDto> roleOwners = this.roleOwnerService.getOwnersByUser(ownerID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(roleOwners);
+    }
+
+    @GetMapping("/private/owner/{ownerID}/board/{boardID}/name/{name}")
+    public ResponseEntity<RoleOwnerDto> hasRole(@PathVariable("ownerID") UUID ownerID,@PathVariable("boardID") UUID boardID,@PathVariable("name") String name) {
+        RoleOwnerDto roleOwnerDto = this.roleOwnerService.hasRole(ownerID,boardID,name);
+        return ResponseEntity.ok(roleOwnerDto);
     }
 
     @GetMapping("/private/role/{roleID}")
@@ -62,6 +75,12 @@ public class RoleOwnerController
     @PreAuthorize("permissionHandler.hasAccess(@roleOwnerDao,#roleOwnerID)")
     public ResponseEntity<Void> deleteRoleOwner(@PathVariable("roleOwnerID") UUID roleOwnerID) {
         this.roleOwnerService.deleteOwner(roleOwnerID);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/private/name/{name}/owner/{ownerID}/board/{boardID}")
+    public ResponseEntity<Void> deleteRoleOwner(@PathVariable("name") String name,@PathVariable("ownerID") UUID ownerID,@PathVariable("boardID") UUID boardID) {
+        this.roleOwnerService.deleteOwner(name,ownerID,boardID);
         return ResponseEntity.noContent().build();
     }
 }

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamMemberDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamMemberDto;
 import com.progettotirocinio.restapi.services.interfaces.TeamMemberService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,6 +44,13 @@ public class TeamMemberController
     public ResponseEntity<TeamMemberDto> createTeamMember(@PathVariable("teamID") UUID teamID) {
         TeamMemberDto teamMemberDto = this.teamMemberService.createTeamMember(teamID);
         return ResponseEntity.status(201).body(teamMemberDto);
+    }
+
+    @PostMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<TeamMemberDto> createTeamMember(@RequestBody @Valid CreateTeamMemberDto createTeamMemberDto) {
+        TeamMemberDto teamMemberDto = this.teamMemberService.createTeamMember(createTeamMemberDto);
+        return ResponseEntity.ok(teamMemberDto);
     }
 
     @GetMapping("/private/member/{memberID}")

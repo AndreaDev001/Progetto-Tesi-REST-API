@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dao.TeamDao;
 import com.progettotirocinio.restapi.data.dao.TeamMemberDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamMemberDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamMemberDto;
 import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.services.interfaces.TeamMemberService;
@@ -21,6 +22,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
@@ -59,6 +61,7 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
         return CollectionModel.of(teamMembers.stream().map(member -> this.modelMapper.map(member,TeamMemberDto.class)).collect(Collectors.toList()));
     }
 
+
     @Override
     public TeamMemberDto getTeamMember(UUID memberID) {
         TeamMember teamMember = this.teamMemberDao.findById(memberID).orElseThrow();
@@ -73,6 +76,18 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
         Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(requiredTeam.getBoard().getId(),requiredUser.getId());
         if(boardMemberOptional.isEmpty())
             throw new InvalidFormat("error.teamMember.missingBoardMember");
+        TeamMember teamMember = new TeamMember();
+        teamMember.setMember(requiredUser);
+        teamMember.setTeam(requiredTeam);
+        teamMember = this.teamMemberDao.save(teamMember);
+        return this.modelMapper.map(teamMember,TeamMemberDto.class);
+    }
+
+    @Override
+    @Transactional
+    public TeamMemberDto createTeamMember(CreateTeamMemberDto createTeamMemberDto) {
+        Team requiredTeam = this.teamDao.findById(createTeamMemberDto.getTeamID()).orElseThrow();
+        User requiredUser = this.userDao.findById(createTeamMemberDto.getUserID()).orElseThrow();
         TeamMember teamMember = new TeamMember();
         teamMember.setMember(requiredUser);
         teamMember.setTeam(requiredTeam);

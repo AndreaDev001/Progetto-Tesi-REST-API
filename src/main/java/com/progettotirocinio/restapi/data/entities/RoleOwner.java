@@ -20,11 +20,11 @@ import java.util.UUID;
 @Table(name = "ROLE_OWNERS")
 public class RoleOwner extends GenericEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "ROLE_ID",nullable = false,updatable = false)
     private Role role;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "OWNER_ID",nullable = false,updatable = false)
     private User owner;
 }

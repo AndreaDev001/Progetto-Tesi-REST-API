@@ -86,4 +86,11 @@ public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardM
         this.boardMemberDao.findById(boardMemberID).orElseThrow();
         this.boardMemberDao.deleteById(boardMemberID);
     }
+
+    @Override
+    @Transactional
+    public void deleteMemberFromBoard(UUID boardID, UUID userID) {
+        BoardMember boardMember = this.boardMemberDao.getBoardMember(boardID,userID).orElseThrow();
+        this.boardMemberDao.deleteById(boardMember.getId());
+    }
 }

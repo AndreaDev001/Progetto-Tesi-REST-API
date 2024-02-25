@@ -36,7 +36,7 @@ public class Team extends AmountEntity implements OwnableEntity
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "team",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "team",orphanRemoval = true)
     private Set<TeamMember> members = new HashSet<>();
 
     @Override

@@ -60,9 +60,14 @@ public class BoardMemberController
     }
 
     @DeleteMapping("/private/{boardMemberID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@boardMemberDao,#boardMemberID)")
     public ResponseEntity<Void> deleteBoardMember(@PathVariable("boardMemberID") UUID boardMemberID) {
         this.boardMemberService.deleteMember(boardMemberID);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/private/board/{boardID}/user/{userID}")
+    public ResponseEntity<Void> deleteBoardMemberFromBoard(@PathVariable("boardID") UUID boardID,@PathVariable("memberID") UUID memberID) {
+        this.boardMemberService.deleteMemberFromBoard(boardID,memberID);
         return ResponseEntity.noContent().build();
     }
 }
