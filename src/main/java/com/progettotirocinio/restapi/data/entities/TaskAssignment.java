@@ -17,15 +17,15 @@ import java.util.UUID;
 @Table(name = "TASK_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TASK_ID","USER_ID"})})
 public class TaskAssignment extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)
     private Task task;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 

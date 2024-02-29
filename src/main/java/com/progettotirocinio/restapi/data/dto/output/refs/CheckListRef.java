@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class CheckListRef extends GenericOutput<CheckListRef>
 {
     private String name;
-    private TaskGroupRef group;
+    private TaskRef task;
     private UserRef publisher;
 
     public CheckListRef(CheckList checkList) {
         this.name = checkList.getName();
-        this.group = new TaskGroupRef(checkList.getGroup());
+        this.task = new TaskRef(checkList.getTask());
         this.publisher = new UserRef(checkList.getPublisher());
     }
 }

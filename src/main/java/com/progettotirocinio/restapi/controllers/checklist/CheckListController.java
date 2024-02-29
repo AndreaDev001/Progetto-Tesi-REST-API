@@ -1,7 +1,11 @@
 package com.progettotirocinio.restapi.controllers.checklist;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListDto;
+import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListDto;
+import com.progettotirocinio.restapi.data.entities.CheckListOption;
 import com.progettotirocinio.restapi.services.interfaces.checklist.CheckListService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,17 +47,31 @@ public class CheckListController
         return ResponseEntity.ok(checkLists);
     }
 
-    @GetMapping("/private/group/{groupID}")
+    @GetMapping("/private/task/{taskID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<CollectionModel<CheckListDto>> getCheckListsByGroup(@PathVariable("groupID") UUID groupID) {
-        CollectionModel<CheckListDto> checkLists = this.checkListService.getCheckListsByGroup(groupID);
+    public ResponseEntity<CollectionModel<CheckListDto>> getCheckListsByGroup(@PathVariable("taskID") UUID taskID) {
+        CollectionModel<CheckListDto> checkLists = this.checkListService.getCheckListsByTask(taskID);
         return ResponseEntity.ok(checkLists);
     }
 
-    @GetMapping("/private/group/{groupID}/name/{name}")
+    @PostMapping("/private")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<CheckListDto> getCheckList(@PathVariable("groupID") UUID groupID,@PathVariable("name") String name) {
-        CheckListDto checkList = this.checkListService.getCheckListByNameAndGroup(name,groupID);
+    public ResponseEntity<CheckListDto> createCheckList(@RequestBody @Valid CreateCheckListDto createCheckListDto) {
+        CheckListDto checkListDto = this.checkListService.createCheckList(createCheckListDto);
+        return ResponseEntity.status(201).body(checkListDto);
+    }
+
+    @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CheckListDto> updateCheckList(@RequestBody @Valid UpdateCheckListDto updateCheckListDto) {
+        CheckListDto checkListDto = this.checkListService.updateCheckList(updateCheckListDto);
+        return ResponseEntity.status(201).body(checkListDto);
+    }
+
+    @GetMapping("/private/task/{taskID}/name/{name}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CheckListDto> getCheckList(@PathVariable("taskID") UUID taskID,@PathVariable("name") String name) {
+        CheckListDto checkList = this.checkListService.getCheckListByNameAndTask(name,taskID);
         return ResponseEntity.ok(checkList);
     }
 

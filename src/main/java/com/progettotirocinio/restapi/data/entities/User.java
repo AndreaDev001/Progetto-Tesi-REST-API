@@ -20,10 +20,10 @@ import java.util.Set;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "USERS")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @SpecificationPrefix
 public class User extends AmountEntity
 {

@@ -22,11 +22,11 @@ public class CheckList extends AmountEntity
     @Convert(converter = TrimConverter.class)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "GROUP_ID",nullable = false,updatable = false)
-    private TaskGroup group;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)
+    private Task task;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 

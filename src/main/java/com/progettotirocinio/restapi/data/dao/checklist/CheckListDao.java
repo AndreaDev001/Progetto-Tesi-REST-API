@@ -16,12 +16,12 @@ import java.util.Optional;
 @Repository
 public interface CheckListDao extends JpaRepository<CheckList, UUID>
 {
-    @Query("select c from CheckList c where c.group.id = :requiredGroupID")
-    List<CheckList> getCheckListsByGroup(@Param("requiredGroupID") UUID groupID);
+    @Query("select c from CheckList c where c.task.id = :requiredID")
+    List<CheckList> getCheckListsByTask(@Param("requiredID") UUID taskID);
     @Query("select c from CheckList c where c.publisher.id = :requiredUserID")
     Page<CheckList> getCheckListsByPublisher(@Param("requiredUserID") UUID publisherID,Pageable pageable);
     @Query("select c from CheckList c where c.name = :requiredName")
     Page<CheckList> getCheckListsByName(@Param("requiredName") String name, Pageable pageable);
-    @Query("select c from CheckList c where c.name = :requiredName and c.group.id = :requiredGroupID")
-    Optional<CheckList> getCheckListByNameAndGroup(@Param("requiredName") String name,@Param("requiredGroupID") UUID groupID);
+    @Query("select c from CheckList c where c.name = :requiredName and c.task.id = :requiredID")
+    Optional<CheckList> getCheckListByNameAndTask(@Param("requiredName") String name,@Param("requiredID") UUID taskID);
 }

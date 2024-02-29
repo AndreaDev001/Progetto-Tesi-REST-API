@@ -2,6 +2,8 @@ package com.progettotirocinio.restapi.controllers.checklist;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListOptionDto;
 import com.progettotirocinio.restapi.services.interfaces.checklist.CheckListOptionService;
 import jakarta.validation.Valid;
@@ -69,6 +71,13 @@ public class CheckListOptionController
     public ResponseEntity<CheckListOptionDto> createOption(@RequestBody @Valid CreateCheckListOptionDto createCheckListOptionDto) {
         CheckListOptionDto checkListOptionDto = this.checkListOptionService.createOption(createCheckListOptionDto);
         return ResponseEntity.status(201).body(checkListOptionDto);
+    }
+
+    @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<CheckListOptionDto> updateOption(@RequestBody @Valid UpdateCheckListOptionDto updateCheckListOptionDto) {
+        CheckListOptionDto checkListOptionDto = this.checkListOptionService.updateOption(updateCheckListOptionDto);
+        return ResponseEntity.ok(checkListOptionDto);
     }
 
     @DeleteMapping("/private/{optionID}")

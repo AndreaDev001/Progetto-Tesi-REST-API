@@ -3,18 +3,23 @@ package com.progettotirocinio.restapi.services.implementations.checklist;
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.checklist.CheckListDao;
 import com.progettotirocinio.restapi.data.dao.checklist.CheckListOptionDao;
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListOptionDto;
 import com.progettotirocinio.restapi.data.entities.CheckList;
 import com.progettotirocinio.restapi.data.entities.CheckListOption;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.checklist.CheckListOptionService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +30,12 @@ import java.util.stream.Collectors;
 public class CheckListOptionServiceImp extends GenericServiceImp<CheckListOption, CheckListOptionDto> implements CheckListOptionService
 {
     private final CheckListOptionDao checkListOptionDao;
-    public CheckListOptionServiceImp(CheckListOptionDao checkListOptionDao,CacheHandler cacheHandler, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CheckListOption> pagedResourcesAssembler) {
+    private final CheckListDao checkListDao;
+
+    public CheckListOptionServiceImp(CheckListDao checkListDao,CheckListOptionDao checkListOptionDao,CacheHandler cacheHandler, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CheckListOption> pagedResourcesAssembler) {
         super(cacheHandler, userDao, mapper, CheckListOption.class,CheckListOptionDto.class, pagedResourcesAssembler);
         this.checkListOptionDao = checkListOptionDao;
+        this.checkListDao = checkListDao;
     }
 
     @Override
@@ -73,11 +81,33 @@ public class CheckListOptionServiceImp extends GenericServiceImp<CheckListOption
     }
 
     @Override
-    public CheckListOptionDto createOption(CreateCheckListOptionDto createCheckListOptionDto) {
-        return null;
+    @Transactional
+    public CheckListOptionDto updateOption(UpdateCheckListOptionDto updateCheckListOptionDto) {
+        CheckListOption checkListOption = this.checkListOptionDao.findById(updateCheckListOptionDto.getCheckListOptionID()).orElseThrow();
+        if(updateCheckListOptionDto.getName() != null)
+            checkListOption.setName(updateCheckListOptionDto.getName());
+        if(updateCheckListOptionDto.getCompleted() != null)
+            checkListOption.setCompleted(updateCheckListOptionDto.getCompleted());
+        checkListOption = this.checkListOptionDao.save(checkListOption);
+        return this.modelMapper.map(checkListOption,CheckListOptionDto.class);
     }
 
     @Override
+    @Transactional
+    public CheckListOptionDto createOption(CreateCheckListOptionDto createCheckListOptionDto) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        CheckList checkList = this.checkListDao.findById(createCheckListOptionDto.getCheckListID()).orElseThrow();
+        CheckListOption checkListOption = new CheckListOption();
+        checkListOption.setName(createCheckListOptionDto.getName());
+        checkListOption.setCompleted(false);
+        checkListOption.setPublisher(authenticatedUser);
+        checkListOption.setCheckList(checkList);
+        checkListOption = this.checkListOptionDao.save(checkListOption);
+        return this.modelMapper.map(checkListOption,CheckListOptionDto.class);
+    }
+
+    @Override
+    @Transactional
     public void deleteOption(UUID optionID) {
         this.checkListOptionDao.findById(optionID).orElseThrow();
         this.checkListOptionDao.deleteById(optionID);

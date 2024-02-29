@@ -23,11 +23,11 @@ public class CheckListOption extends GenericEntity
     @Column(name = "COMPLETED",nullable = false,updatable = false)
     private boolean completed;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "CHECKLIST_ID",nullable = false,updatable = false)
     private CheckList checkList;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 }

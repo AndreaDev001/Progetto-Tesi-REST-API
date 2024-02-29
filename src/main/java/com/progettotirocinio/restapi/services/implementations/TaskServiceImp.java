@@ -152,11 +152,11 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
         if(updateTaskDto.getName() != null)
              task.setName(updateTaskDto.getName());
         if(updateTaskDto.getDescription() != null)
-            updateTaskDto.setDescription(updateTaskDto.getDescription());
+            task.setDescription(updateTaskDto.getDescription());
         if(updateTaskDto.getTitle() != null)
-            updateTaskDto.setTitle(updateTaskDto.getTitle());
+            task.setTitle(updateTaskDto.getTitle());
         if(updateTaskDto.getExpirationDate() != null)
-            updateTaskDto.setExpirationDate(updateTaskDto.getExpirationDate());
+            task.setExpirationDate(updateTaskDto.getExpirationDate());
         if(updateTaskDto.getPriority() != null)
             task.setPriority(updateTaskDto.getPriority());
         if(updateTaskDto.getGroupID() != null) {

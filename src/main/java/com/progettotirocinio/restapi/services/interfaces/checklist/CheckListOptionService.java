@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces.checklist;
 
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListOptionDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
@@ -17,6 +18,7 @@ public interface CheckListOptionService
     CollectionModel<CheckListOptionDto> getOptionsByCheckList(UUID checkListID);
     CollectionModel<CheckListOptionDto> getOptionsByCheckListAndCompleted(boolean completed,UUID checkListID);
     CheckListOptionDto getOption(UUID optionID);
+    CheckListOptionDto updateOption(UpdateCheckListOptionDto updateCheckListOptionDto);
     CheckListOptionDto createOption(CreateCheckListOptionDto createCheckListOptionDto);
     void deleteOption(UUID optionID);
 
