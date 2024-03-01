@@ -2,32 +2,29 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
-import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
+import com.progettotirocinio.restapi.data.dao.tags.TagDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardDto;
-import com.progettotirocinio.restapi.data.dto.output.RoleOwnerDto;
 import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import com.progettotirocinio.restapi.services.interfaces.BoardService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,11 +39,12 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
 
     private final BoardDao boardDao;
     private final RoleDao roleDao;
+    private final TagDao tagDao;
     private final RoleOwnerDao roleOwnerDao;
     private final TaskGroupDao taskGroupDao;
     private final BoardMemberDao boardMemberDao;
 
-    public BoardServiceImp(BoardMemberDao boardMemberDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+    public BoardServiceImp(BoardMemberDao boardMemberDao,TagDao tagDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
         this.boardDao = boardDao;
         this.taskGroupDao = taskGroupDao;
@@ -135,12 +133,12 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         board.setStatus(BoardStatus.OPEN);
         board.setPublisher(publisher);
         board = this.boardDao.save(board);
-        TaskGroup firstGroup = createDefaultGroup("TO DO",0,board,publisher);
-        TaskGroup secondGroup = createDefaultGroup("IN PROGRESS",1,board,publisher);
-        TaskGroup thirdGroup = createDefaultGroup("COMPLETED",2,board,publisher);
-        this.taskGroupDao.save(firstGroup);
-        this.taskGroupDao.save(secondGroup);
-        this.taskGroupDao.save(thirdGroup);
+        createDefaultGroup("TO DO",0,board,publisher);
+        createDefaultGroup("IN PROGRESS",1,board,publisher);
+        createDefaultGroup("COMPLETED",2,board,publisher);
+        createDefaultTag("TO DO","#FF0000",board);
+        createDefaultTag("IN PROGRESS","#FFA500",board);
+        createDefaultTag("COMPLETED","#008000",board);
         BoardMember boardMember = new BoardMember();
         boardMember.setUser(publisher);
         boardMember.setBoard(board);
@@ -192,6 +190,14 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         return Set.of(writeBoardPermission,readBoardPermission,writeTasks,readTasks,writeAssignedTaskPermission,readAssignedTaskPermission);
     }
 
+    private void createDefaultTag(String name,String color,Board board) {
+        Tag tag = new Tag();
+        tag.setName(name);
+        tag.setColor(color);
+        tag.setBoard(board);
+        this.tagDao.save(tag);
+    }
+
     private Set<Permission> createMemberPermissions(Role requiredRole)
     {
         Permission writeAssignedTaskPermission = new Permission();
@@ -208,14 +214,14 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         return Set.of(writeAssignedTaskPermission,readAssignedTaskPermission,readTasksPermission);
     }
 
-    private TaskGroup createDefaultGroup(String name,Integer order,Board board,User publisher) {
+    private void createDefaultGroup(String name, Integer order, Board board, User publisher) {
         TaskGroup taskGroup = new TaskGroup();
         taskGroup.setName(name);
         taskGroup.setCurrentOrder(order);
         taskGroup.setStatus(TaskGroupStatus.OPEN);
         taskGroup.setBoard(board);
         taskGroup.setPublisher(publisher);
-        return taskGroup;
+        this.taskGroupDao.save(taskGroup);
     }
 
     @Override
