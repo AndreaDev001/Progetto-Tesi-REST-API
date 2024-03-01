@@ -23,10 +23,10 @@ public class PollOption extends AmountEntity
     @Convert(converter = TrimConverter.class)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "POLL_ID",nullable = false,updatable = false)
     private Poll poll;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "pollOption")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "pollOption")
     private Set<PollVote> receivedVotes = new HashSet<>();
 }

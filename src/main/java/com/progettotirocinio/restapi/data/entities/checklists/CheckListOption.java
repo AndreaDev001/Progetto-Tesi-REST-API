@@ -3,10 +3,13 @@ package com.progettotirocinio.restapi.data.entities.checklists;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +19,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(value =  {AuditingEntityListener.class, UUIDEntityListener.class})
 @Table(name = "CHECKLIST_OPTIONS")
-public class CheckListOption extends GenericEntity
+public class CheckListOption extends GenericEntity implements OwnableEntity
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -32,4 +35,9 @@ public class CheckListOption extends GenericEntity
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
+
+    @Override
+    public UUID getOwnerID() {
+        return this.publisher.getId();
+    }
 }

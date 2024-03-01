@@ -19,11 +19,11 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class PollVote extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "POLL_OPTION_ID",nullable = false,updatable = false)
     private PollOption pollOption;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
     private User user;
 

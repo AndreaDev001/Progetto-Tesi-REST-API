@@ -43,7 +43,7 @@ public class Discussion extends AmountEntity implements OwnableEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "discussion")
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",updatable = false)
     @SpecificationOrderType(allowDepth = true)
     private User publisher;

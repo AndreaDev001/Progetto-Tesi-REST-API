@@ -45,10 +45,10 @@ public class Poll extends AmountEntity implements OwnableEntity
     @SpecificationOrderType
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
     private Set<PollLike> receivedLikes = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
     private Set<PollOption> options = new HashSet<>();
 
     @Column(name = "MINIMUM_VOTES",nullable = false)

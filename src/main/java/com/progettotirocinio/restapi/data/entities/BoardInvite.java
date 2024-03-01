@@ -34,11 +34,11 @@ public class BoardInvite extends GenericEntity
     @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
     private LocalDate expirationDate;
 
-    @ManyToOne(cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 
-    @ManyToOne(cascade = CascadeType.ALL,optional = false)
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "RECEIVER_ID",nullable = false,updatable = false)
     private User receiver;
 

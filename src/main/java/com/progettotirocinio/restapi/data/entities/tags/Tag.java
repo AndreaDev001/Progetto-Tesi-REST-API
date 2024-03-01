@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity
 @Table(name = "TAGS")
-public class Tag extends GenericEntity
+public class Tag extends GenericEntity implements OwnableEntity
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -36,4 +39,9 @@ public class Tag extends GenericEntity
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
+
+    @Override
+    public UUID getOwnerID() {
+        return this.publisher.getId();
+    }
 }

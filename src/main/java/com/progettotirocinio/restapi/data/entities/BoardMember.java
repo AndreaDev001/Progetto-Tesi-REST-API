@@ -20,11 +20,11 @@ import java.util.UUID;
 @Table(name = "BOARD_MEMBERS",uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID","BOARD_ID"})})
 public class BoardMember extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
 

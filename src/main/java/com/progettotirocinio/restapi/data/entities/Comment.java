@@ -34,11 +34,11 @@ public class Comment extends AmountEntity implements OwnableEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "comment")
     private Set<CommentLike> receivedLikes = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = true)
+    @ManyToOne(fetch = FetchType.LAZY,optional = true)
     @JoinColumn(name = "DISCUSSION_ID",updatable = false)
     private Discussion discussion;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 

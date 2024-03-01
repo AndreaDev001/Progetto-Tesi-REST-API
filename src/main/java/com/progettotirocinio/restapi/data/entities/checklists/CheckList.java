@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.AmountEntity;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +21,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = {AuditingEntityListener.class, UUIDEntityListener.class})
-public class CheckList extends AmountEntity
+public class CheckList extends AmountEntity implements OwnableEntity
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -35,4 +37,9 @@ public class CheckList extends AmountEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "checkList")
     private Set<CheckListOption> options = new HashSet<>();
+
+    @Override
+    public UUID getOwnerID() {
+        return this.publisher.getId();
+    }
 }

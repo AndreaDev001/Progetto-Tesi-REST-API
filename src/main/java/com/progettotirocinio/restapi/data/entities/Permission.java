@@ -31,7 +31,7 @@ public class Permission extends GenericEntity implements OwnableEntity
     @Enumerated(value = EnumType.STRING)
     private PermissionType type;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "ROLE_ID",nullable = false,updatable = false)
     private Role role;
 

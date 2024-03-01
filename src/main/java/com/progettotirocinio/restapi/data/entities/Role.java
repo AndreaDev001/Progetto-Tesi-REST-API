@@ -29,14 +29,14 @@ public class Role extends AmountEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",updatable = false,nullable = false)
     private User publisher;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "role")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "role")
     private Set<Permission> permissions = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",updatable = false,nullable = false)
     private Board board;
 
