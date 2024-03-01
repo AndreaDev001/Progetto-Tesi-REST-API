@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.config;
 import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.MultiOwnableEntity;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ import java.util.List;
 public class PermissionHandler
 {
     private final UserDao userDao;
+    private final TaskDao taskDao;
+    private final TaskGroupDao taskGroupDao;
     private final BoardMemberDao boardMemberDao;
     private final RoleOwnerDao roleOwnerDao;
+    private final TaskAssignmentDao taskAssignmentDao;
 
     public boolean hasRole(String requiredRole) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -62,7 +66,14 @@ public class PermissionHandler
 
     public boolean isMember(UUID boardID)
     {
-        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        User authenticatedUser = this.getAuthenticatedUser();
+        Optional<BoardMember> requiredBoardMember = this.boardMemberDao.getBoardMember(boardID,authenticatedUser.getId());
+        return requiredBoardMember.isPresent();
+    }
+
+    public boolean isMember(UUID resourceID,JpaRepository<BoardElement,UUID> repository) {
+        User authenticatedUser = this.getAuthenticatedUser();
+        UUID boardID = this.getBoardID(resourceID,repository);
         Optional<BoardMember> requiredBoardMember = this.boardMemberDao.getBoardMember(boardID,authenticatedUser.getId());
         return requiredBoardMember.isPresent();
     }
@@ -79,6 +90,41 @@ public class PermissionHandler
                 if(currentPermission.getType().equals(permissionType))
                     return true;
             }
+        }
+        return false;
+    }
+
+    public boolean hasBoardRole(String roleName,UUID resourceID,JpaRepository<BoardElement,UUID> repository) {
+        User authenticatedUser = this.getAuthenticatedUser();
+        UUID boardID = this.getBoardID(resourceID,repository);
+        if(boardID != null) {
+            Optional<RoleOwner> roleOwnerOptional = this.roleOwnerDao.getOwnerByNameAndBoardAndUser(authenticatedUser.getId(),boardID,roleName);
+            return roleOwnerOptional.isPresent();
+        }
+        return false;
+    }
+
+    public boolean hasBoardRole(String roleName,UUID boardID) {
+        User authenticatedUser = this.getAuthenticatedUser();
+        Optional<RoleOwner> roleOwnerOptional = this.roleOwnerDao.getOwnerByNameAndBoardAndUser(authenticatedUser.getId(),boardID,roleName);
+        return roleOwnerOptional.isPresent();
+    }
+    public UUID getBoardID(UUID resourceID, JpaRepository<BoardElement,UUID> repository) {
+        Optional<BoardElement> boardElementOptional = repository.findById(resourceID);
+        if(boardElementOptional.isPresent()) {
+            BoardElement boardElement = boardElementOptional.get();
+            return boardElement.getBoardID();
+        }
+        return null;
+    }
+
+    public boolean isAssigned(UUID taskID) {
+        User authenticatedUser = this.getAuthenticatedUser();
+        Optional<Task> taskOptional = this.taskDao.findById(taskID);
+        if(taskOptional.isPresent()) {
+            Optional<RoleOwner> roleOwnerOptional = this.roleOwnerDao.getOwnerByNameAndBoardAndUser(authenticatedUser.getId(),taskOptional.get().getId(),"MEMBER");
+            Optional<TaskAssignment> taskAssignmentOptional = this.taskAssignmentDao.getTaskAssignment(authenticatedUser.getUser().getId(),taskID);
+            return roleOwnerOptional.isPresent() && taskAssignmentOptional.isPresent();
         }
         return false;
     }

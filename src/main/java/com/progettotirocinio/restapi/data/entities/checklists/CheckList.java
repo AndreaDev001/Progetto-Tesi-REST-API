@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.AmountEntity;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = {AuditingEntityListener.class, UUIDEntityListener.class})
-public class CheckList extends AmountEntity implements OwnableEntity
+public class CheckList extends AmountEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -41,5 +42,10 @@ public class CheckList extends AmountEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.task.getGroup().getBoard().getId();
     }
 }

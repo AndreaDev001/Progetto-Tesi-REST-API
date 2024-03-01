@@ -1,6 +1,8 @@
 package com.progettotirocinio.restapi.data.entities;
 
 
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,7 +20,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "ROLE_OWNERS")
-public class RoleOwner extends GenericEntity
+public class RoleOwner extends GenericEntity implements OwnableEntity, BoardElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "ROLE_ID",nullable = false,updatable = false)
@@ -27,4 +29,14 @@ public class RoleOwner extends GenericEntity
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "OWNER_ID",nullable = false,updatable = false)
     private User owner;
+
+    @Override
+    public UUID getBoardID() {
+        return role.getBoard().getId();
+    }
+
+    @Override
+    public UUID getOwnerID() {
+        return owner.getId();
+    }
 }

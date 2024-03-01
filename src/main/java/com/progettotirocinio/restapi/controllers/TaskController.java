@@ -47,14 +47,14 @@ public class TaskController
     }
 
     @GetMapping("/private/name/{name}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskDto>> getTasksByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#createTaskDto.boardID,@taskDao)")
     public ResponseEntity<TaskDto> createTask(@RequestBody @Valid CreateTaskDto createTaskDto) {
         TaskDto taskDto = this.taskService.createTask(createTaskDto);
         return ResponseEntity.status(201).body(taskDto);
@@ -68,7 +68,7 @@ public class TaskController
     }
 
     @GetMapping("/private/spec")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskDto>> getTasksBySpec(@ParameterObject @Valid TaskSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksBySpec(TaskSpecifications.withFilter(filter),paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
@@ -115,28 +115,28 @@ public class TaskController
     }
 
     @GetMapping("/private/description/{description}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskDto>> getTasksByDescription(@PathVariable("description") String description,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByDescription(description,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/private/group/{groupID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isMember(#groupID,@taskGroupDao)")
     public ResponseEntity<CollectionModel<TaskDto>> getTasksByGroup(@PathVariable("groupID") UUID groupID) {
         CollectionModel<TaskDto> tasks = this.taskService.getTasksByGroup(groupID);
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/private/priority/{priority}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskDto>> getTasksByPriority(@PathVariable("priority")Priority priority,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByPriority(priority,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/private/title/{title}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskDto>> getTasksByTitle(@PathVariable("title") String title,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskDto> tasks = this.taskService.getTasksByTitle(title,paginationRequest.toPageRequest());
         return ResponseEntity.ok(tasks);

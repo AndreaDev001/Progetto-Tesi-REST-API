@@ -116,6 +116,9 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
             boardInvite.setText(updateBoardInviteDto.getText());
         if(updateBoardInviteDto.getStatus().equals(BoardInviteStatus.ACCEPTED))
         {
+            Board board = this.boardDao.findById(boardInvite.getBoardID()).orElseThrow();
+            if(board.getMaxMembers() < board.getMembers().size() + 1)
+                throw new InvalidFormat("error.boardInvite.boardFull");
             BoardMember boardMember = new BoardMember();
             boardMember.setUser(authenticatedUser);
             boardMember.setBoard(boardInvite.getBoard());

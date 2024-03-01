@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.Board;
 import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity
 @Table(name = "TAGS")
-public class Tag extends GenericEntity implements OwnableEntity
+public class Tag extends GenericEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -43,5 +44,10 @@ public class Tag extends GenericEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.board.getId();
     }
 }

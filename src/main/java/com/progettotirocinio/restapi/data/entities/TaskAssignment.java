@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.data.entities;
 
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASK_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TASK_ID","USER_ID"})})
-public class TaskAssignment extends GenericEntity implements OwnableEntity
+public class TaskAssignment extends GenericEntity implements OwnableEntity, BoardElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
@@ -32,5 +33,10 @@ public class TaskAssignment extends GenericEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.task.getGroup().getBoardID();
     }
 }

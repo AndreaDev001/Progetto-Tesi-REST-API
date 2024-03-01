@@ -7,6 +7,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.annotations.Specifi
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import jakarta.persistence.*;
@@ -27,7 +28,7 @@ import java.util.UUID;
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASKS")
 @SpecificationPrefix
-public class Task extends AmountEntity implements OwnableEntity
+public class Task extends AmountEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
@@ -78,5 +79,10 @@ public class Task extends AmountEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.getGroup().getBoardID();
     }
 }

@@ -23,7 +23,6 @@ public interface TaskGroupDao extends JpaRepository<TaskGroup, UUID> {
     Page<TaskGroup> getTaskGroupsByPublisher(@Param("requiredPublisherID") UUID publisherID, Pageable pageable);
     @Query("select max(t.currentOrder) from TaskGroup t where t.board.id = :requiredBoardID")
     Integer getMaxOrderInBoard(@Param("requiredBoardID") UUID boardID);
-
     @Query("select t from TaskGroup t where t.name = :requiredName")
     Page<TaskGroup> getTaskGroupsByName(@Param("requiredName") String name,Pageable pageable);
     @Query("select t from TaskGroup t where t.board.id = :requiredBoardID order by t.currentOrder asc")

@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASK_GROUPS")
-public class TaskGroup extends AmountEntity implements OwnableEntity
+public class TaskGroup extends AmountEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
@@ -53,5 +54,10 @@ public class TaskGroup extends AmountEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.board.getId();
     }
 }

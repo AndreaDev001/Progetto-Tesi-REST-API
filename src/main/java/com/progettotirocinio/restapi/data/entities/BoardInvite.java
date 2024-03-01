@@ -3,6 +3,8 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardInvite extends GenericEntity
+public class BoardInvite extends GenericEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "TEXT",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -45,4 +47,14 @@ public class BoardInvite extends GenericEntity
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
+
+    @Override
+    public UUID getBoardID() {
+        return board.getId();
+    }
+
+    @Override
+    public UUID getOwnerID() {
+        return publisher.getId();
+    }
 }

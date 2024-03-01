@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "PERMISSIONS")
-public class Permission extends GenericEntity implements OwnableEntity
+public class Permission extends GenericEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",updatable = false,nullable = false)
     @Convert(converter = TrimConverter.class)
@@ -38,5 +39,10 @@ public class Permission extends GenericEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.role.getOwnerID();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.role.getBoard().getId();
     }
 }

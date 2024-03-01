@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -53,6 +55,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> invalidFormatException(InvalidFormat invalidFormat, HttpServletRequest request) {
         return errorResponse(HttpStatus.BAD_REQUEST,Date.from(Instant.now()),invalidFormat.getMessage(),request.getRequestURI());
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ResponseEntity<ErrorResponse> forbiddenException(AccessDeniedException accessDeniedException,HttpServletRequest request) {
+        return errorResponse(HttpStatus.FORBIDDEN,Date.from(Instant.now()),"error.http.forbidden",request.getRequestURI());
+    }
+
+    @ExceptionHandler({InvalidBearerTokenException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponse> invalidTokenException(InvalidBearerTokenException invalidBearerTokenException,HttpServletRequest request) {
+        return errorResponse(HttpStatus.UNAUTHORIZED,Date.from(Instant.now()),"error.http.invalidToken",request.getRequestURI());
     }
 
     @ExceptionHandler({BindException.class})

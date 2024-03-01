@@ -51,6 +51,7 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         this.boardMemberDao = boardMemberDao;
         this.roleDao = roleDao;
         this.roleOwnerDao = roleOwnerDao;
+        this.tagDao = tagDao;
     }
 
     @Override
