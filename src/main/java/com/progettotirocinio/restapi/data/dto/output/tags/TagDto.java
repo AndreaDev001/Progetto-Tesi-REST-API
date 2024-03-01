@@ -1,17 +1,13 @@
-package com.progettotirocinio.restapi.data.dto.output;
+package com.progettotirocinio.restapi.data.dto.output.tags;
 
-
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
 import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
-import com.progettotirocinio.restapi.data.dto.output.refs.TaskRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -21,6 +17,7 @@ import java.util.UUID;
 public class TagDto extends GenericOutput<TagDto>
 {
     private String name;
+    private String color;
+    private BoardRef board;
     private UserRef publisher;
-    private TaskRef task;
 }

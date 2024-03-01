@@ -1,8 +1,7 @@
 package com.progettotirocinio.restapi.data.dao.specifications;
 
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPath;
-import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import jakarta.persistence.criteria.*;

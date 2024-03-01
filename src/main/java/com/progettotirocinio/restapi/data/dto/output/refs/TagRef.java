@@ -1,7 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output.refs;
 
 import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
-import com.progettotirocinio.restapi.data.entities.polls.PollOption;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class PollOptionRef extends GenericOutput<PollOptionRef>
+public class TagRef extends GenericOutput<TagRef>
 {
     private String name;
-    private PollRef poll;
 
-    public PollOptionRef(PollOption pollOption) {
-        this.name = pollOption.getName();
+    public TagRef(Tag tag) {
+        this.name = tag.getName();
     }
 }

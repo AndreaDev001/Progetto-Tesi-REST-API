@@ -2,10 +2,8 @@ package com.progettotirocinio.restapi.controllers.checklist;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListDto;
-import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListOptionDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListDto;
-import com.progettotirocinio.restapi.data.entities.CheckListOption;
 import com.progettotirocinio.restapi.services.interfaces.checklist.CheckListService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

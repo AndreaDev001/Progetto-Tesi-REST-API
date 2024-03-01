@@ -2,7 +2,6 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.PollVoteDto;
-import com.progettotirocinio.restapi.data.entities.PollVote;
 import com.progettotirocinio.restapi.services.interfaces.PollVoteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

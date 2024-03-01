@@ -8,7 +8,7 @@ import com.progettotirocinio.restapi.data.dao.checklist.CheckListDao;
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListDto;
-import com.progettotirocinio.restapi.data.entities.CheckList;
+import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;

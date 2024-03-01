@@ -1,7 +1,7 @@
 package com.progettotirocinio.restapi.data.dao;
 
 
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

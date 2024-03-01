@@ -1,8 +1,8 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.controllers.BoardInviteController;
 import com.progettotirocinio.restapi.controllers.RoleController;
-import com.progettotirocinio.restapi.controllers.TagController;
 import com.progettotirocinio.restapi.controllers.TaskGroupController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -41,12 +40,17 @@ public class BoardDto extends GenericOutput<BoardDto>
     @AmountReference(name = "roles")
     private Integer amountOfRoles;
     @AmountReference(name = "members")
-    private Integer members;
+    private Integer amountOfMembers;
+    @AmountReference(name = "associatedTags")
+    private Integer amountOfAssociatedTags;
+    @AmountReference(name = "invites")
+    private Integer amountOfInvites;
 
     @Override
     public void addLinks(Object... params) {
         PaginationRequest paginationRequest = new PaginationRequest(0,20);
         this.add(linkTo(methodOn(TaskGroupController.class).getTaskGroupsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("taskGroups").withName("taskGroups"));
         this.add(linkTo(methodOn(RoleController.class).getRoles(paginationRequest)).slash(paginationRequest.toString()).withRel("roles").withName("roles"));
+        this.add(linkTo(methodOn(BoardInviteController.class).getBoardInvitesByBoard(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("invites").withName("invites"));
     }
 }

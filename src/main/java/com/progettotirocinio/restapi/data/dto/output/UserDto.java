@@ -92,7 +92,6 @@ public class UserDto extends GenericOutput<UserDto>
         this.add(linkTo(methodOn(CommentController.class).getCommentsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdComments").withName("createdComments"));
         this.add(linkTo(methodOn(DiscussionController.class).getDiscussionsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdDiscussions").withName("createdDiscussions"));
         this.add(linkTo(methodOn(PollController.class).getPollsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdPolls").withName("createdPolls"));
-        this.add(linkTo(methodOn(TagController.class).getTagsByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdTags").withName("createdTags"));
         this.add(linkTo(methodOn(RoleOwnerController.class).getRoleOwnersByOwner(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("rolesOwned").withName("rolesOwned"));
         this.add(linkTo(methodOn(BoardInviteController.class).getBoardInvitesByPublisher(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("createdInvites").withName("createdInvites"));
         this.add(linkTo(methodOn(BoardMemberController.class).getBoardMembersByUser(this.id,paginationRequest)).slash(paginationRequest.toString()).withRel("boardMembers").withName("boardMembers"));

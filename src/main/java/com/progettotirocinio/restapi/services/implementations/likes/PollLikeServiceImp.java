@@ -8,7 +8,7 @@ import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.likes.PollLikeDao;
 import com.progettotirocinio.restapi.data.dto.output.likes.PollLikeDto;
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;

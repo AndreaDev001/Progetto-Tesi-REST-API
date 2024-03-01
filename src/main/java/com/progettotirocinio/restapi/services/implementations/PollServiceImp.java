@@ -10,12 +10,11 @@ import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.PollDto;
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.services.interfaces.PollService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

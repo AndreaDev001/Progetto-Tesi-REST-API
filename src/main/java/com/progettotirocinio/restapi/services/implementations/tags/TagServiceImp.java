@@ -1,24 +1,19 @@
-package com.progettotirocinio.restapi.services.implementations;
-
+package com.progettotirocinio.restapi.services.implementations.tags;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
-import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.BoardDao;
-import com.progettotirocinio.restapi.data.dao.TagDao;
-import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
-import com.progettotirocinio.restapi.data.dto.input.create.CreateTagDto;
-import com.progettotirocinio.restapi.data.dto.input.update.UpdateTagDto;
-import com.progettotirocinio.restapi.data.dto.output.BoardDto;
-import com.progettotirocinio.restapi.data.dto.output.TagDto;
+import com.progettotirocinio.restapi.data.dao.tags.TagDao;
+import com.progettotirocinio.restapi.data.dto.input.create.tags.CreateTagDto;
+import com.progettotirocinio.restapi.data.dto.input.update.tags.UpdateTagDto;
+import com.progettotirocinio.restapi.data.dto.output.tags.TagDto;
 import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.Tag;
-import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.User;
-import com.progettotirocinio.restapi.services.interfaces.TagService;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
+import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
+import com.progettotirocinio.restapi.services.interfaces.tags.TagService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -32,15 +27,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiresCaching(allCacheName = "ALL_TAGS")
-public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements TagService  {
+public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements TagService
+{
     private final TagDao tagDao;
-    private final TaskDao taskDao;
+    private final BoardDao boardDao;
 
-    public TagServiceImp(CacheHandler cacheHandler,TaskDao taskDao,UserDao userDao, BoardDao boardDao, Mapper mapper, TagDao tagDao, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
-        super(cacheHandler,userDao,mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
+    public TagServiceImp(CacheHandler cacheHandler,BoardDao boardDao,TagDao tagDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<Tag> pagedResourcesAssembler) {
+        super(cacheHandler, userDao, mapper, Tag.class,TagDto.class, pagedResourcesAssembler);
         this.tagDao = tagDao;
-        this.taskDao = taskDao;
+        this.boardDao = boardDao;
     }
 
     @Override
@@ -50,15 +45,9 @@ public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements Tag
     }
 
     @Override
-    public PagedModel<TagDto> getTagsByPublisher(UUID tagID, Pageable pageable) {
-        Page<Tag> tags = this.tagDao.getTagsByPublisher(tagID,pageable);
+    public PagedModel<TagDto> getTagsByPublisher(UUID publisherID,Pageable pageable) {
+        Page<Tag> tags = this.tagDao.getTagsByPublisher(publisherID,pageable);
         return this.pagedResourcesAssembler.toModel(tags,modelAssembler);
-    }
-
-    @Override
-    public CollectionModel<TagDto> getTagsByTask(UUID taskID) {
-        List<Tag> tags = this.tagDao.getTagsByTask(taskID);
-        return CollectionModel.of(tags.stream().map(tag -> this.modelMapper.map(tag,TagDto.class)).collect(Collectors.toList()));
     }
 
     @Override
@@ -68,7 +57,19 @@ public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements Tag
     }
 
     @Override
-    public TagDto getTag(UUID tagID) {
+    public PagedModel<TagDto> getTagsByColor(String color, Pageable pageable) {
+        Page<Tag> tags = this.tagDao.getTagsByColor(color,pageable);
+        return this.pagedResourcesAssembler.toModel(tags,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<TagDto> getTagsByBoard(UUID boardID) {
+        List<Tag> tags = this.tagDao.getTagsByBoard(boardID);
+        return CollectionModel.of(tags.stream().map(tag -> this.modelMapper.map(tag,TagDto.class)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public TagDto findTag(UUID tagID) {
         Tag tag = this.tagDao.findById(tagID).orElseThrow();
         return this.modelMapper.map(tag,TagDto.class);
     }
@@ -77,11 +78,12 @@ public class TagServiceImp extends GenericServiceImp<Tag, TagDto> implements Tag
     @Transactional
     public TagDto createTag(CreateTagDto createTagDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
-        Task task = this.taskDao.findById(createTagDto.getTaskID()).orElseThrow();
+        Board board = this.boardDao.findById(createTagDto.getBoardID()).orElseThrow();
         Tag tag = new Tag();
-        tag.setName(createTagDto.getName());
-        tag.setTask(task);
         tag.setPublisher(publisher);
+        tag.setBoard(board);
+        tag.setName(createTagDto.getName());
+        tag.setColor(createTagDto.getColor());
         tag = this.tagDao.save(tag);
         return this.modelMapper.map(tag,TagDto.class);
     }

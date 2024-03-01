@@ -1,7 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output.refs;
 
 import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,5 +1,7 @@
-package com.progettotirocinio.restapi.data.entities;
+package com.progettotirocinio.restapi.data.entities.polls;
 
+import com.progettotirocinio.restapi.data.entities.GenericEntity;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,6 @@ public class PollVote extends GenericEntity implements OwnableEntity
 
     @Override
     public UUID getOwnerID() {
-        return this.user.id;
+        return this.user.getId();
     }
 }

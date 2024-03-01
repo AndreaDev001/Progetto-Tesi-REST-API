@@ -2,7 +2,6 @@ package com.progettotirocinio.restapi.services.interfaces;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.PollOptionDto;
-import com.progettotirocinio.restapi.data.entities.PollOption;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 

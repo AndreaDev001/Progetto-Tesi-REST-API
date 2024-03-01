@@ -1,7 +1,6 @@
 package com.progettotirocinio.restapi.data.entities.reports;
 
-import com.progettotirocinio.restapi.data.entities.GenericEntity;
-import com.progettotirocinio.restapi.data.entities.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

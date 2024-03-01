@@ -1,13 +1,13 @@
-package com.progettotirocinio.restapi.data.entities;
+package com.progettotirocinio.restapi.data.entities.polls;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
-import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPath;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
+import com.progettotirocinio.restapi.data.entities.AmountEntity;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
-import com.progettotirocinio.restapi.data.entities.likes.Like;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import jakarta.persistence.*;
 import lombok.*;

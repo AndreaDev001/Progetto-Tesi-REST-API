@@ -1,15 +1,12 @@
 package com.progettotirocinio.restapi.config.mapper;
 
-import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
-import com.progettotirocinio.restapi.data.dto.output.UserDto;
 import com.progettotirocinio.restapi.data.dto.output.refs.*;
 import com.progettotirocinio.restapi.data.entities.*;
-import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import org.modelmapper.*;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ui.ModelMap;
 
 @Configuration
 public class ModelMapperConfig

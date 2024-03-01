@@ -56,6 +56,7 @@ public class SecurityConfig
                         .requestMatchers("/roles/public/**").permitAll()
                         .requestMatchers("/roleOwners/public/**").permitAll()
                         .requestMatchers("/tags/public/**").permitAll()
+                        .requestMatchers("/tagAssignments/public/**").permitAll()
                         .requestMatchers("/taskGroups/public/**").permitAll()
                         .requestMatchers("/teams/public/**").permitAll()
                         .requestMatchers("/teamMembers/public/**").permitAll()
@@ -79,6 +80,8 @@ public class SecurityConfig
                         .requestMatchers("/taskAssignments/public/**").permitAll()
                         .requestMatchers("/pollOptions/public/**").permitAll()
                         .requestMatchers("/pollVotes/public/**").permitAll()
+                        .requestMatchers("/checkLists/public/**").permitAll()
+                        .requestMatchers("/checkListOptions/public/**").permitAll()
                         .anyRequest().authenticated());
         httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         httpSecurity.addFilterAfter(authenticationFilter,BasicAuthenticationFilter.class);

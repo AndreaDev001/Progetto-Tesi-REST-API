@@ -1,8 +1,7 @@
-package com.progettotirocinio.restapi.data.entities;
+package com.progettotirocinio.restapi.data.entities.polls;
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.entities.AmountEntity;
-import com.progettotirocinio.restapi.data.entities.Poll;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -9,7 +9,10 @@ import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.data.entities.images.UserImage;
 import com.progettotirocinio.restapi.data.entities.likes.*;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
+import com.progettotirocinio.restapi.data.entities.polls.PollVote;
 import com.progettotirocinio.restapi.data.entities.reports.Report;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -83,9 +86,6 @@ public class User extends AmountEntity
     private Set<Poll> createdPolls = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
-    private Set<Tag> createdTags = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
     private Set<Role> createdRoles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
@@ -99,6 +99,9 @@ public class User extends AmountEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
     private Set<CommentLike> likedComments = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "publisher")
+    private Set<Tag> createdTags = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
     private Set<DiscussionLike> likedDiscussions = new HashSet<>();

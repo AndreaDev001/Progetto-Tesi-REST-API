@@ -1,7 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output.refs;
 
 import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
-import com.progettotirocinio.restapi.data.entities.CheckList;
+import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

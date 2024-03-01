@@ -3,8 +3,6 @@ package com.progettotirocinio.restapi.services.interfaces.checklist;
 import com.progettotirocinio.restapi.data.dto.input.create.checkList.CreateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateCheckListDto;
 import com.progettotirocinio.restapi.data.dto.output.checklist.CheckListDto;
-import com.progettotirocinio.restapi.data.entities.CheckList;
-import com.progettotirocinio.restapi.data.entities.CheckListOption;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;

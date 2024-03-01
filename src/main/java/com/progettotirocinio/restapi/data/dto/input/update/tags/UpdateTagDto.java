@@ -1,7 +1,5 @@
-package com.progettotirocinio.restapi.data.dto.input.create;
+package com.progettotirocinio.restapi.data.dto.input.update.tags;
 
-
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +12,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateTagDto
+public class UpdateTagDto
 {
     @NotNull
-    @NotBlank
+    private UUID tagID;
     private String name;
-    @NotNull
-    private UUID taskID;
 }

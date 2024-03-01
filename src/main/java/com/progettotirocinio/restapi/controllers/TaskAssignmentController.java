@@ -73,7 +73,7 @@ public class TaskAssignmentController
     }
 
     @DeleteMapping("/private/{taskAssignmentID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@taskAssignmentDao,#taskAssignmentID)")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<Void> deleteTaskAssignment(@PathVariable("taskAssignmentID") UUID taskAssignmentID) {
         this.taskAssignmentService.deleteTaskAssignment(taskAssignmentID);
         return ResponseEntity.noContent().build();

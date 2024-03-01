@@ -8,6 +8,7 @@ import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -69,6 +70,9 @@ public class Board extends AmountEntity implements OwnableEntity
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
     private Set<BoardMember> members = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)
+    private Set<Tag> associatedTags = new HashSet<>();
 
     @Column(name = "MAX_MEMBERS",nullable = false)
     private Integer maxMembers;

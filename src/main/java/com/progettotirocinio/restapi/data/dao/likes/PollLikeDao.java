@@ -1,6 +1,5 @@
 package com.progettotirocinio.restapi.data.dao.likes;
 
-import com.progettotirocinio.restapi.data.entities.Poll;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
