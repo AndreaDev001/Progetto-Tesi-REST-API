@@ -43,12 +43,16 @@ public class PermissionHandler
     }
 
     public boolean hasAccess(JpaRepository<OwnableEntity, UUID> repository,UUID resourceID) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         UUID userID = this.getAuthenticatedID();
         Optional<OwnableEntity> ownableEntityOptional = repository.findById(resourceID);
         return ownableEntityOptional.map(ownableEntity -> ownableEntity.getOwnerID().equals(userID)).orElse(false);
     }
 
     public boolean hasAccess(UUID userID) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         UUID authenticatedID = this.getAuthenticatedID();
         if(authenticatedID != null)
             return authenticatedID.equals(userID);
@@ -56,6 +60,8 @@ public class PermissionHandler
     }
 
     public boolean hasAccessMulti(JpaRepository<MultiOwnableEntity,UUID> repository,UUID resourceID) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         Optional<MultiOwnableEntity> multiOwnableEntityOptional = repository.findById(resourceID);
         if(multiOwnableEntityOptional.isPresent()) {
             List<UUID> values = multiOwnableEntityOptional.get().getOwnersID();
@@ -67,19 +73,24 @@ public class PermissionHandler
 
     public boolean isMember(UUID boardID)
     {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         User authenticatedUser = this.getAuthenticatedUser();
         Optional<BoardMember> requiredBoardMember = this.boardMemberDao.getBoardMember(boardID,authenticatedUser.getId());
         return requiredBoardMember.isPresent();
     }
 
     public boolean isMember(UUID resourceID,JpaRepository<BoardElement,UUID> repository) {
-        User authenticatedUser = this.getAuthenticatedUser();
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         UUID boardID = this.getBoardID(resourceID,repository);
         return boardID != null && isMember(boardID);
     }
 
     public boolean hasPermission(UUID boardID,PermissionType permissionType)
     {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         if(!isMember(boardID))
             return false;
@@ -95,11 +106,15 @@ public class PermissionHandler
     }
 
     public boolean hasBoardRole(String roleName,UUID resourceID,JpaRepository<BoardElement,UUID> repository) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         UUID boardID = this.getBoardID(resourceID,repository);
         return boardID != null && hasBoardRole(roleName, boardID);
     }
 
     public boolean hasBoardRole(String roleName,UUID boardID) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         User authenticatedUser = this.getAuthenticatedUser();
         Optional<RoleOwner> roleOwnerOptional = this.roleOwnerDao.getOwnerByNameAndBoardAndUser(authenticatedUser.getId(),boardID,roleName);
         return roleOwnerOptional.isPresent();
@@ -114,6 +129,8 @@ public class PermissionHandler
     }
 
     public boolean isAssigned(UUID taskID) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         User authenticatedUser = this.getAuthenticatedUser();
         Optional<Task> taskOptional = this.taskDao.findById(taskID);
         if(taskOptional.isPresent()) {
@@ -125,6 +142,8 @@ public class PermissionHandler
     }
 
     public boolean isAssigned(UUID resourceID, JpaRepository<TaskElement,UUID> repository) {
+        if(hasRole("ROLE_ADMIN"))
+            return true;
         Optional<TaskElement> taskElementOptional = repository.findById(resourceID);
         if(taskElementOptional.isPresent()) {
             UUID taskID = taskElementOptional.get().getTaskID();
