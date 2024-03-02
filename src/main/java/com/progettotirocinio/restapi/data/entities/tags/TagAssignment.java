@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.entities.tags;
 import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
+import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity
 @Table(name = "TAG_ASSIGNMENTS")
-public class TagAssignment extends GenericEntity implements BoardElement
+public class TagAssignment extends GenericEntity implements BoardElement, TaskElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "TAG_ID",nullable = false,updatable = false)
@@ -32,5 +33,10 @@ public class TagAssignment extends GenericEntity implements BoardElement
     @Override
     public UUID getBoardID() {
         return this.tag.getBoard().getId();
+    }
+
+    @Override
+    public UUID getTaskID() {
+        return this.task.getId();
     }
 }

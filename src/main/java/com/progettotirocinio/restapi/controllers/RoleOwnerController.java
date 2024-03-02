@@ -32,20 +32,21 @@ public class RoleOwnerController
     }
 
     @GetMapping("/private/{roleOwnerID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    @PreAuthorize("@permissionHandler.hasAccess(#roleOwnerID,@roleOwnerDao)")
     public ResponseEntity<RoleOwnerDto> getOwner(@PathVariable("roleOwnerID")UUID roleOwnerID) {
         RoleOwnerDto roleOwner = this.roleOwnerService.getById(roleOwnerID);
         return ResponseEntity.ok(roleOwner);
     }
 
     @PostMapping("/private/{roleID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#roleID,@roleDao)")
     public ResponseEntity<RoleOwnerDto> createRoleOwner(@PathVariable("roleID") UUID roleID) {
         RoleOwnerDto roleOwnerDto = this.roleOwnerService.createRoleOwner(roleID);
         return ResponseEntity.status(201).body(roleOwnerDto);
     }
 
     @PostMapping("/private")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createRoleOwnerDto.roleID,@roleDao)")
     public ResponseEntity<RoleOwnerDto> createRoleOwner(@RequestBody @Valid CreateRoleOwnerDto createRoleOwnerDto) {
         RoleOwnerDto roleOwnerDto = this.roleOwnerService.createRoleOwner(createRoleOwnerDto);
         return ResponseEntity.status(201).body(roleOwnerDto);
@@ -59,6 +60,7 @@ public class RoleOwnerController
     }
 
     @GetMapping("/private/owner/{ownerID}/board/{boardID}/name/{name}")
+    @PreAuthorize("@permissionHandler.hasAccess(#ownerID) and @permissionHandler.isMember(#boardID)")
     public ResponseEntity<RoleOwnerDto> hasRole(@PathVariable("ownerID") UUID ownerID,@PathVariable("boardID") UUID boardID,@PathVariable("name") String name) {
         RoleOwnerDto roleOwnerDto = this.roleOwnerService.hasRole(ownerID,boardID,name);
         return ResponseEntity.ok(roleOwnerDto);
@@ -72,13 +74,14 @@ public class RoleOwnerController
     }
 
     @DeleteMapping("/private/{roleOwnerID}")
-    @PreAuthorize("permissionHandler.hasAccess(@roleOwnerDao,#roleOwnerID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#roleOwnerID,@roleOwnerDao)")
     public ResponseEntity<Void> deleteRoleOwner(@PathVariable("roleOwnerID") UUID roleOwnerID) {
         this.roleOwnerService.deleteOwner(roleOwnerID);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/private/name/{name}/owner/{ownerID}/board/{boardID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
     public ResponseEntity<Void> deleteRoleOwner(@PathVariable("name") String name,@PathVariable("ownerID") UUID ownerID,@PathVariable("boardID") UUID boardID) {
         this.roleOwnerService.deleteOwner(name,ownerID,boardID);
         return ResponseEntity.noContent().build();

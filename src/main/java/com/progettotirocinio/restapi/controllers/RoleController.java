@@ -40,21 +40,21 @@ public class RoleController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createRoleDto.boardID)")
     public ResponseEntity<RoleDto> createRole(@RequestBody @Valid CreateRoleDto createRoleDto) {
         RoleDto roleDto = this.roleService.createRole(createRoleDto);
         return ResponseEntity.status(201).body(roleDto);
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasAccess(@roleDao,#updateRoleDto.roleID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateRoleDto.roleID,@roleDao)")
     public ResponseEntity<RoleDto> updateRole(@RequestBody @Valid UpdateRoleDto updateRoleDto) {
         RoleDto roleDto = this.roleService.updateRole(updateRoleDto);
         return ResponseEntity.ok(roleDto);
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isMember(#boardID)")
     public ResponseEntity<PagedModel<RoleDto>> getRolesByBoard(@PathVariable("boardID") UUID boardID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<RoleDto> roles = this.roleService.getRolesByBoard(boardID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(roles);
@@ -68,7 +68,7 @@ public class RoleController
     }
 
     @GetMapping("/private/name/{name}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<RoleDto>> getRolesByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<RoleDto> roles = this.roleService.getRolesByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(roles);

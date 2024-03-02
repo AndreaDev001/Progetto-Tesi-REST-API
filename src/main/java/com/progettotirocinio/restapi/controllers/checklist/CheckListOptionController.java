@@ -46,14 +46,14 @@ public class CheckListOptionController
     }
 
     @GetMapping("/private/checklist/{checkListID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#checklistID,@checkListDao)")
     public ResponseEntity<CollectionModel<CheckListOptionDto>> getOptionsByChecklist(@PathVariable("checklistID") UUID checkListID) {
         CollectionModel<CheckListOptionDto> collectionModel = this.checkListOptionService.getOptionsByCheckList(checkListID);
         return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/checklist/{checklistID}/completed/{completed}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#checkListID,@checkListDao)")
     public ResponseEntity<CollectionModel<CheckListOptionDto>> getOptionsByChecklistAndCompleted(@PathVariable("checklistID") UUID checklistID,@PathVariable("completed") boolean completed) {
         CollectionModel<CheckListOptionDto> collectionModel = this.checkListOptionService.getOptionsByCheckListAndCompleted(completed,checklistID);
         return ResponseEntity.ok(collectionModel);
@@ -67,21 +67,21 @@ public class CheckListOptionController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isAssigned(#createCheckListOptionDto.checklistID,@checkListDao)")
     public ResponseEntity<CheckListOptionDto> createOption(@RequestBody @Valid CreateCheckListOptionDto createCheckListOptionDto) {
         CheckListOptionDto checkListOptionDto = this.checkListOptionService.createOption(createCheckListOptionDto);
         return ResponseEntity.status(201).body(checkListOptionDto);
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isAssigned(#updateCheckListOptionDto.optionID,@checkListOptionDao)")
     public ResponseEntity<CheckListOptionDto> updateOption(@RequestBody @Valid UpdateCheckListOptionDto updateCheckListOptionDto) {
         CheckListOptionDto checkListOptionDto = this.checkListOptionService.updateOption(updateCheckListOptionDto);
         return ResponseEntity.ok(checkListOptionDto);
     }
 
     @DeleteMapping("/private/{optionID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@checkListOptionDao,#optionID)")
+    @PreAuthorize("@permissionHandler.isAssigned(#optionID,@checkListOptionDao)")
     public ResponseEntity<Void> deleteOption(@PathVariable("optionID") UUID optionID) {
         this.checkListOptionService.deleteOption(optionID);
         return ResponseEntity.noContent().build();

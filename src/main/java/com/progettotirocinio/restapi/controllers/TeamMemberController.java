@@ -40,14 +40,14 @@ public class TeamMemberController
     }
 
     @PostMapping("/private/{teamID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#teamID,@teamDao)")
     public ResponseEntity<TeamMemberDto> createTeamMember(@PathVariable("teamID") UUID teamID) {
         TeamMemberDto teamMemberDto = this.teamMemberService.createTeamMember(teamID);
         return ResponseEntity.status(201).body(teamMemberDto);
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTeamMemberDto.teamID,@teamDao)")
     public ResponseEntity<TeamMemberDto> createTeamMember(@RequestBody @Valid CreateTeamMemberDto createTeamMemberDto) {
         TeamMemberDto teamMemberDto = this.teamMemberService.createTeamMember(createTeamMemberDto);
         return ResponseEntity.ok(teamMemberDto);
@@ -61,14 +61,14 @@ public class TeamMemberController
     }
 
     @GetMapping("/private/team/{teamID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#teamID,@teamDao)")
     public ResponseEntity<CollectionModel<TeamMemberDto>> getTeamMembersByTeam(@PathVariable("teamID") UUID teamID) {
         CollectionModel<TeamMemberDto> teamMembers = this.teamMemberService.getTeamMembersByTeam(teamID);
         return ResponseEntity.ok(teamMembers);
     }
 
     @DeleteMapping("/private/{teamMemberID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#teamMemberID,@teamMemberDao)")
     public ResponseEntity<Void> deleteTeamMember(@PathVariable("teamMemberID") UUID teamMemberID) {
         this.teamMemberService.deleteTeamMember(teamMemberID);
         return ResponseEntity.noContent().build();

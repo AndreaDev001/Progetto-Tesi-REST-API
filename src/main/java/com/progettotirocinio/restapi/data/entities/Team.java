@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TEAMS")
-public class Team extends AmountEntity implements OwnableEntity
+public class Team extends AmountEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -42,5 +43,10 @@ public class Team extends AmountEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return board.getId();
     }
 }

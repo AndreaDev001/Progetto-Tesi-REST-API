@@ -83,6 +83,6 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
 
     @Override
     public UUID getBoardID() {
-        return this.getGroup().getBoardID();
+        return this.group.getBoardID();
     }
 }

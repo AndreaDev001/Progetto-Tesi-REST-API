@@ -45,35 +45,35 @@ public class TaskAssignmentController
     }
 
     @GetMapping("/private/task/{taskID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
     public ResponseEntity<CollectionModel<TaskAssignmentDto>> getTaskAssignmentsByTask(@PathVariable("taskID") UUID taskID) {
         CollectionModel<TaskAssignmentDto> collectionModel = this.taskAssignmentService.getTaskAssignmentsByTask(taskID);
         return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
     public ResponseEntity<PagedModel<TaskAssignmentDto>> getTaskAssignmentsByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.getTaskAssignmentsByUser(userID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskAssignments);
     }
 
     @GetMapping("/private/user/{userID}/task/{taskID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @PreAuthorize("@permissionHandler.hasAccess(#userID) and @permissionHandler.isMember(#taskID,@taskDao)")
     public ResponseEntity<TaskAssignmentDto> getTaskAssignment(@PathVariable("userID") UUID userID,@PathVariable("taskAssignmentID") UUID taskAssignmentID) {
         TaskAssignmentDto taskAssignmentDto = this.taskAssignmentService.getTaskAssignment(userID,taskAssignmentID);
         return ResponseEntity.ok(taskAssignmentDto);
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTaskAssignmentDto.taskID,@taskDao)")
     public ResponseEntity<TaskAssignmentDto> createTaskAssignment(@RequestBody @Valid CreateTaskAssignmentDto createTaskAssignmentDto) {
         TaskAssignmentDto taskAssignmentDto = this.taskAssignmentService.createTaskAssignment(createTaskAssignmentDto);
         return ResponseEntity.status(201).body(taskAssignmentDto);
     }
 
     @DeleteMapping("/private/{taskAssignmentID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#taskAssignmentID,@taskAssignmentDao)")
     public ResponseEntity<Void> deleteTaskAssignment(@PathVariable("taskAssignmentID") UUID taskAssignmentID) {
         this.taskAssignmentService.deleteTaskAssignment(taskAssignmentID);
         return ResponseEntity.noContent().build();

@@ -45,21 +45,21 @@ public class TaskGroupController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#createTaskGroupDto.boardID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTaskGroupDto.boardID,@taskGroupDao)")
     public ResponseEntity<TaskGroupDto> createTaskGroup(@RequestBody @Valid CreateTaskGroupDto createTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.createTaskGroup(createTaskGroupDto);
         return ResponseEntity.status(201).body(taskGroupDto);
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
     public ResponseEntity<TaskGroupDto> updateTaskGroup(@RequestBody @Valid UpdateTaskGroupDto updateTaskGroupDto) {
         TaskGroupDto taskGroupDto = this.taskGroupService.updateTaskGroup(updateTaskGroupDto);
         return ResponseEntity.ok(taskGroupDto);
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_MEMBER',#boardID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#boardID,@taskGroupDao)")
     public ResponseEntity<CollectionModel<TaskGroupDto>> getTaskGroupsByBoard(@PathVariable("boardID") UUID boardID) {
         CollectionModel<TaskGroupDto> collectionModel = this.taskGroupService.getTaskGroupsByBoard(boardID);
         return ResponseEntity.ok(collectionModel);
@@ -92,14 +92,14 @@ public class TaskGroupController
     }
 
     @DeleteMapping("/private/{taskGroupID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
     public ResponseEntity<Void> deleteTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         this.taskGroupService.deleteTaskGroup(taskGroupID);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/private/clear/{taskGroupID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
     public ResponseEntity<TaskGroupDto> clearTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         TaskGroupDto taskGroupDto =  this.taskGroupService.clearTaskGroup(taskGroupID);
         return ResponseEntity.ok(taskGroupDto);

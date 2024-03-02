@@ -46,28 +46,28 @@ public class CheckListController
     }
 
     @GetMapping("/private/task/{taskID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<CollectionModel<CheckListDto>> getCheckListsByGroup(@PathVariable("taskID") UUID taskID) {
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
+    public ResponseEntity<CollectionModel<CheckListDto>> getCheckListsByTask(@PathVariable("taskID") UUID taskID) {
         CollectionModel<CheckListDto> checkLists = this.checkListService.getCheckListsByTask(taskID);
         return ResponseEntity.ok(checkLists);
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isAssigned(#createCheckListDto.taskID)")
     public ResponseEntity<CheckListDto> createCheckList(@RequestBody @Valid CreateCheckListDto createCheckListDto) {
         CheckListDto checkListDto = this.checkListService.createCheckList(createCheckListDto);
         return ResponseEntity.status(201).body(checkListDto);
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isAssigned(#updateCheckListDto.taskID)")
     public ResponseEntity<CheckListDto> updateCheckList(@RequestBody @Valid UpdateCheckListDto updateCheckListDto) {
         CheckListDto checkListDto = this.checkListService.updateCheckList(updateCheckListDto);
         return ResponseEntity.status(201).body(checkListDto);
     }
 
     @GetMapping("/private/task/{taskID}/name/{name}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
     public ResponseEntity<CheckListDto> getCheckList(@PathVariable("taskID") UUID taskID,@PathVariable("name") String name) {
         CheckListDto checkList = this.checkListService.getCheckListByNameAndTask(name,taskID);
         return ResponseEntity.ok(checkList);
@@ -81,7 +81,7 @@ public class CheckListController
     }
 
     @DeleteMapping("/private/{checkListID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@checkListDao,#checkListID)")
+    @PreAuthorize("@permissionHandler.isAssigned(#checkListID,@checkListDao)")
     public ResponseEntity<Void> deleteCheckList(@PathVariable("checkListID") UUID checkListID) {
         this.checkListService.deleteCheckList(checkListID);
         return ResponseEntity.noContent().build();

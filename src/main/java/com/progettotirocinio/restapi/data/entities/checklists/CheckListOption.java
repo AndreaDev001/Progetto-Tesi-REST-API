@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value =  {AuditingEntityListener.class, UUIDEntityListener.class})
 @Table(name = "CHECKLIST_OPTIONS")
-public class CheckListOption extends GenericEntity implements OwnableEntity, BoardElement
+public class CheckListOption extends GenericEntity implements OwnableEntity, BoardElement, TaskElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
@@ -44,6 +45,11 @@ public class CheckListOption extends GenericEntity implements OwnableEntity, Boa
 
     @Override
     public UUID getBoardID() {
-        return this.checkList.getTask().getGroup().getBoard().getId();
+        return this.checkList.getTaskID();
+    }
+
+    @Override
+    public UUID getTaskID() {
+        return this.checkList.getTaskID();
     }
 }

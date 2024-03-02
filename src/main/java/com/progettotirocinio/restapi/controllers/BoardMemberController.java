@@ -46,26 +46,28 @@ public class BoardMemberController
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isMember(#boardID)")
     public ResponseEntity<CollectionModel<BoardMemberDto>> getBoardMembersByBoard(@PathVariable("boardID") UUID boardID) {
         CollectionModel<BoardMemberDto> collectionModel = this.boardMemberService.getBoardMembersByBoard(boardID);
         return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/user/{userID}/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @PreAuthorize("@permissionHandler.hasAccess(#userID) and @permissionHandler.isMember(#boardID)")
     public ResponseEntity<BoardMemberDto> isMember(@PathVariable("userID") UUID userID,@PathVariable("boardID") UUID boardID) {
         BoardMemberDto boardMemberDto = this.boardMemberService.isMember(userID,boardID);
         return ResponseEntity.ok(boardMemberDto);
     }
 
     @DeleteMapping("/private/{boardMemberID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardMemberID,@boardMemberDao)")
     public ResponseEntity<Void> deleteBoardMember(@PathVariable("boardMemberID") UUID boardMemberID) {
         this.boardMemberService.deleteMember(boardMemberID);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/private/board/{boardID}/user/{userID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
     public ResponseEntity<Void> deleteBoardMemberFromBoard(@PathVariable("boardID") UUID boardID,@PathVariable("memberID") UUID memberID) {
         this.boardMemberService.deleteMemberFromBoard(boardID,memberID);
         return ResponseEntity.noContent().build();

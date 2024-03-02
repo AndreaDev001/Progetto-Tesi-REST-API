@@ -43,28 +43,28 @@ public class TeamController
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.isMember('MEMBER',#boardID)")
     public ResponseEntity<CollectionModel<TeamDto>> getTeamsByBoard(@PathVariable("boardID") UUID boardID) {
         CollectionModel<TeamDto> collectionModel = this.teamService.getTeamsByBoard(boardID);
         return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/private/name/{name}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TeamDto>> getTeamsByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TeamDto> teams = this.teamService.getTeamsByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(teams);
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTeamDto.boardID)")
     public ResponseEntity<TeamDto> createTeam(@RequestBody @Valid CreateTeamDto createTeamDto) {
         TeamDto teamDto = this.teamService.createTeam(createTeamDto);
         return ResponseEntity.status(201).body(teamDto);
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasAccess(@teamDao,#updateTeamDto.teamID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTeamDto.teamID,@teamDao)")
     public ResponseEntity<TeamDto> updateTeam(@RequestBody @Valid UpdateTeamDto updateTeamDto) {
         TeamDto teamDto = this.teamService.updateTeam(updateTeamDto);
         return ResponseEntity.ok(teamDto);
@@ -78,7 +78,7 @@ public class TeamController
     }
 
     @DeleteMapping("/private/{teamID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@teamDao,#teamID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#teamID,@teamDao)")
     public ResponseEntity<Void> deleteTeam(@PathVariable("teamID") UUID teamID) {
         this.teamService.deleteTeam(teamID);
         return ResponseEntity.noContent().build();

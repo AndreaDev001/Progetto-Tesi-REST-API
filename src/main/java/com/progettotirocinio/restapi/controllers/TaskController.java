@@ -54,7 +54,7 @@ public class TaskController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ROLE_ADMIN',#createTaskDto.boardID,@taskDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTaskDto.boardID,@taskDao)")
     public ResponseEntity<TaskDto> createTask(@RequestBody @Valid CreateTaskDto createTaskDto) {
         TaskDto taskDto = this.taskService.createTask(createTaskDto);
         return ResponseEntity.status(201).body(taskDto);

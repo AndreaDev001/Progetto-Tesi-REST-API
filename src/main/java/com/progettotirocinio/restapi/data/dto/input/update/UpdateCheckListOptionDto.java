@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 public class UpdateCheckListOptionDto {
     @NotNull
-    private UUID checkListOptionID;
+    private UUID optionID;
     private String name;
     private Boolean completed;
 }

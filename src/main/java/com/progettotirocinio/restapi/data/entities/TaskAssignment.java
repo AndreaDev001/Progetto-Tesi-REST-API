@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASK_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TASK_ID","USER_ID"})})
-public class TaskAssignment extends GenericEntity implements OwnableEntity, BoardElement
+public class TaskAssignment extends GenericEntity implements OwnableEntity, BoardElement, TaskElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
@@ -37,6 +38,11 @@ public class TaskAssignment extends GenericEntity implements OwnableEntity, Boar
 
     @Override
     public UUID getBoardID() {
-        return this.task.getGroup().getBoardID();
+        return this.task.getBoardID();
+    }
+
+    @Override
+    public UUID getTaskID() {
+        return this.task.getId();
     }
 }

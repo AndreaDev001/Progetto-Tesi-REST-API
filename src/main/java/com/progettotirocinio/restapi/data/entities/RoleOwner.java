@@ -32,7 +32,7 @@ public class RoleOwner extends GenericEntity implements OwnableEntity, BoardElem
 
     @Override
     public UUID getBoardID() {
-        return role.getBoard().getId();
+        return this.role.getBoardID();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.entities;
 
 
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TEAM_MEMBERS")
-public class TeamMember extends GenericEntity implements OwnableEntity
+public class TeamMember extends GenericEntity implements OwnableEntity, BoardElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "MEMBER_ID",nullable = false,updatable = false)
@@ -31,5 +32,10 @@ public class TeamMember extends GenericEntity implements OwnableEntity
     @Override
     public UUID getOwnerID() {
         return member.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return team.getBoardID();
     }
 }

@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
+import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
