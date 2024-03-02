@@ -7,20 +7,17 @@ import com.progettotirocinio.restapi.controllers.likes.CommentLikeController;
 import com.progettotirocinio.restapi.controllers.likes.DiscussionLikeController;
 import com.progettotirocinio.restapi.controllers.likes.PollLikeController;
 import com.progettotirocinio.restapi.controllers.likes.TaskLikeController;
+import com.progettotirocinio.restapi.controllers.polls.PollController;
 import com.progettotirocinio.restapi.controllers.reports.ReportController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
-import com.progettotirocinio.restapi.data.entities.reports.Report;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

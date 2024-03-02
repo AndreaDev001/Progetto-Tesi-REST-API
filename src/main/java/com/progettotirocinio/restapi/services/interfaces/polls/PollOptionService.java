@@ -1,4 +1,4 @@
-package com.progettotirocinio.restapi.services.interfaces;
+package com.progettotirocinio.restapi.services.interfaces.polls;
 
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.PollOptionDto;

@@ -1,8 +1,8 @@
-package com.progettotirocinio.restapi.controllers;
+package com.progettotirocinio.restapi.controllers.polls;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.PollVoteDto;
-import com.progettotirocinio.restapi.services.interfaces.PollVoteService;
+import com.progettotirocinio.restapi.services.interfaces.polls.PollVoteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;

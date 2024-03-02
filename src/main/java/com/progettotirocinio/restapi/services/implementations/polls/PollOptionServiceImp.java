@@ -1,4 +1,4 @@
-package com.progettotirocinio.restapi.services.implementations;
+package com.progettotirocinio.restapi.services.implementations.polls;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
@@ -11,7 +11,8 @@ import com.progettotirocinio.restapi.data.dto.output.PollOptionDto;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.polls.PollOption;
 import com.progettotirocinio.restapi.data.entities.User;
-import com.progettotirocinio.restapi.services.interfaces.PollOptionService;
+import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
+import com.progettotirocinio.restapi.services.interfaces.polls.PollOptionService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -15,6 +15,7 @@ import com.progettotirocinio.restapi.data.entities.bans.BoardBan;
 import com.progettotirocinio.restapi.data.entities.enums.BanType;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.bans.BoardBanService;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -68,6 +69,7 @@ public class BoardBanServiceImp extends GenericServiceImp<BoardBan, BoardBanDto>
     }
 
     @Override
+    @Transactional
     public BoardBanDto createBoardBan(CreateBanDto createBanDto, UUID boardID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         User bannedUser = this.userDao.findById(createBanDto.getBannedID()).orElseThrow();
@@ -89,6 +91,7 @@ public class BoardBanServiceImp extends GenericServiceImp<BoardBan, BoardBanDto>
     }
 
     @Override
+    @Transactional
     public void deleteBoardBan(UUID boardBanID) {
         this.boardBanDao.findById(boardBanID).orElseThrow();
         this.boardBanDao.deleteById(boardBanID);

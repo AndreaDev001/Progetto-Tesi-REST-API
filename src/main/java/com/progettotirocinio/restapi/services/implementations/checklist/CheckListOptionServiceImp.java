@@ -83,7 +83,7 @@ public class CheckListOptionServiceImp extends GenericServiceImp<CheckListOption
     @Override
     @Transactional
     public CheckListOptionDto updateOption(UpdateCheckListOptionDto updateCheckListOptionDto) {
-        CheckListOption checkListOption = this.checkListOptionDao.findById(updateCheckListOptionDto.getCheckListOptionID()).orElseThrow();
+        CheckListOption checkListOption = this.checkListOptionDao.findById(updateCheckListOptionDto.getOptionID()).orElseThrow();
         if(updateCheckListOptionDto.getName() != null)
             checkListOption.setName(updateCheckListOptionDto.getName());
         if(updateCheckListOptionDto.getCompleted() != null)
