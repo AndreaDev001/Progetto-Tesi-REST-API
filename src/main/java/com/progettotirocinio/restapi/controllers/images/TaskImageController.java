@@ -39,10 +39,10 @@ public class TaskImageController
         return ResponseEntity.ok(taskImage);
     }
 
-    @PostMapping(value = "/private",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/private/{taskID}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("@permissionHandler.isAssigned(#createTaskImageDto.taskID,@taskDao)")
-    public ResponseEntity<TaskImageDto> uploadTaskImage(@ModelAttribute @Valid CreateTaskImageDto createTaskImageDto) {
-        TaskImageDto taskImageDto = this.taskImageService.uploadImage(createTaskImageDto);
+    public ResponseEntity<TaskImageDto> uploadTaskImage(@PathVariable("taskID") UUID taskID,@ModelAttribute @Valid CreateTaskImageDto createTaskImageDto) {
+        TaskImageDto taskImageDto = this.taskImageService.uploadImage(taskID,createTaskImageDto);
         return ResponseEntity.ok(taskImageDto);
     }
 

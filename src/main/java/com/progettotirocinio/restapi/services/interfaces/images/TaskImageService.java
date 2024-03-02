@@ -12,5 +12,5 @@ public interface TaskImageService
     PagedModel<TaskImageDto> getTaskImages(Pageable pageable);
     TaskImageDto getTaskImageByTask(UUID taskID);
     TaskImageDto getTaskImage(UUID taskImageID);
-    TaskImageDto uploadImage(CreateTaskImageDto createTaskImageDto);
+    TaskImageDto uploadImage(UUID taskID,CreateTaskImageDto createTaskImageDto);
 }

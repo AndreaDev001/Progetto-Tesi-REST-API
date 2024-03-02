@@ -14,7 +14,5 @@ import java.util.UUID;
 public class CreateBoardImageDto
 {
     @NotNull
-    private UUID boardID;
-    @NotNull
     private MultipartFile file;
 }

@@ -13,5 +13,5 @@ public interface BoardImageService
     PagedModel<BoardImageDto> getBoardImages(Pageable pageable);
     BoardImageDto getBoardImageByBoard(UUID boardID);
     BoardImageDto getBoard(UUID boardID);
-    BoardImageDto uploadImage(CreateBoardImageDto createBoardImageDto);
+    BoardImageDto uploadImage(UUID boardID,CreateBoardImageDto createBoardImageDto);
 }

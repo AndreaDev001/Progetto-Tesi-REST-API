@@ -61,10 +61,10 @@ public class TaskImageServiceImp extends GenericServiceImp<TaskImage, TaskImageD
     @Override
     @SneakyThrows
     @Transactional
-    public TaskImageDto uploadImage(CreateTaskImageDto createTaskImageDto) {
+    public TaskImageDto uploadImage(UUID taskID,CreateTaskImageDto createTaskImageDto) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
-        Task task = this.taskDao.findById(createTaskImageDto.getTaskID()).orElseThrow();
-        Optional<TaskImage> taskImageOptional = this.taskImageDao.getTask(createTaskImageDto.getTaskID());
+        Task task = this.taskDao.findById(taskID).orElseThrow();
+        Optional<TaskImage> taskImageOptional = this.taskImageDao.getTask(taskID);
         TaskImage taskImage = taskImageOptional.orElseGet(TaskImage::new);
         taskImage.setImage(createTaskImageDto.getFile().getBytes());
         taskImage.setType(ImageUtils.getImageType(createTaskImageDto.getFile().getContentType()));

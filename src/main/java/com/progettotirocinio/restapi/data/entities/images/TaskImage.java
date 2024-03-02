@@ -18,6 +18,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class TaskImage extends Image
 {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "TASK_ID",nullable = false)
+    @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)
     private Task task;
 }

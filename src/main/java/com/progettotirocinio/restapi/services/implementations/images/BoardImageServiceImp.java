@@ -63,17 +63,29 @@ public class BoardImageServiceImp extends GenericServiceImp<BoardImage, BoardIma
     @Override
     @Transactional
     @SneakyThrows
-    public BoardImageDto uploadImage(CreateBoardImageDto createBoardImageDto) {
+    public BoardImageDto uploadImage(UUID boardID,CreateBoardImageDto createBoardImageDto) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
-        Board requiredBoard  = this.boardDao.findById(createBoardImageDto.getBoardID()).orElseThrow();
-        Optional<BoardImage> boardImageOptional = this.boardImageDao.getBoardImageByBoard(createBoardImageDto.getBoardID());
-        BoardImage boardImage = boardImageOptional.orElseGet(BoardImage::new);
-        boardImage.setBoard(requiredBoard);
-        boardImage.setType(ImageUtils.getImageType(createBoardImageDto.getFile().getContentType()));
-        boardImage.setOwner(ImageOwnerType.BOARD);
-        boardImage.setImage(createBoardImageDto.getFile().getBytes());
-        boardImage.setUploader(authenticatedUser);
-        boardImage = this.boardImageDao.save(boardImage);
-        return this.modelMapper.map(boardImage,BoardImageDto.class);
+        Board requiredBoard  = this.boardDao.findById(boardID).orElseThrow();
+
+        Optional<BoardImage> boardImageOptional = this.boardImageDao.getBoardImageByBoard(boardID);
+        if(boardImageOptional.isEmpty()) {
+            BoardImage boardImage = new BoardImage();
+            boardImage.setBoard(requiredBoard);
+            boardImage.setType(ImageUtils.getImageType(createBoardImageDto.getFile().getContentType()));
+            boardImage.setOwner(ImageOwnerType.BOARD);
+            boardImage.setImage(createBoardImageDto.getFile().getBytes());
+            boardImage.setUploader(authenticatedUser);
+            boardImage = this.boardImageDao.save(boardImage);
+            return this.modelMapper.map(boardImage,BoardImageDto.class);
+        }
+        else
+        {
+            BoardImage boardImage = boardImageOptional.get();
+            boardImage.setImage(createBoardImageDto.getFile().getBytes());
+            boardImage.setType(ImageUtils.getImageType(createBoardImageDto.getFile().getContentType()));
+            boardImage.setUploader(authenticatedUser);
+            boardImage = this.boardImageDao.save(boardImage);
+            return this.modelMapper.map(boardImage,BoardImageDto.class);
+        }
     }
 }

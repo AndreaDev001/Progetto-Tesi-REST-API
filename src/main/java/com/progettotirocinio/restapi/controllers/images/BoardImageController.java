@@ -39,10 +39,10 @@ public class BoardImageController
         return ResponseEntity.ok(boardImage);
     }
 
-    @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createBoardImage.boardID)")
-    public ResponseEntity<BoardImageDto> uploadBoardImage(@ModelAttribute @Valid CreateBoardImageDto createBoardImageDto) {
-        BoardImageDto boardImageDto = this.boardImageService.getBoardImageByBoard(createBoardImageDto.getBoardID());
+    @PostMapping(value = "/private/{boardID}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
+    public ResponseEntity<BoardImageDto> uploadBoardImage(@PathVariable("boardID") UUID boardID,@ModelAttribute @Valid CreateBoardImageDto createBoardImageDto) {
+        BoardImageDto boardImageDto = this.boardImageService.uploadImage(boardID,createBoardImageDto);
         return ResponseEntity.ok(boardImageDto);
     }
 

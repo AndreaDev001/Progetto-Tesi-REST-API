@@ -18,8 +18,8 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
-@EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -34,15 +34,15 @@ public class Image extends GenericEntity implements OwnableEntity
     @Column(name = "OWNER_TYPE",nullable = false,updatable = false)
     protected ImageOwnerType owner;
 
-    @Column(name = "IMAGE",nullable = false,updatable = false)
+    @Column(name = "IMAGE",nullable = false)
     protected byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "UPLOADER_ID",nullable = false,updatable = false)
+    @JoinColumn(name = "UPLOADER_ID",nullable = false)
     private User uploader;
 
     @Override
     public UUID getOwnerID() {
-        return null;
+        return uploader.getId();
     }
 }
