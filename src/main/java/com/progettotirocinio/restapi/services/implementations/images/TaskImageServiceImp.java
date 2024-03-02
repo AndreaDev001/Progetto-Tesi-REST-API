@@ -10,6 +10,8 @@ import com.progettotirocinio.restapi.data.dto.input.create.images.CreateTaskImag
 import com.progettotirocinio.restapi.data.dto.output.TaskDto;
 import com.progettotirocinio.restapi.data.dto.output.images.TaskImageDto;
 import com.progettotirocinio.restapi.data.entities.Task;
+import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.images.TaskImageService;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -59,12 +62,15 @@ public class TaskImageServiceImp extends GenericServiceImp<TaskImage, TaskImageD
     @SneakyThrows
     @Transactional
     public TaskImageDto uploadImage(CreateTaskImageDto createTaskImageDto) {
-        Task task = this.taskDao.findById(createTaskImageDto.getId()).orElseThrow();
-        Optional<TaskImage> taskImageOptional = this.taskImageDao.getTask(createTaskImageDto.getId());
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Task task = this.taskDao.findById(createTaskImageDto.getTaskID()).orElseThrow();
+        Optional<TaskImage> taskImageOptional = this.taskImageDao.getTask(createTaskImageDto.getTaskID());
         TaskImage taskImage = taskImageOptional.orElseGet(TaskImage::new);
         taskImage.setImage(createTaskImageDto.getFile().getBytes());
         taskImage.setType(ImageUtils.getImageType(createTaskImageDto.getFile().getContentType()));
         taskImage.setTask(task);
+        taskImage.setOwner(ImageOwnerType.TASK);
+        taskImage.setUploader(authenticatedUser);
         taskImage = this.taskImageDao.save(taskImage);
         return this.modelMapper.map(taskImage,TaskImageDto.class);
     }

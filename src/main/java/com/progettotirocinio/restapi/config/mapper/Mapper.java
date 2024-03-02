@@ -25,9 +25,13 @@ public class Mapper
     @SneakyThrows
     public<T> T map(Object source,Class<T> requiredClass) {
         T result = this.modelMapper.map(source,requiredClass);
-        if(source instanceof GenericEntity genericEntity && result instanceof GenericOutput<?> genericOutput) {
-            genericOutput.setId(genericEntity.getId());
-            genericOutput.setCreatedDate(genericEntity.getCreatedDate());
+        if(result instanceof GenericOutput<?> genericOutput)
+        {
+            genericOutput.addLinks();
+            if(source instanceof GenericEntity genericEntity) {
+                genericOutput.setId(genericEntity.getId());
+                genericOutput.setCreatedDate(genericEntity.getCreatedDate());
+            }
         }
         if(source instanceof AmountEntity amountEntity) {
             Field[] fields = getFields(result);

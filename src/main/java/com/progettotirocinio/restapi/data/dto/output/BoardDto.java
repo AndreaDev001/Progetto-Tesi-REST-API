@@ -29,7 +29,6 @@ public class BoardDto extends GenericOutput<BoardDto>
 {
     private String title;
     private String description;
-    private Integer minMembers;
     private Integer maxMembers;
     private LocalDate expirationDate;
     private BoardVisibility visibility;

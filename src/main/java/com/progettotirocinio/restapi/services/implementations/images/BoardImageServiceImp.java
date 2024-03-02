@@ -10,6 +10,8 @@ import com.progettotirocinio.restapi.data.dao.images.BoardImageDao;
 import com.progettotirocinio.restapi.data.dto.input.create.images.CreateBoardImageDto;
 import com.progettotirocinio.restapi.data.dto.output.images.BoardImageDto;
 import com.progettotirocinio.restapi.data.entities.Board;
+import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
 import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -61,12 +64,15 @@ public class BoardImageServiceImp extends GenericServiceImp<BoardImage, BoardIma
     @Transactional
     @SneakyThrows
     public BoardImageDto uploadImage(CreateBoardImageDto createBoardImageDto) {
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board requiredBoard  = this.boardDao.findById(createBoardImageDto.getBoardID()).orElseThrow();
         Optional<BoardImage> boardImageOptional = this.boardImageDao.getBoardImageByBoard(createBoardImageDto.getBoardID());
         BoardImage boardImage = boardImageOptional.orElseGet(BoardImage::new);
         boardImage.setBoard(requiredBoard);
         boardImage.setType(ImageUtils.getImageType(createBoardImageDto.getFile().getContentType()));
+        boardImage.setOwner(ImageOwnerType.BOARD);
         boardImage.setImage(createBoardImageDto.getFile().getBytes());
+        boardImage.setUploader(authenticatedUser);
         boardImage = this.boardImageDao.save(boardImage);
         return this.modelMapper.map(boardImage,BoardImageDto.class);
     }

@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.data.dto.output.refs.*;
 import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
+import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import org.modelmapper.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -74,6 +75,12 @@ public class ModelMapperConfig
             return new CheckListRef(checkList);
         }
     };
+    private static final Converter<Tag,TagRef> tagRefConverter = new AbstractConverter<Tag, TagRef>() {
+        @Override
+        protected TagRef convert(Tag tag) {
+            return new TagRef(tag);
+        }
+    };
 
     public static ModelMapper generateModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -89,6 +96,7 @@ public class ModelMapperConfig
         modelMapper.addConverter(commentRefConverter);
         modelMapper.addConverter(pollRefConverter);
         modelMapper.addConverter(checkListRefConverter);
+        modelMapper.addConverter(tagRefConverter);
         return modelMapper;
     }
 

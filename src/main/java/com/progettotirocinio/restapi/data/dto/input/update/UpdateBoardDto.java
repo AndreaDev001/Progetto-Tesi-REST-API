@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.input.update;
 
 
+import com.progettotirocinio.restapi.data.entities.enums.BoardStatus;
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,5 @@ public class UpdateBoardDto
     private String description;
     private Integer maxMembers;
     private BoardVisibility visibility;
+    private BoardStatus status;
 }

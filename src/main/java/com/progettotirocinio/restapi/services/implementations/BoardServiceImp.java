@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dao.specifications.BoardSpecifications;
@@ -43,9 +44,11 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     private final RoleOwnerDao roleOwnerDao;
     private final TaskGroupDao taskGroupDao;
     private final BoardMemberDao boardMemberDao;
+    private final PermissionDao permissionDao;
 
-    public BoardServiceImp(BoardMemberDao boardMemberDao,TagDao tagDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
+    public BoardServiceImp(BoardMemberDao boardMemberDao,PermissionDao permissionDao,TagDao tagDao,RoleDao roleDao,RoleOwnerDao roleOwnerDao,TaskGroupDao taskGroupDao,CacheHandler cacheHandler,UserDao userDao, BoardDao boardDao, Mapper mapper, PagedResourcesAssembler<Board> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper,Board.class,BoardDto.class,pagedResourcesAssembler);
+        this.permissionDao = permissionDao;
         this.boardDao = boardDao;
         this.taskGroupDao = taskGroupDao;
         this.boardMemberDao = boardMemberDao;
@@ -137,9 +140,9 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         createDefaultGroup("TO DO",0,board,publisher);
         createDefaultGroup("IN PROGRESS",1,board,publisher);
         createDefaultGroup("COMPLETED",2,board,publisher);
-        createDefaultTag("TO DO","#FF0000",board);
-        createDefaultTag("IN PROGRESS","#FFA500",board);
-        createDefaultTag("COMPLETED","#008000",board);
+        createDefaultTag(publisher,"TO DO","#FF0000",board);
+        createDefaultTag(publisher,"IN PROGRESS","#FFA500",board);
+        createDefaultTag(publisher,"COMPLETED","#008000",board);
         BoardMember boardMember = new BoardMember();
         boardMember.setUser(publisher);
         boardMember.setBoard(board);
@@ -149,12 +152,10 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         adminRole.setName("ADMIN");
         adminRole.setPublisher(publisher);
         adminRole.setBoard(board);
-        adminRole.setPermissions(createAdminPermissions(adminRole));
+        adminRole = this.roleDao.save(adminRole);
         memberRole.setName("MEMBER");
         memberRole.setPublisher(publisher);
         memberRole.setBoard(board);
-        memberRole.setPermissions(createMemberPermissions(memberRole));
-        adminRole = this.roleDao.save(adminRole);
         this.roleDao.save(memberRole);
         RoleOwner roleOwner = new RoleOwner();
         roleOwner.setRole(adminRole);
@@ -163,56 +164,64 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
         return this.modelMapper.map(board,BoardDto.class);
     }
 
-    private Set<Permission> createAdminPermissions(Role requiredRole) {
+    private void createAdminPermissions(Role requiredRole) {
         Permission writeBoardPermission = new Permission();
         writeBoardPermission.setName("WRITE_BOARD");
         writeBoardPermission.setType(PermissionType.WRITE_BOARD);
         writeBoardPermission.setRole(requiredRole);
+        writeBoardPermission = this.permissionDao.save(writeBoardPermission);
         Permission readBoardPermission = new Permission();
         readBoardPermission.setName("READ_BOARD");
         readBoardPermission.setType(PermissionType.READ_BOARD);
         readBoardPermission.setRole(requiredRole);
-        Permission writeTasks = new Permission();
-        writeTasks.setName("WRITE_TASKS");
-        writeTasks.setType(PermissionType.WRITE_TASKS);
-        writeTasks.setRole(requiredRole);
-        Permission readTasks = new Permission();
-        readTasks.setName("READ_TASKS");
-        readTasks.setType(PermissionType.READ_TASKS);
-        readTasks.setRole(requiredRole);
+        readBoardPermission = this.permissionDao.save(readBoardPermission);
+        Permission writeTasksPermission = new Permission();
+        writeTasksPermission.setName("WRITE_TASKS");
+        writeTasksPermission.setType(PermissionType.WRITE_TASKS);
+        writeTasksPermission.setRole(requiredRole);
+        writeTasksPermission = this.permissionDao.save(writeTasksPermission);
+        Permission readTasksPermission = new Permission();
+        readTasksPermission.setName("READ_TASKS");
+        readTasksPermission.setType(PermissionType.READ_TASKS);
+        readTasksPermission.setRole(requiredRole);
+        readTasksPermission = this.permissionDao.save(readTasksPermission);
         Permission writeAssignedTaskPermission = new Permission();
         writeAssignedTaskPermission.setName("WRITE_ASSIGNED_TASK");
         writeAssignedTaskPermission.setType(PermissionType.WRITE_ASSIGNED_TASK);
         writeAssignedTaskPermission.setRole(requiredRole);
+        writeAssignedTaskPermission = this.permissionDao.save(writeAssignedTaskPermission);
         Permission readAssignedTaskPermission = new Permission();
         readAssignedTaskPermission.setName("READ_ASSIGNED_TASK");
         readAssignedTaskPermission.setType(PermissionType.READ_ASSIGNED_TASK);
         readAssignedTaskPermission.setRole(requiredRole);
-        return Set.of(writeBoardPermission,readBoardPermission,writeTasks,readTasks,writeAssignedTaskPermission,readAssignedTaskPermission);
+        readAssignedTaskPermission = this.permissionDao.save(readAssignedTaskPermission);
     }
 
-    private void createDefaultTag(String name,String color,Board board) {
+    private void createDefaultTag(User publisher,String name,String color,Board board) {
         Tag tag = new Tag();
         tag.setName(name);
         tag.setColor(color);
         tag.setBoard(board);
+        tag.setPublisher(publisher);
         this.tagDao.save(tag);
     }
 
-    private Set<Permission> createMemberPermissions(Role requiredRole)
+    private void createMemberPermissions(Role requiredRole)
     {
         Permission writeAssignedTaskPermission = new Permission();
         writeAssignedTaskPermission.setName("WRITE_ASSIGNED_TASK");
         writeAssignedTaskPermission.setType(PermissionType.WRITE_ASSIGNED_TASK);
         writeAssignedTaskPermission.setRole(requiredRole);
+        writeAssignedTaskPermission = this.permissionDao.save(writeAssignedTaskPermission);
         Permission readAssignedTaskPermission = new Permission();
         readAssignedTaskPermission.setName("READ_ASSIGNED_TASK");
         readAssignedTaskPermission.setType(PermissionType.READ_ASSIGNED_TASK);
         readAssignedTaskPermission.setRole(requiredRole);
+        readAssignedTaskPermission = this.permissionDao.save(readAssignedTaskPermission);
         Permission readTasksPermission = new Permission();
         readTasksPermission.setType(PermissionType.READ_TASKS);
         readTasksPermission.setRole(requiredRole);
-        return Set.of(writeAssignedTaskPermission,readAssignedTaskPermission,readTasksPermission);
+        readTasksPermission = this.permissionDao.save(readTasksPermission);
     }
 
     private void createDefaultGroup(String name, Integer order, Board board, User publisher) {
@@ -229,14 +238,21 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
     @Transactional
     public BoardDto updateBoard(UpdateBoardDto updateBoardDto) {
         Board board = this.boardDao.findById(updateBoardDto.getBoardID()).orElseThrow();
-        if(board.getTitle() != null)
+        if(updateBoardDto.getTitle() != null)
             board.setTitle(updateBoardDto.getTitle());
-        if(board.getDescription() != null)
+        if(updateBoardDto.getDescription() != null)
             board.setDescription(updateBoardDto.getDescription());
-        if(board.getVisibility() != null)
+        if(updateBoardDto.getVisibility() != null)
             board.setVisibility(updateBoardDto.getVisibility());
-        if(board.getMaxMembers() != null)
+        if(updateBoardDto.getMaxMembers() != null)
             board.setMaxMembers(updateBoardDto.getMaxMembers());
+        if(updateBoardDto.getStatus() != null) {
+            if(board.getStatus().equals(BoardStatus.CLOSED))
+                throw new InvalidFormat("error.board.update.invalidOldStatus");
+            if(updateBoardDto.getStatus().equals(BoardStatus.EXPIRED))
+                throw new InvalidFormat("error.board.update.invalidNewStatus");
+            board.setStatus(updateBoardDto.getStatus());
+        }
         board = this.boardDao.save(board);
         return this.modelMapper.map(board,BoardDto.class);
     }

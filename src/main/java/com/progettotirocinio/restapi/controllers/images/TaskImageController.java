@@ -13,6 +13,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,24 +26,28 @@ public class TaskImageController
 {
     private final TaskImageService taskImageService;
     @GetMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskImageDto>> getTaskImages(@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskImageDto> taskImages = taskImageService.getTaskImages(paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskImages);
     }
 
     @GetMapping("/private/{taskImageID}")
+    @PreAuthorize("@permissionHandler.isMember(#taskImageID,@taskImageDao)")
     public ResponseEntity<TaskImageDto> getTaskImage(@PathVariable("taskImageID") UUID taskImageID) {
         TaskImageDto taskImage = this.taskImageService.getTaskImage(taskImageID);
         return ResponseEntity.ok(taskImage);
     }
 
     @PostMapping(value = "/private",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("@permissionHandler.isAssigned(#createTaskImageDto.taskID,@taskDao)")
     public ResponseEntity<TaskImageDto> uploadTaskImage(@ModelAttribute @Valid CreateTaskImageDto createTaskImageDto) {
         TaskImageDto taskImageDto = this.taskImageService.uploadImage(createTaskImageDto);
         return ResponseEntity.ok(taskImageDto);
     }
 
     @GetMapping("/private/task/{taskID}")
+    @PreAuthorize("@permissionHandler.isMember(#taskID,@taskDao)")
     public ResponseEntity<TaskImageDto> getTaskImageByTask(@PathVariable("taskID") UUID taskID) {
         TaskImageDto taskImage = this.taskImageService.getTaskImageByTask(taskID);
         return ResponseEntity.ok(taskImage);

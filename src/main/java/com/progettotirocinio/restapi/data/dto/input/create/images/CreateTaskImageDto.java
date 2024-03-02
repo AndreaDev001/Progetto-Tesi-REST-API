@@ -15,7 +15,7 @@ import java.util.UUID;
 public class CreateTaskImageDto
 {
     @NotNull
-    private UUID id;
+    private UUID taskID;
     @NotNull
     private MultipartFile file;
 }

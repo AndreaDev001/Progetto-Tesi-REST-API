@@ -2,10 +2,7 @@ package com.progettotirocinio.restapi.data.dto.input.create;
 
 
 import com.progettotirocinio.restapi.data.entities.enums.BoardVisibility;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +23,7 @@ public class CreateBoardDto
     @NotBlank
     private String description;
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Integer maxMembers;
     @NotNull
     private BoardVisibility visibility;

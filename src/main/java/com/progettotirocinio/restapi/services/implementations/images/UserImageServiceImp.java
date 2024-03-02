@@ -52,9 +52,10 @@ public class UserImageServiceImp extends GenericServiceImp<UserImage, UserImageD
         if(userImageOptional.isEmpty()) {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("defaultUserImage.jpg");
             userImage = new UserImage();
-            userImage.setType(ImageType.JPG);
+            userImage.setOwner(ImageOwnerType.USER);
             userImage.setImage(inputStream.readAllBytes());
             userImage.setUser(requiredUser);
+            userImage.setUploader(requiredUser);
             this.userImageDao.save(userImage);
         }
         else
