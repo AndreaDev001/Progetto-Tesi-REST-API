@@ -69,22 +69,19 @@ public class TaskImageController
         return ResponseEntity.ok(taskImageDto);
     }
 
-    @GetMapping("/private/task/{taskID}/index/{index}/image")
-    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
+    @GetMapping("/public/task/{taskID}/index/{index}/image")
     public ResponseEntity<byte[]> getImageByIndexAsBytes(@PathVariable("taskID") UUID taskID,@PathVariable("index") Integer index) {
         TaskImageDto taskImageDto = this.taskImageService.getCurrentImage(taskID,index);
         return ResponseEntity.ok().contentType(MediaType.valueOf(taskImageDto.getType().getName())).body(taskImageDto.getImage());
     }
 
-    @GetMapping("/private/task/{taskID}/first/image")
-    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
+    @GetMapping("/public/task/{taskID}/first/image")
     public ResponseEntity<byte[]> getFirstImageAsBytes(@PathVariable("taskID") UUID taskID) {
         TaskImageDto taskImageDto = this.taskImageService.getFirstImage(taskID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(taskImageDto.getType().getName())).body(taskImageDto.getImage());
     }
 
-    @GetMapping("/private/task/{taskID}/last/image")
-    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
+    @GetMapping("/public/task/{taskID}/last/image")
     public ResponseEntity<byte[]> getLastImageAsBytes(@PathVariable("taskID") UUID taskID) {
         TaskImageDto taskImageDto = this.taskImageService.getLastImage(taskID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(taskImageDto.getType().getName())).body(taskImageDto.getImage());

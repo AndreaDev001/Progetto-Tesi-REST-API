@@ -49,8 +49,7 @@ public class ImageController {
         return ResponseEntity.ok(images);
     }
 
-    @GetMapping("/private/image/{imageID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @GetMapping("/public/image/{imageID}")
     public ResponseEntity<byte[]> getImageAsBytes(@PathVariable("imageID") UUID imageID) {
         ImageDto imageDto = this.imageService.getImageById(imageID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(imageDto.getType().getName())).body(imageDto.getImage());

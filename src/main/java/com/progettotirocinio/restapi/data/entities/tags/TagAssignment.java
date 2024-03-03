@@ -19,7 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity
-@Table(name = "TAG_ASSIGNMENTS")
+@Table(name = "TAG_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TAG_ID","TASK_ID"})})
 public class TagAssignment extends GenericEntity implements BoardElement, TaskElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

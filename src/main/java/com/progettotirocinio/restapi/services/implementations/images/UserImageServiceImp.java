@@ -54,6 +54,7 @@ public class UserImageServiceImp extends GenericServiceImp<UserImage, UserImageD
             userImage = new UserImage();
             userImage.setOwner(ImageOwnerType.USER);
             userImage.setImage(inputStream.readAllBytes());
+            userImage.setType(ImageType.JPG);
             userImage.setUser(requiredUser);
             userImage.setUploader(requiredUser);
             this.userImageDao.save(userImage);

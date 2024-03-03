@@ -53,8 +53,7 @@ public class BoardImageController
         return ResponseEntity.ok(boardImageDto);
     }
 
-    @GetMapping("/private/image/{boardID}")
-    @PreAuthorize("@permissionHandler.isMember(#boardID)")
+    @GetMapping("/public/image/{boardID}")
     public ResponseEntity<byte[]> getBoardImageByBoardAsBytes(@PathVariable("boardID") UUID boardID) {
         BoardImageDto boardImageDto = this.boardImageService.getBoardImageByBoard(boardID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(boardImageDto.getType().getName())).body(boardImageDto.getImage());

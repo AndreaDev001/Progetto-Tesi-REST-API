@@ -14,8 +14,12 @@ import lombok.NoArgsConstructor;
 public class TagRef extends GenericOutput<TagRef>
 {
     private String name;
+    private String color;
 
     public TagRef(Tag tag) {
+        this.id = tag.getId();
+        this.createdDate = tag.getCreatedDate();
         this.name = tag.getName();
+        this.color = tag.getColor();
     }
 }

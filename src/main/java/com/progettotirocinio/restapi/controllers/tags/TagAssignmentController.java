@@ -55,10 +55,10 @@ public class TagAssignmentController
 
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createTagAssignment.taskID,@taskDao)")
+    @PreAuthorize("@permissionHandler.isAssigned(#createTagAssignmentDto.taskID,@taskDao)")
     public ResponseEntity<TagAssignmentDto> createTagAssignment(@RequestBody @Valid CreateTagAssignmentDto createTagAssignmentDto) {
         TagAssignmentDto tagAssignmentDto = this.tagAssignmentService.createTagAssignment(createTagAssignmentDto);
-        return ResponseEntity.ok(tagAssignmentDto);
+        return ResponseEntity.status(201).body(tagAssignmentDto);
     }
 
     @DeleteMapping("/private/{taskAssignmentID}")

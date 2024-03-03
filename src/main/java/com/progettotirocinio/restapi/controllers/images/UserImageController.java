@@ -47,8 +47,7 @@ public class UserImageController
         UserImageDto userImageDto = this.userImageService.uploadImage(createUserImageDto);
         return ResponseEntity.ok(userImageDto);
     }
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @GetMapping("/public/user/{userID}/image")
     public ResponseEntity<byte[]> getUserImageByUser(@PathVariable("userID") UUID userID) {
         UserImageDto userImage = this.userImageService.getUserImageByUser(userID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(userImage.getType().getName())).body(userImage.getImage());
