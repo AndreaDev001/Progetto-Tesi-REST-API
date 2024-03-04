@@ -4,6 +4,7 @@ import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.comments.CommentDao;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.comments.CommentDto;
 import com.progettotirocinio.restapi.data.entities.comments.Comment;
 import com.progettotirocinio.restapi.data.entities.enums.CommentType;
@@ -59,6 +60,18 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
     public PagedModel<CommentDto> getCommentsByType(CommentType type, Pageable pageable) {
         Page<Comment> comments = this.commentDao.getCommentsByType(type,pageable);
         return this.pagedResourcesAssembler.toModel(comments,modelAssembler);
+    }
+
+    @Override
+    @Transaction
+    public CommentDto updateComment(UpdateCommentDto updateCommentDto) {
+        Comment comment = this.commentDao.findById(updateCommentDto.getCommentID()).orElseThrow();
+        if(updateCommentDto.getTitle() != null)
+            comment.setTitle(updateCommentDto.getTitle());
+        if(updateCommentDto.getText() != null)
+            comment.setTitle(updateCommentDto.getText());
+        comment = this.commentDao.save(comment);
+        return this.modelMapper.map(comment,CommentDto.class);
     }
 
     @Override

@@ -2,11 +2,15 @@ package com.progettotirocinio.restapi.services.implementations.comments;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.TaskDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.comments.CommentTaskDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.comments.CommentTaskDto;
+import com.progettotirocinio.restapi.data.entities.Task;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.comments.CommentTask;
+import com.progettotirocinio.restapi.data.entities.enums.CommentType;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.comments.CommentTaskService;
 import jakarta.transaction.Transactional;
@@ -15,8 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.rmi.server.UID;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -27,10 +33,12 @@ public class CommentTaskServiceImp extends GenericServiceImp<CommentTask, Commen
 {
 
     private final CommentTaskDao commentTaskDao;
+    private final TaskDao taskDao;
 
-    public CommentTaskServiceImp(CacheHandler cacheHandler,CommentTaskDao commentTaskDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentTask> pagedResourcesAssembler) {
+    public CommentTaskServiceImp(CacheHandler cacheHandler,TaskDao taskDao,CommentTaskDao commentTaskDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentTask> pagedResourcesAssembler) {
         super(cacheHandler, userDao, mapper,CommentTask.class,CommentTaskDto.class, pagedResourcesAssembler);
         this.commentTaskDao = commentTaskDao;
+        this.taskDao = taskDao;
     }
 
     @Override
@@ -58,8 +66,18 @@ public class CommentTaskServiceImp extends GenericServiceImp<CommentTask, Commen
     }
 
     @Override
+    @Transactional
     public CommentTaskDto createTaskComment(UUID taskID, CreateCommentDto createCommentDto) {
-        return null;
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Task requiredTask = this.taskDao.findById(taskID).orElseThrow();
+        CommentTask commentTask = new CommentTask();
+        commentTask.setTitle(createCommentDto.getTitle());
+        commentTask.setText(createCommentDto.getText());
+        commentTask.setPublisher(authenticatedUser);
+        commentTask.setTask(requiredTask);
+        commentTask.setType(CommentType.TASK);
+        commentTask = this.commentTaskDao.save(commentTask);
+        return this.modelMapper.map(commentTask,CommentTaskDto.class);
     }
 
     @Override

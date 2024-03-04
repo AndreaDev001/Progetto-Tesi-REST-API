@@ -2,11 +2,15 @@ package com.progettotirocinio.restapi.services.implementations.comments;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.comments.CommentPollDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.comments.CommentPollDto;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.comments.CommentPoll;
+import com.progettotirocinio.restapi.data.entities.enums.CommentType;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
 import com.progettotirocinio.restapi.services.interfaces.comments.CommentPollService;
 import jakarta.transaction.Transactional;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +30,11 @@ import java.util.stream.Collectors;
 public class CommentPollServiceImp extends GenericServiceImp<CommentPoll, CommentPollDto> implements CommentPollService
 {
     private final CommentPollDao commentPollDao;
+    private final PollDao pollDao;
 
-    public CommentPollServiceImp(CacheHandler cacheHandler,CommentPollDao commentPollDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentPoll> pagedResourcesAssembler) {
+    public CommentPollServiceImp(CacheHandler cacheHandler,PollDao pollDao,CommentPollDao commentPollDao, UserDao userDao, Mapper mapper, PagedResourcesAssembler<CommentPoll> pagedResourcesAssembler) {
         super(cacheHandler, userDao, mapper,CommentPoll.class,CommentPollDto.class, pagedResourcesAssembler);
+        this.pollDao = pollDao;
         this.commentPollDao = commentPollDao;
 
     }
@@ -47,7 +54,16 @@ public class CommentPollServiceImp extends GenericServiceImp<CommentPoll, Commen
     @Override
     @Transactional
     public CommentPollDto createCommentPoll(UUID pollID, CreateCommentDto createCommentDto) {
-        return null;
+        User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
+        Poll poll = this.pollDao.findById(pollID).orElseThrow();
+        CommentPoll commentPoll = new CommentPoll();
+        commentPoll.setTitle(createCommentDto.getTitle());
+        commentPoll.setText(createCommentDto.getText());
+        commentPoll.setType(CommentType.POLL);
+        commentPoll.setPublisher(authenticatedUser);
+        commentPoll.setPoll(poll);
+        commentPoll = this.commentPollDao.save(commentPoll);
+        return this.modelMapper.map(commentPoll,CommentPollDto.class);
     }
 
     @Override

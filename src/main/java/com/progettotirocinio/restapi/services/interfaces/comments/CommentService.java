@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.services.interfaces.comments;
 
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.comments.CommentDto;
 import com.progettotirocinio.restapi.data.entities.enums.CommentType;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ public interface CommentService
     PagedModel<CommentDto> getCommentsByText(String text,Pageable pageable);
     PagedModel<CommentDto> getCommentsByPublisher(UUID publisherID,Pageable pageable);
     PagedModel<CommentDto> getCommentsByType(CommentType type,Pageable pageable);
+    CommentDto updateComment(UpdateCommentDto updateCommentDto);
     CommentDto getCommentByID(UUID commentID);
     CollectionModel<CommentType> getTypes();
 
