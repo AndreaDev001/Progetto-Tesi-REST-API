@@ -63,7 +63,7 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
     }
 
     @Override
-    @Transaction
+    @Transactional
     public CommentDto updateComment(UpdateCommentDto updateCommentDto) {
         Comment comment = this.commentDao.findById(updateCommentDto.getCommentID()).orElseThrow();
         if(updateCommentDto.getTitle() != null)

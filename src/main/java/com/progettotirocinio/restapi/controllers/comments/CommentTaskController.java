@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CommentTaskController
 {
-    private CommentTaskService commentTaskService;
+    private final CommentTaskService commentTaskService;
 
     @GetMapping("/private")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")

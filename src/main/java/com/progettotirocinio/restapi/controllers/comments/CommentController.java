@@ -24,7 +24,7 @@ import java.util.UUID;
 @SecurityRequirement(name = "Authorization")
 public class CommentController
 {
-    public CommentService commentService;
+    private final CommentService commentService;
 
     @GetMapping("/private")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
