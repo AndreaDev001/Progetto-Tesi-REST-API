@@ -1,15 +1,14 @@
 package com.progettotirocinio.restapi.services.implementations.likes;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
 import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
-import com.progettotirocinio.restapi.data.dao.CommentDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.comments.CommentDao;
 import com.progettotirocinio.restapi.data.dao.likes.CommentLikeDao;
 import com.progettotirocinio.restapi.data.dto.output.likes.CommentLikeDto;
-import com.progettotirocinio.restapi.data.entities.Comment;
+import com.progettotirocinio.restapi.data.entities.comments.Comment;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.likes.CommentLike;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;

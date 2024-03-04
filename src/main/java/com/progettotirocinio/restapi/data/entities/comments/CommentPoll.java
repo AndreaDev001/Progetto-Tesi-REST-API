@@ -1,6 +1,6 @@
-package com.progettotirocinio.restapi.data.entities.likes;
+package com.progettotirocinio.restapi.data.entities.comments;
 
-import com.progettotirocinio.restapi.data.entities.comments.Comment;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "COMMENT_LIKES")
-public class CommentLike extends Like
+@Table(name = "COMMENT_POLLS")
+public class CommentPoll extends Comment
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "COMMENT_ID",nullable = false,updatable = false)
-    private Comment comment;
+    @JoinColumn(name = "POLL_ID",nullable = false,updatable = false)
+    private Poll poll;
 }

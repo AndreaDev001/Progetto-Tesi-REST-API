@@ -1,7 +1,11 @@
-package com.progettotirocinio.restapi.data.entities;
+package com.progettotirocinio.restapi.data.entities.comments;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.AmountEntity;
+import com.progettotirocinio.restapi.data.entities.Discussion;
+import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.CommentType;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.CommentLike;
 import com.progettotirocinio.restapi.data.entities.likes.Like;
@@ -16,31 +20,31 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "COMMENTS")
 public class Comment extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
-    private String title;
+    protected String title;
 
     @Column(name = "TEXT",nullable = false)
     @Convert(converter = TrimConverter.class)
-    private String text;
+    protected String text;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "comment")
-    private Set<CommentLike> receivedLikes = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY,optional = true)
-    @JoinColumn(name = "DISCUSSION_ID",updatable = false)
-    private Discussion discussion;
+    protected Set<CommentLike> receivedLikes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
-    private User publisher;
+    protected User publisher;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE",nullable = false)
+    private CommentType type;
 
     @Override
     public UUID getOwnerID() {

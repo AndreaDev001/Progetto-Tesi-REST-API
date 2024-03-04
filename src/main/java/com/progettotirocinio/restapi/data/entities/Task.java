@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
+import com.progettotirocinio.restapi.data.entities.comments.CommentTask;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
 import com.progettotirocinio.restapi.data.entities.images.TaskImage;
@@ -62,6 +63,9 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskImage> taskImages = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<CommentTask> receivedComments = new HashSet<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

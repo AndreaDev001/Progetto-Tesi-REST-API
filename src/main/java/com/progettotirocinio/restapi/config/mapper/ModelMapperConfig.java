@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.config.mapper;
 import com.progettotirocinio.restapi.data.dto.output.refs.*;
 import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
+import com.progettotirocinio.restapi.data.entities.comments.Comment;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import org.modelmapper.*;

@@ -9,7 +9,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.PollSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
-import com.progettotirocinio.restapi.data.dto.output.PollDto;
+import com.progettotirocinio.restapi.data.dto.output.polls.PollDto;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;

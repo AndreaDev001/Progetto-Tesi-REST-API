@@ -3,6 +3,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 import com.progettotirocinio.restapi.controllers.*;
 import com.progettotirocinio.restapi.controllers.bans.BanController;
+import com.progettotirocinio.restapi.controllers.comments.CommentController;
 import com.progettotirocinio.restapi.controllers.likes.CommentLikeController;
 import com.progettotirocinio.restapi.controllers.likes.DiscussionLikeController;
 import com.progettotirocinio.restapi.controllers.likes.PollLikeController;

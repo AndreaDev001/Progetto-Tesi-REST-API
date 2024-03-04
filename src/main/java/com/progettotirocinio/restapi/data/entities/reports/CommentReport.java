@@ -1,7 +1,6 @@
 package com.progettotirocinio.restapi.data.entities.reports;
 
-import com.progettotirocinio.restapi.data.entities.Comment;
-import com.progettotirocinio.restapi.data.entities.GenericEntity;
+import com.progettotirocinio.restapi.data.entities.comments.Comment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,7 +7,7 @@ import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.PollOptionDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dto.input.create.CreatePollOptionDto;
-import com.progettotirocinio.restapi.data.dto.output.PollOptionDto;
+import com.progettotirocinio.restapi.data.dto.output.polls.PollOptionDto;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.polls.PollOption;
 import com.progettotirocinio.restapi.data.entities.User;

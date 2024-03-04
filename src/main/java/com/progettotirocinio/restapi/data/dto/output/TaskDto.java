@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.TaskAssignmentController;
+import com.progettotirocinio.restapi.controllers.comments.CommentTaskController;
 import com.progettotirocinio.restapi.controllers.images.TaskImageController;
 import com.progettotirocinio.restapi.controllers.likes.TaskLikeController;
 import com.progettotirocinio.restapi.controllers.tags.TagAssignmentController;
@@ -31,11 +32,13 @@ public class TaskDto extends GenericOutput<TaskDto>
     private TaskStatus status;
     private UserRef publisher;
     @AmountReference(name = "receivedLikes")
-    private Integer amountOfLikes;
+    private Integer amountOfReceivedLikes;
     @AmountReference(name = "assignments")
     private Integer amountOfAssignments;
     @AmountReference(name = "tags")
     private Integer amountOfTags;
+    @AmountReference(name = "receivedComments")
+    private Integer amountOfReceivedComments;
     @AmountReference(name = "images")
     private Integer amountOfImages;
 
@@ -46,5 +49,6 @@ public class TaskDto extends GenericOutput<TaskDto>
         this.add(linkTo(methodOn(TaskAssignmentController.class).getTaskAssignmentsByTask(this.id)).withRel("assignments").withName("assignments"));
         this.add(linkTo(methodOn(TagAssignmentController.class).getTagAssignmentsByTag(this.id)).withRel("tags").withName("tags"));
         this.add(linkTo(methodOn(TaskImageController.class).getTaskImages(this.id)).withRel("images").withName("images"));
+        this.add(linkTo(methodOn(CommentTaskController.class).getCommentsByTask(this.id)).withRel("receivedComments").withName("receivedComments"));
     }
 }

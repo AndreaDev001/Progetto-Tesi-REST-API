@@ -5,7 +5,7 @@ import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollOptionDao;
 import com.progettotirocinio.restapi.data.dao.PollVoteDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
-import com.progettotirocinio.restapi.data.dto.output.PollVoteDto;
+import com.progettotirocinio.restapi.data.dto.output.polls.PollVoteDto;
 import com.progettotirocinio.restapi.data.entities.polls.PollOption;
 import com.progettotirocinio.restapi.data.entities.polls.PollVote;
 import com.progettotirocinio.restapi.data.entities.User;

@@ -1,6 +1,7 @@
-package com.progettotirocinio.restapi.data.dto.output;
+package com.progettotirocinio.restapi.data.dto.output.polls;
 
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
 import com.progettotirocinio.restapi.data.dto.output.refs.PollRef;
 import lombok.AllArgsConstructor;
 import lombok.Data;

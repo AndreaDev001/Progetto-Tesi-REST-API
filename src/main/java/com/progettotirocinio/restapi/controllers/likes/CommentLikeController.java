@@ -1,9 +1,7 @@
 package com.progettotirocinio.restapi.controllers.likes;
 
-import com.progettotirocinio.restapi.data.dao.likes.CommentLikeDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.output.likes.CommentLikeDto;
-import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.services.interfaces.likes.CommentLikeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

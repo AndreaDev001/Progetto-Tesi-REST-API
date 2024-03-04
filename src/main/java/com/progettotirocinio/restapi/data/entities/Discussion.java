@@ -4,14 +4,14 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
+import com.progettotirocinio.restapi.data.entities.comments.Comment;
+import com.progettotirocinio.restapi.data.entities.comments.CommentDiscussion;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.DiscussionLike;
-import com.progettotirocinio.restapi.data.entities.likes.Like;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -41,7 +41,7 @@ public class Discussion extends AmountEntity implements OwnableEntity
     private Set<DiscussionLike> receivedLikes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "discussion")
-    private Set<Comment> comments = new HashSet<>();
+    private Set<CommentDiscussion> receivedComments = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",updatable = false)

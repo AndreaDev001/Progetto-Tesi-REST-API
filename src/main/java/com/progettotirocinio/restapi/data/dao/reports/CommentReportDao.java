@@ -1,6 +1,5 @@
 package com.progettotirocinio.restapi.data.dao.reports;
 
-import com.progettotirocinio.restapi.data.entities.Comment;
 import com.progettotirocinio.restapi.data.entities.reports.CommentReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

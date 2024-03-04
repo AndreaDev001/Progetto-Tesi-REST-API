@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.annotations.Specifi
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.AmountEntity;
 import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.comments.CommentPoll;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
@@ -45,10 +46,13 @@ public class Poll extends AmountEntity implements OwnableEntity
     @SpecificationOrderType
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
     private Set<PollLike> receivedLikes = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    private Set<CommentPoll> receivedComments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
     private Set<PollOption> options = new HashSet<>();
 
     @Column(name = "MINIMUM_VOTES",nullable = false)

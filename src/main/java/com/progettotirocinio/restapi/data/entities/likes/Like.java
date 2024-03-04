@@ -18,7 +18,7 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class Like extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
     protected User user;
 
