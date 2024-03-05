@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.output;
 
 
 import com.progettotirocinio.restapi.controllers.TaskAssignmentController;
+import com.progettotirocinio.restapi.controllers.checklist.CheckListController;
 import com.progettotirocinio.restapi.controllers.comments.CommentTaskController;
 import com.progettotirocinio.restapi.controllers.images.TaskImageController;
 import com.progettotirocinio.restapi.controllers.likes.TaskLikeController;
@@ -31,16 +32,19 @@ public class TaskDto extends GenericOutput<TaskDto>
     private Priority priority;
     private TaskStatus status;
     private UserRef publisher;
+    private Integer currentOrder;
     @AmountReference(name = "receivedLikes")
     private Integer amountOfReceivedLikes;
     @AmountReference(name = "assignments")
     private Integer amountOfAssignments;
-    @AmountReference(name = "tags")
+    @AmountReference(name = "receivedTags")
     private Integer amountOfTags;
     @AmountReference(name = "receivedComments")
     private Integer amountOfReceivedComments;
-    @AmountReference(name = "images")
+    @AmountReference(name = "taskImages")
     private Integer amountOfImages;
+    @AmountReference(name = "checkLists")
+    private Integer amountOfCheckLists;
 
     @Override
     public void addLinks(Object... params) {
@@ -50,5 +54,6 @@ public class TaskDto extends GenericOutput<TaskDto>
         this.add(linkTo(methodOn(TagAssignmentController.class).getTagAssignmentsByTag(this.id)).withRel("tags").withName("tags"));
         this.add(linkTo(methodOn(TaskImageController.class).getTaskImages(this.id)).withRel("images").withName("images"));
         this.add(linkTo(methodOn(CommentTaskController.class).getCommentsByTask(this.id)).withRel("receivedComments").withName("receivedComments"));
+        this.add(linkTo(methodOn(CheckListController.class).getCheckListsByTask(this.id)).withRel("checklists").withName("checklists"));
     }
 }

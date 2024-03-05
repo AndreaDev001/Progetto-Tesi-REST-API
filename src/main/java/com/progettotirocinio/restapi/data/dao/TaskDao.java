@@ -28,7 +28,7 @@ public interface TaskDao extends JpaRepository<Task, UUID>, JpaSpecificationExec
     Page<Task> getTasksByDescription(@Param("requiredDescription") String description,Pageable pageable);
     @Query("select t from Task t where t.publisher.id = :requiredPublisherID")
     Page<Task> getTasksByPublisher(@Param("requiredPublisherID") UUID publisherID,Pageable pageable);
-    @Query("select  t from Task t where t.group.id = :requiredGroupID")
+    @Query("select  t from Task t where t.group.id = :requiredGroupID order by t.currentOrder asc")
     List<Task> getTasksByGroup(@Param("requiredGroupID") UUID groupID);
     @Query("select t from Task t where t.priority = :requiredPriority")
     Page<Task> getTasksByPriority(@Param("requiredPriority") Priority priority,Pageable pageable);
@@ -38,4 +38,7 @@ public interface TaskDao extends JpaRepository<Task, UUID>, JpaSpecificationExec
     List<Task> getTasksByStatus(@Param("requiredStatus") TaskStatus status);
     @Query("select t from Task t where t.status = :requiredStatus")
     Page<Task> getTasksByStatus(@Param("requiredStatus")TaskStatus status,Pageable pageable);
+
+    @Query("select max(t.currentOrder) from Task t where t.group.id = :requiredGroupID")
+    Integer getMaxOrderInGroup(@Param("requiredGroupID") UUID groupID);
 }

@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.dto.input.update;
 
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class UpdateTaskDto
 {
     @NotNull
     private UUID taskID;
+    @PositiveOrZero
+    private Integer order;
     private String title;
     private String name;
     private String description;

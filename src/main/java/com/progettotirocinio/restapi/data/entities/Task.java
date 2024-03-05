@@ -4,6 +4,7 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
+import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
 import com.progettotirocinio.restapi.data.entities.comments.CommentTask;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
@@ -11,6 +12,7 @@ import com.progettotirocinio.restapi.data.entities.images.TaskImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
+import com.progettotirocinio.restapi.data.entities.tags.TagAssignment;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -46,6 +48,9 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
     @SpecificationOrderType
     private String description;
 
+    @Column(name = "CURRENT_ORDER",nullable = false)
+    private Integer currentOrder;
+
     @Column(name = "PRIORITY",nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Priority priority;
@@ -59,6 +64,9 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
     private Set<TaskLike> receivedLikes = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<TagAssignment> receivedTags = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskAssignment> assignments =  new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
@@ -66,6 +74,9 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<CommentTask> receivedComments = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<CheckList> checkLists = new HashSet<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

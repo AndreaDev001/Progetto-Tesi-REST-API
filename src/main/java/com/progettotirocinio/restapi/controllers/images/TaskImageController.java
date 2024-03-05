@@ -100,4 +100,11 @@ public class TaskImageController
         TaskImageDto taskImageDto = this.taskImageService.getLastImage(taskID);
         return ResponseEntity.ok(taskImageDto);
     }
+
+    @DeleteMapping("/private/{taskImageID}")
+    @PreAuthorize("@permissionHandler.isAssigned(#taskImageID,@taskImageDao)")
+    public ResponseEntity<Void> deleteTaskImage(@PathVariable("taskImageID") UUID taskImageID) {
+        this.taskImageService.deleteTaskImage(taskImageID);
+        return ResponseEntity.noContent().build();
+    }
 }

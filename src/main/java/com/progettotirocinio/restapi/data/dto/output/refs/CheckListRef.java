@@ -18,6 +18,8 @@ public class CheckListRef extends GenericOutput<CheckListRef>
     private UserRef publisher;
 
     public CheckListRef(CheckList checkList) {
+        this.id = checkList.getId();
+        this.createdDate = checkList.getCreatedDate();
         this.name = checkList.getName();
         this.task = new TaskRef(checkList.getTask());
         this.publisher = new UserRef(checkList.getPublisher());

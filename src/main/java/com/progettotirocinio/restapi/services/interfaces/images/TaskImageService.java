@@ -17,5 +17,6 @@ public interface TaskImageService
     TaskImageDto getLastImage(UUID taskID);
     TaskImageDto getFirstImage(UUID taskID);
     TaskImageDto getTaskImage(UUID taskImageID);
+    void deleteTaskImage(UUID taskImageID);
     CollectionModel<TaskImageDto> uploadImage(UUID taskID,CreateTaskImageDto createTaskImageDto);
 }

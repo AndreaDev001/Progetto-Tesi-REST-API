@@ -97,6 +97,13 @@ public class TaskImageServiceImp extends GenericServiceImp<TaskImage, TaskImageD
     }
 
     @Override
+    @Transactional
+    public void deleteTaskImage(UUID taskImageID) {
+        this.taskImageDao.findById(taskImageID);
+        this.taskImageDao.deleteById(taskImageID);
+    }
+
+    @Override
     @SneakyThrows
     @Transactional
     public CollectionModel<TaskImageDto> uploadImage(UUID taskID,CreateTaskImageDto createTaskImageDto) {

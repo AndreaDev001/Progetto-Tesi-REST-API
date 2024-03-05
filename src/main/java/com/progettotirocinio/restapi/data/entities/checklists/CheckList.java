@@ -16,16 +16,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = {AuditingEntityListener.class, UUIDEntityListener.class})
 public class CheckList extends AmountEntity implements OwnableEntity, BoardElement, TaskElement
 {
-    @Column(name = "NAME",nullable = false,updatable = false)
+    @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String name;
 
@@ -37,7 +37,7 @@ public class CheckList extends AmountEntity implements OwnableEntity, BoardEleme
     @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
     private User publisher;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "checkList")
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,orphanRemoval = true,mappedBy = "checkList")
     private Set<CheckListOption> options = new HashSet<>();
 
     @Override

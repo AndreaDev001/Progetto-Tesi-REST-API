@@ -141,6 +141,8 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
         task.setPublisher(publisher);
         task.setGroup(taskGroup);
         task.setStatus(TaskStatus.OPEN);
+        Integer maxValue = this.taskDao.getMaxOrderInGroup(taskGroup.getId());
+        task.setCurrentOrder(maxValue != null ? maxValue + 1 : 0);
         task = this.taskDao.save(task);
         return this.modelMapper.map(task,TaskDto.class);
     }
@@ -166,6 +168,8 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
                 task.setGroup(taskGroup);
             }
         }
+        if(updateTaskDto.getOrder() != null)
+            task.setCurrentOrder(updateTaskDto.getOrder());
         task = this.taskDao.save(task);
         return this.modelMapper.map(task,TaskDto.class);
     }

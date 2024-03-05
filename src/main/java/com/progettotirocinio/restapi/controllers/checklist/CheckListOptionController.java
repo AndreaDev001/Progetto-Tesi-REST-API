@@ -46,8 +46,7 @@ public class CheckListOptionController
     }
 
     @GetMapping("/private/checklist/{checkListID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#checklistID,@checkListDao)")
-    public ResponseEntity<CollectionModel<CheckListOptionDto>> getOptionsByChecklist(@PathVariable("checklistID") UUID checkListID) {
+    public ResponseEntity<CollectionModel<CheckListOptionDto>> getOptionsByChecklist(@PathVariable("checkListID") UUID checkListID) {
         CollectionModel<CheckListOptionDto> collectionModel = this.checkListOptionService.getOptionsByCheckList(checkListID);
         return ResponseEntity.ok(collectionModel);
     }
@@ -67,7 +66,7 @@ public class CheckListOptionController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.isAssigned(#createCheckListOptionDto.checklistID,@checkListDao)")
+    @PreAuthorize("@permissionHandler.isAssigned(#createCheckListOptionDto.checkListID,@checkListDao)")
     public ResponseEntity<CheckListOptionDto> createOption(@RequestBody @Valid CreateCheckListOptionDto createCheckListOptionDto) {
         CheckListOptionDto checkListOptionDto = this.checkListOptionService.createOption(createCheckListOptionDto);
         return ResponseEntity.status(201).body(checkListOptionDto);

@@ -60,7 +60,7 @@ public class CheckListController
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.isAssigned(#updateCheckListDto.taskID)")
+    @PreAuthorize("@permissionHandler.isAssigned(#updateCheckListDto.checkListID)")
     public ResponseEntity<CheckListDto> updateCheckList(@RequestBody @Valid UpdateCheckListDto updateCheckListDto) {
         CheckListDto checkListDto = this.checkListService.updateCheckList(updateCheckListDto);
         return ResponseEntity.status(201).body(checkListDto);
