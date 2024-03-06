@@ -17,6 +17,7 @@ public interface PollReportService
     PagedModel<PollReportDto> getPollReportsByReported(UUID reportedID,Pageable pageable);
     PagedModel<PollReportDto> getPollReportsByPoll(UUID pollID,Pageable pageable);
     PollReportDto getPollReport(UUID pollReportID);
+    PollReportDto getPollReportBetween(UUID userID,UUID pollID);
     PollReportDto createPollReport(CreateReportDto createReportDto,UUID pollReportID);
     void deletePollReport(UUID pollReportID);
 }

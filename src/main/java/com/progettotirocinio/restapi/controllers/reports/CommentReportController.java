@@ -60,6 +60,13 @@ public class CommentReportController {
         return ResponseEntity.ok(commentReports);
     }
 
+    @GetMapping("/private/comment/{commentID}/reporter/{reporterID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
+    public ResponseEntity<CommentReportDto> getReportBetween(@PathVariable("commentID") UUID commentID,@PathVariable("reporterID") UUID reporterID) {
+        CommentReportDto commentReportDto = this.commentReportService.getReportBetween(reporterID,commentID);
+        return ResponseEntity.ok(commentReportDto);
+    }
+
     @PostMapping("/private/{commentID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<CommentReportDto> createCommentReport(@RequestBody @Valid CreateReportDto createReportDto, @PathVariable("commentID") UUID commentID) {

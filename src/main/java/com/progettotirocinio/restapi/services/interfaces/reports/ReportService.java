@@ -28,5 +28,6 @@ public interface ReportService
     ReportDto getReport(UUID reportID);
     ReportDto createReport(CreateReportDto createReportDto,UUID reportedID);
     ReportDto updateReport(UpdateReportDto updateReportDto);
+    ReportDto getReportBetween(UUID reporterID,UUID reportedID);
     void deleteReport(UUID reportID);
 }

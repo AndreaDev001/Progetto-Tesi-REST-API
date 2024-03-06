@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "TASK_LIKES",uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID","TASK_ID"})})
 public class TaskLike extends Like
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)
     private Task task;
 }

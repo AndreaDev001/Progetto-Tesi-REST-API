@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,4 +20,6 @@ public interface CommentReportDao extends JpaRepository<CommentReport, UUID>
     Page<CommentReport> getCommentReportsByReported(@Param("requiredID") UUID reportedID,Pageable pageable);
     @Query("select c from CommentReport c where c.comment.id = :requiredID")
     Page<CommentReport> getCommentReportsByComment(@Param("requiredID") UUID commentID,Pageable pageable);
+    @Query("select c from CommentReport c where c.comment.id = :requiredCommentID and c.reporter.id = :requiredReporterID")
+    Optional<CommentReport> getReportBetween(@Param("requiredCommentID") UUID commentID,@Param("requiredReporterID") UUID reporterID);
 }

@@ -5,6 +5,7 @@ import com.progettotirocinio.restapi.data.dto.input.update.UpdateDiscussionDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateReportDto;
 import com.progettotirocinio.restapi.data.dto.output.reports.DiscussionReportDto;
 import com.progettotirocinio.restapi.data.entities.Discussion;
+import org.hibernate.validator.cfg.defs.UUIDDef;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 
@@ -17,6 +18,7 @@ public interface DiscussionReportService
     PagedModel<DiscussionReportDto> getDiscussionReportsByReported(UUID reportedID,Pageable pageable);
     PagedModel<DiscussionReportDto> getDiscussionReportsByDiscussion(UUID discussionID,Pageable pageable);
     DiscussionReportDto getDiscussionReport(UUID discussionReportID);
+    DiscussionReportDto getReportBetween(UUID userID, UUID discussionID);
     DiscussionReportDto createDiscussionReport(CreateReportDto createReportDto,UUID discussionID);
     void deleteDiscussionReport(UUID discussionReportID);
 }

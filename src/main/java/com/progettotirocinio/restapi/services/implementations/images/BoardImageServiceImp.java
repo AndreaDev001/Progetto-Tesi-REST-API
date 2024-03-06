@@ -88,4 +88,11 @@ public class BoardImageServiceImp extends GenericServiceImp<BoardImage, BoardIma
             return this.modelMapper.map(boardImage,BoardImageDto.class);
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteImage(UUID boardImageID) {
+        this.boardImageDao.findById(boardImageID).orElseThrow();
+        this.boardImageDao.deleteById(boardImageID);
+    }
 }

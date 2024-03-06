@@ -69,6 +69,12 @@ public class PollReportServiceImp extends GenericServiceImp<PollReport, PollRepo
     }
 
     @Override
+    public PollReportDto getPollReportBetween(UUID userID, UUID pollID) {
+        PollReport pollReport = this.pollReportDao.getReportBetween(pollID,userID).orElseThrow();
+        return this.modelMapper.map(pollReport,PollReportDto.class);
+    }
+
+    @Override
     @Transactional
     public PollReportDto createPollReport(CreateReportDto createReportDto, UUID pollReportID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();

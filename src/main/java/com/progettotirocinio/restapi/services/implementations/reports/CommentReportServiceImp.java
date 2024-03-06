@@ -69,6 +69,12 @@ public class CommentReportServiceImp extends GenericServiceImp<CommentReport, Co
     }
 
     @Override
+    public CommentReportDto getReportBetween(UUID userID, UUID reportID) {
+        CommentReport commentReport = this.commentReportDao.getReportBetween(reportID,userID).orElseThrow();
+        return this.modelMapper.map(commentReport,CommentReportDto.class);
+    }
+
+    @Override
     @Transactional
     public CommentReportDto createCommentReport(CreateReportDto createReportDto, UUID commentID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();

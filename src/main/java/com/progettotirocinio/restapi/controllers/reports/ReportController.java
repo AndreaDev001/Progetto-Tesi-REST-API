@@ -51,6 +51,13 @@ public class ReportController
         return ResponseEntity.ok(reports);
     }
 
+    @GetMapping("/private/reporter/{reporterID}/reported/{reportedID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
+    public ResponseEntity<ReportDto> getReportBetween(@PathVariable("reporterID") UUID reporterID,@PathVariable("reportedID") UUID reportedID) {
+        ReportDto reportDto = this.reportService.getReportBetween(reporterID,reportedID);
+        return ResponseEntity.ok(reportDto);
+    }
+
     @GetMapping("/private/reported/{reportedID}")
     @PreAuthorize("@permissionHandler.hasAccess(#reportedID)")
     public ResponseEntity<PagedModel<ReportDto>> getReportsByReported(@PathVariable("reportedID") UUID reportedID,@ParameterObject @Valid PaginationRequest paginationRequest) {

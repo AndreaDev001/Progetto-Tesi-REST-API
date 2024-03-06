@@ -55,6 +55,13 @@ public class PollReportController
         return ResponseEntity.ok(pollReports);
     }
 
+    @GetMapping("/private/poll/{pollID}/reporter/{reporterID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
+    public ResponseEntity<PollReportDto> getReportBetween(@PathVariable("pollID") UUID pollID,@PathVariable("reporterID") UUID reporterID) {
+        PollReportDto pollReportDto = this.pollReportService.getPollReportBetween(reporterID,pollID);
+        return ResponseEntity.ok(pollReportDto);
+    }
+
     @GetMapping("/private/poll/{pollID}")
     @PreAuthorize("@permissionHandler.hasAccess(@pollDao,#pollID)")
     public ResponseEntity<PagedModel<PollReportDto>> getPollReportsByPoll(@PathVariable("pollID") UUID pollID,@ParameterObject @Valid PaginationRequest paginationRequest) {

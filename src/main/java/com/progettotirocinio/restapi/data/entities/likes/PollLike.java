@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "POLL_LIKES",uniqueConstraints = @UniqueConstraint(columnNames = {"POLL_ID","USER_ID"}))
 public class PollLike extends Like
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "POLL_ID",nullable = false,updatable = false)
     private Poll poll;
 }

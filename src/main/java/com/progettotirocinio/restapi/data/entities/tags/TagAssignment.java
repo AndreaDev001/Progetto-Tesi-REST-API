@@ -5,18 +5,15 @@ import com.progettotirocinio.restapi.data.entities.Task;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @EntityListeners(value = AuditingEntityListener.class)
 @Entity
 @Table(name = "TAG_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TAG_ID","TASK_ID"})})
@@ -26,7 +23,7 @@ public class TagAssignment extends GenericEntity implements BoardElement, TaskEl
     @JoinColumn(name = "TAG_ID",nullable = false,updatable = false)
     private Tag tag;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)
     private Task task;
 

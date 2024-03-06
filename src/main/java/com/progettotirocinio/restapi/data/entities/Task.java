@@ -26,7 +26,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASKS")
@@ -63,7 +62,7 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskLike> receivedLikes = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "task",orphanRemoval = true)
     private Set<TagAssignment> receivedTags = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)

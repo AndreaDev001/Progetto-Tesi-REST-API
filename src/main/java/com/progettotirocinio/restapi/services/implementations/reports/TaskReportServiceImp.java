@@ -70,6 +70,12 @@ public class TaskReportServiceImp extends GenericServiceImp<TaskReport, TaskRepo
     }
 
     @Override
+    public TaskReportDto getTaskReportBetween(UUID userID, UUID taskID) {
+        TaskReport taskReport = this.taskReportDao.getReportBetween(taskID,userID).orElseThrow();
+        return this.modelMapper.map(taskReport,TaskReportDto.class);
+    }
+
+    @Override
     @Transactional
     public TaskReportDto createTaskReport(CreateReportDto createReportDto, UUID taskID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();

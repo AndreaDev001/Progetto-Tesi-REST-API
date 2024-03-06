@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "DISCUSSION_LIKES",uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID","DISCUSSION_ID"})})
 public class DiscussionLike extends Like
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "DISCUSSION_ID",nullable = false,updatable = false)
     private Discussion discussion;
 }

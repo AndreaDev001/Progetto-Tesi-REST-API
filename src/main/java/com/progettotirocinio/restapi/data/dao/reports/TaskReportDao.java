@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,4 +20,6 @@ public interface TaskReportDao extends JpaRepository<TaskReport, UUID>
     Page<TaskReport> getTaskReportsByReported(@Param("requiredID") UUID reportedID,Pageable pageable);
     @Query("select t from TaskReport t where t.task.id = :requiredID")
     Page<TaskReport> getTaskReportsByTask(@Param("requiredID") UUID taskID,Pageable pageable);
+    @Query("select t from TaskReport t where t.task.id = :requiredTaskID and t.reporter.id = :requiredReporterID")
+    Optional<TaskReport> getReportBetween(@Param("requiredTaskID") UUID taskID,@Param("requiredReporterID") UUID reporterID);
 }

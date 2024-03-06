@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardImage extends Image {
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
 }

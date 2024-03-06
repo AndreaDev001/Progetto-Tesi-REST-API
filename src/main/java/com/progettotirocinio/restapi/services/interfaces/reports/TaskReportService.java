@@ -15,6 +15,7 @@ public interface TaskReportService
     PagedModel<TaskReportDto> getTaskReportsByReported(UUID reportedID,Pageable pageable);
     PagedModel<TaskReportDto> getTaskReportsByTask(UUID taskID,Pageable pageable);
     TaskReportDto getTaskReport(UUID taskReportID);
+    TaskReportDto getTaskReportBetween(UUID userID,UUID taskID);
     TaskReportDto createTaskReport(CreateReportDto createReportDto,UUID taskID);
     void deleteTaskReport(UUID taskReportID);
 }

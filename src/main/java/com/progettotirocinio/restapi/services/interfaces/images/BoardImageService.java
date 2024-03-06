@@ -14,4 +14,5 @@ public interface BoardImageService
     BoardImageDto getBoardImageByBoard(UUID boardID);
     BoardImageDto getBoard(UUID boardID);
     BoardImageDto uploadImage(UUID boardID,CreateBoardImageDto createBoardImageDto);
+    void deleteImage(UUID boardImageID);
 }

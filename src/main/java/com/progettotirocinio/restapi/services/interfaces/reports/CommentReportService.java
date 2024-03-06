@@ -17,6 +17,7 @@ public interface CommentReportService
     PagedModel<CommentReportDto> getCommentReportsByReported(UUID reportedID,Pageable pageable);
     PagedModel<CommentReportDto> getCommentReportsByComment(UUID commentID,Pageable pageable);
     CommentReportDto getCommentReport(UUID commentReportID);
+    CommentReportDto getReportBetween(UUID userID,UUID reportID);
     CommentReportDto createCommentReport(CreateReportDto createReportDto,UUID commentID);
     void deleteCommentReport(UUID commentReportID);
 }

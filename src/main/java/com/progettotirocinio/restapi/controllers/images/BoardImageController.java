@@ -58,4 +58,11 @@ public class BoardImageController
         BoardImageDto boardImageDto = this.boardImageService.getBoardImageByBoard(boardID);
         return ResponseEntity.ok().contentType(MediaType.valueOf(boardImageDto.getType().getName())).body(boardImageDto.getImage());
     }
+
+    @DeleteMapping("/private/{boardImageID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardImageID,@boardImageDao)")
+    public ResponseEntity<Void> deleteBoardImage(@PathVariable("boardImageID") UUID boardImageID) {
+        this.boardImageService.deleteImage(boardImageID);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -73,6 +73,12 @@ public class DiscussionReportServiceImp extends GenericServiceImp<DiscussionRepo
     }
 
     @Override
+    public DiscussionReportDto getReportBetween(UUID userID, UUID discussionID) {
+        DiscussionReport discussionReport = this.discussionReportDao.getReportBetween(discussionID,userID).orElseThrow();
+        return this.modelMapper.map(discussionReport,DiscussionReportDto.class);
+    }
+
+    @Override
     @Transactional
     public DiscussionReportDto createDiscussionReport(CreateReportDto createReportDto, UUID discussionID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();

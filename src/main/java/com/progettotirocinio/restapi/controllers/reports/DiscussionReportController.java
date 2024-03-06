@@ -46,6 +46,13 @@ public class DiscussionReportController
         return ResponseEntity.ok(discussionReports);
     }
 
+    @GetMapping("/private/discussion/{discussionID}/reporter/{reporterID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
+    public ResponseEntity<DiscussionReportDto> getReportBetween(@PathVariable("discussionID") UUID discussionID,@PathVariable("reporterID") UUID reporterID) {
+        DiscussionReportDto discussionReportDto = this.discussionReportService.getReportBetween(reporterID,discussionID);
+        return ResponseEntity.ok(discussionReportDto);
+    }
+
     @GetMapping("/private/reported/{reportedID}")
     @PreAuthorize("@permissionHandler.hasAccess(#reportedID)")
     public ResponseEntity<PagedModel<DiscussionReportDto>> getDiscussionReportsByReported(@PathVariable("reportedID") UUID reportedID,@ParameterObject @Valid PaginationRequest paginationRequest) {

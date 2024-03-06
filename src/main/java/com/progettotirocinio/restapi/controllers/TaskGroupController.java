@@ -92,14 +92,14 @@ public class TaskGroupController
     }
 
     @DeleteMapping("/private/{taskGroupID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#taskGroupID,@taskGroupDao)")
     public ResponseEntity<Void> deleteTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         this.taskGroupService.deleteTaskGroup(taskGroupID);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/private/clear/{taskGroupID}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskGroupDto.groupID,@taskGroupDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#taskGroupID,@taskGroupDao)")
     public ResponseEntity<TaskGroupDto> clearTaskGroup(@PathVariable("taskGroupID") UUID taskGroupID) {
         TaskGroupDto taskGroupDto =  this.taskGroupService.clearTaskGroup(taskGroupID);
         return ResponseEntity.ok(taskGroupDto);

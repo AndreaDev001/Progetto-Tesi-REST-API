@@ -62,6 +62,13 @@ public class TaskReportController
         return ResponseEntity.ok(taskReports);
     }
 
+    @GetMapping("/private/task/{taskID}/reporter/{reporterID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
+    public ResponseEntity<TaskReportDto> getReportBetween(@PathVariable("taskID") UUID taskID,@PathVariable("reporterID") UUID reporterID) {
+        TaskReportDto taskReportDto = this.taskReportService.getTaskReportBetween(reporterID,taskID);
+        return ResponseEntity.ok(taskReportDto);
+    }
+
     @PostMapping("/private/{taskID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<TaskReportDto> createTaskReport(@RequestBody @Valid CreateReportDto createReportDto, @PathVariable("taskID") UUID taskID) {

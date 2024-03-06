@@ -143,6 +143,12 @@ public class ReportServiceImp extends GenericServiceImp<Report, ReportDto> imple
     }
 
     @Override
+    public ReportDto getReportBetween(UUID reporterID, UUID reportedID) {
+        Report report = this.reportDao.getReportBetween(reporterID,reportedID).orElseThrow();
+        return this.modelMapper.map(report,ReportDto.class);
+    }
+
+    @Override
     @Transactional
     public void deleteReport(UUID reportID) {
         this.reportDao.findById(reportID).orElseThrow();
