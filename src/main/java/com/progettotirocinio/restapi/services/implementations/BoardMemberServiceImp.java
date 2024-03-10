@@ -57,6 +57,18 @@ public class BoardMemberServiceImp extends GenericServiceImp<BoardMember, BoardM
     }
 
     @Override
+    public CollectionModel<BoardMemberDto> getPossibleTaskMembers(UUID boardID, UUID taskID) {
+        List<BoardMember> boardMembers = this.boardMemberDao.getPossibleTaskMembers(boardID,taskID);
+        return CollectionModel.of(boardMembers.stream().map(boardMember -> this.modelMapper.map(boardMember,BoardMemberDto.class)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public CollectionModel<BoardMemberDto> getPossibleTeamMembers(UUID boardID, UUID teamID) {
+        List<BoardMember> boardMembers = this.boardMemberDao.getPossibleTeamMembers(boardID,teamID);
+        return CollectionModel.of(boardMembers.stream().map(boardMember -> this.modelMapper.map(boardMember,BoardMemberDto.class)).collect(Collectors.toList()));
+    }
+
+    @Override
     public BoardMemberDto getBoardMember(UUID boardMemberID) {
         BoardMember boardMember = this.boardMemberDao.findById(boardMemberID).orElseThrow();
         return this.modelMapper.map(boardMember,BoardMemberDto.class);

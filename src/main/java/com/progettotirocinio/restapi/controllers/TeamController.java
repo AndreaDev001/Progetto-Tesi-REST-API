@@ -43,7 +43,7 @@ public class TeamController
     }
 
     @GetMapping("/private/board/{boardID}")
-    @PreAuthorize("@permissionHandler.isMember('MEMBER',#boardID)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#boardID)")
     public ResponseEntity<CollectionModel<TeamDto>> getTeamsByBoard(@PathVariable("boardID") UUID boardID) {
         CollectionModel<TeamDto> collectionModel = this.teamService.getTeamsByBoard(boardID);
         return ResponseEntity.ok(collectionModel);

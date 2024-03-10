@@ -29,7 +29,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "BOARDS")
-@SpecificationPrefix
+@SpecificationPrefix(prefix = "BOARDS")
 public class Board extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
@@ -42,6 +42,11 @@ public class Board extends AmountEntity implements OwnableEntity
     @SpecificationOrderType
     private String description;
 
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
+    @SpecificationOrderType(allowDepth = true)
+    private User publisher;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "VISIBILITY",nullable = false)
     private BoardVisibility visibility;
@@ -53,10 +58,6 @@ public class Board extends AmountEntity implements OwnableEntity
     @OneToOne(mappedBy = "board",fetch = FetchType.LAZY)
     private BoardImage boardImage;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "PUBLISHER_ID",nullable = false,updatable = false)
-    @SpecificationOrderType(allowDepth = true)
-    private User publisher;
 
     @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "board",orphanRemoval = true)

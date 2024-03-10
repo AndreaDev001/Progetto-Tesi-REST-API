@@ -68,7 +68,7 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<TaskAssignment> assignments =  new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "task",orphanRemoval = true)
     private Set<TaskImage> taskImages = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)

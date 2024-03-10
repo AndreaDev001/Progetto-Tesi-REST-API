@@ -12,6 +12,8 @@ public interface BoardMemberService
     PagedModel<BoardMemberDto> getBoardMembers(Pageable pageable);
     PagedModel<BoardMemberDto> getBoardMembersByUser(UUID userID, Pageable pageable);
     CollectionModel<BoardMemberDto> getBoardMembersByBoard(UUID boardID);
+    CollectionModel<BoardMemberDto> getPossibleTaskMembers(UUID boardID,UUID taskID);
+    CollectionModel<BoardMemberDto> getPossibleTeamMembers(UUID boardID,UUID teamID);
     BoardMemberDto getBoardMember(UUID boardMemberID);
     BoardMemberDto isMember(UUID userID,UUID boardID);
     BoardMemberDto createMember(UUID boardID);

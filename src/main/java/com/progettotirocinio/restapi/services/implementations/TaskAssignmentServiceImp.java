@@ -75,7 +75,7 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         User user = this.userDao.findById(createTaskAssignmentDto.getUserID()).orElseThrow();
         Task task = this.taskDao.findById(createTaskAssignmentDto.getTaskID()).orElseThrow();
-        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(task.getGroup().getBoard().getId(),publisher.getId());
+        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(task.getGroup().getBoard().getId(),user.getId());
         if(boardMemberOptional.isEmpty())
             throw new InvalidFormat("error.taskAssignment.invalidUser");
         TaskAssignment taskAssignment = new TaskAssignment();

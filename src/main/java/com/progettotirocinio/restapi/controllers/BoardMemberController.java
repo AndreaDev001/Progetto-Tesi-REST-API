@@ -38,6 +38,20 @@ public class BoardMemberController
         return ResponseEntity.ok(boardMemberDto);
     }
 
+    @GetMapping("/private/possible/task/board/{boardID}/task/{taskID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
+    public ResponseEntity<CollectionModel<BoardMemberDto>> getPossibleTaskMembers(@PathVariable("boardID") UUID boardID,@PathVariable("taskID") UUID taskID) {
+        CollectionModel<BoardMemberDto> collectionModel = this.boardMemberService.getPossibleTaskMembers(boardID,taskID);
+        return ResponseEntity.ok(collectionModel);
+    }
+
+    @GetMapping("/private/possible/team/board/{boardID}/team/{teamID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
+    public ResponseEntity<CollectionModel<BoardMemberDto>> getPossibleTeamMembers(@PathVariable("boardID") UUID boardID,@PathVariable("teamID") UUID teamID) {
+        CollectionModel<BoardMemberDto> collectionModel = this.boardMemberService.getPossibleTeamMembers(boardID,teamID);
+        return ResponseEntity.ok(collectionModel);
+    }
+
     @GetMapping("/private/user/{userID}")
     @PreAuthorize("@permissionHandler.hasAccess(#userID)")
     public ResponseEntity<PagedModel<BoardMemberDto>> getBoardMembersByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
