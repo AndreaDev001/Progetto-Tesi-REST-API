@@ -24,7 +24,7 @@ public class TeamMember extends GenericEntity implements OwnableEntity, BoardEle
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "MEMBER_ID",nullable = false,updatable = false)
-    private User member;
+    private BoardMember member;
 
     @ManyToOne(fetch = FetchType.EAGER,optional = false)
     @JoinColumn(name = "TEAM_ID",nullable = false,updatable = false)

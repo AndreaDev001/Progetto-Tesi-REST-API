@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.data.dto.output.refs.BoardMemberRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.TeamRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.Team;
@@ -17,6 +18,6 @@ import java.util.UUID;
 @Relation(collectionRelation = "content")
 public class TeamMemberDto extends GenericOutput<TeamMemberDto>
 {
-    private UserRef member;
+    private BoardMemberRef member;
     private TeamRef team;
 }

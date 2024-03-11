@@ -51,7 +51,13 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
 
     @Override
     public PagedModel<TeamMemberDto> getTeamMembersByMember(UUID memberID, Pageable pageable) {
-        Page<TeamMember> teamMembers = this.teamMemberDao.getTeamMemberByMember(memberID,pageable);
+        Page<TeamMember> teamMembers = this.teamMemberDao.getTeamMembersByMember(memberID,pageable);
+        return this.pagedResourcesAssembler.toModel(teamMembers,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<TeamMemberDto> getTeamMembersByUser(UUID userID, Pageable pageable) {
+        Page<TeamMember> teamMembers = this.teamMemberDao.getTeamMembersByUser(userID,pageable);
         return this.pagedResourcesAssembler.toModel(teamMembers,modelAssembler);
     }
 
@@ -77,7 +83,7 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
         if(boardMemberOptional.isEmpty())
             throw new InvalidFormat("error.teamMember.missingBoardMember");
         TeamMember teamMember = new TeamMember();
-        teamMember.setMember(requiredUser);
+        teamMember.setMember(boardMemberOptional.get());
         teamMember.setTeam(requiredTeam);
         teamMember = this.teamMemberDao.save(teamMember);
         return this.modelMapper.map(teamMember,TeamMemberDto.class);
@@ -88,8 +94,11 @@ public class TeamMemberServiceImp extends GenericServiceImp<TeamMember, TeamMemb
     public TeamMemberDto createTeamMember(CreateTeamMemberDto createTeamMemberDto) {
         Team requiredTeam = this.teamDao.findById(createTeamMemberDto.getTeamID()).orElseThrow();
         User requiredUser = this.userDao.findById(createTeamMemberDto.getUserID()).orElseThrow();
+        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(requiredTeam.getBoardID(),requiredUser.getId());
+        if(boardMemberOptional.isEmpty())
+            throw new InvalidFormat("error.teamMember.missingBoardMember");
         TeamMember teamMember = new TeamMember();
-        teamMember.setMember(requiredUser);
+        teamMember.setMember(boardMemberOptional.get());
         teamMember.setTeam(requiredTeam);
         teamMember = this.teamMemberDao.save(teamMember);
         return this.modelMapper.map(teamMember,TeamMemberDto.class);

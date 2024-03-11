@@ -99,10 +99,9 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
         List<TaskAssignment> taskAssignments = new ArrayList<>();
         for(TeamMember member : teamMembers) {
             TaskAssignment taskAssignment = new TaskAssignment();
-            BoardMember requiredMember = this.boardMemberDao.getBoardMember(task.getBoardID(),member.getMember().getId()).orElseThrow();
-            if(this.taskAssignmentDao.getTaskAssignment(requiredMember.getId(),taskID).isPresent())
+            if(this.taskAssignmentDao.getTaskAssignment(member.getMember().getId(),taskID).isPresent())
                 continue;
-            taskAssignment.setMember(requiredMember);
+            taskAssignment.setMember(member.getMember());
             taskAssignment.setTask(task);
             taskAssignment.setPublisher(authenticatedUser);
             taskAssignments.add(taskAssignment);

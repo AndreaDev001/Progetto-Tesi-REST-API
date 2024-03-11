@@ -2,18 +2,13 @@ package com.progettotirocinio.restapi.services.implementations;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
-import com.progettotirocinio.restapi.data.dao.BoardDao;
-import com.progettotirocinio.restapi.data.dao.TeamDao;
-import com.progettotirocinio.restapi.data.dao.TeamMemberDao;
-import com.progettotirocinio.restapi.data.dao.UserDao;
+import com.progettotirocinio.restapi.data.dao.*;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateTeamDto;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateTeamDto;
 import com.progettotirocinio.restapi.data.dto.output.TeamDto;
-import com.progettotirocinio.restapi.data.entities.Board;
-import com.progettotirocinio.restapi.data.entities.Team;
-import com.progettotirocinio.restapi.data.entities.TeamMember;
-import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.*;
 import com.progettotirocinio.restapi.services.interfaces.TeamService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -26,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,13 +32,15 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
 
     private final TeamDao teamDao;
     private final TeamMemberDao teamMemberDao;
+    private final BoardMemberDao boardMemberDao;
     private final BoardDao boardDao;
 
-    public TeamServiceImp(CacheHandler cacheHandler,TeamMemberDao teamMemberDao,UserDao userDao, BoardDao boardDao, Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
+    public TeamServiceImp(CacheHandler cacheHandler,BoardMemberDao boardMemberDao,TeamMemberDao teamMemberDao,UserDao userDao, BoardDao boardDao, Mapper mapper, TeamDao teamDao, PagedResourcesAssembler<Team> pagedResourcesAssembler) {
         super(cacheHandler,userDao,mapper, Team.class,TeamDto.class, pagedResourcesAssembler);
         this.boardDao = boardDao;
         this.teamDao = teamDao;
         this.teamMemberDao = teamMemberDao;
+        this.boardMemberDao = boardMemberDao;
     }
 
     @Override
@@ -81,6 +79,9 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
     public TeamDto createTeam(CreateTeamDto createTeamDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Board board = this.boardDao.findById(createTeamDto.getBoardID()).orElseThrow();
+        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(board.getId(),publisher.getId());
+        if(boardMemberOptional.isEmpty())
+            throw new InvalidFormat("error.team.invalidPublisher");
         Team team = new Team();
         team.setName(createTeamDto.getName());
         team.setBoard(board);
@@ -88,7 +89,7 @@ public class TeamServiceImp extends GenericServiceImp<Team, TeamDto> implements 
         team = this.teamDao.save(team);
         TeamMember teamMember = new TeamMember();
         teamMember.setTeam(team);
-        teamMember.setMember(publisher);
+        teamMember.setMember(boardMemberOptional.get());
         this.teamMemberDao.save(teamMember);
         return this.modelMapper.map(team,TeamDto.class);
 

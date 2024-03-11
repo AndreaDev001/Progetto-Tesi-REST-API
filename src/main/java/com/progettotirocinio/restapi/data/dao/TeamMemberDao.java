@@ -18,7 +18,9 @@ import java.util.List;
 public interface TeamMemberDao  extends JpaRepository<TeamMember, UUID>
 {
     @Query("select m from TeamMember m where m.member.id = :requiredID")
-    Page<TeamMember> getTeamMemberByMember(@Param("requiredID") UUID memberID, Pageable pageable);
+    Page<TeamMember> getTeamMembersByMember(@Param("requiredID") UUID memberID, Pageable pageable);
+    @Query("select m from TeamMember m where m.member.user.id = :requiredID")
+    Page<TeamMember> getTeamMembersByUser(@Param("requiredID") UUID id,Pageable pageable);
     @Query("select m from TeamMember m where m.team.id = :requiredID")
     List<TeamMember> getTeamMembersByTeam(@Param("requiredID") UUID teamID);
     @Query("select m from TeamMember m where m.member.id = :requiredMemberID and m.team.id = :requiredTeamID")

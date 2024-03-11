@@ -61,7 +61,7 @@ public class TaskController
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#updateTaskDto.taskID,@taskDao)")
     public ResponseEntity<TaskDto> updateTask(@RequestBody @Valid UpdateTaskDto updateTaskDto) {
         TaskDto taskDto = this.taskService.updateTask(updateTaskDto);
         return ResponseEntity.ok(taskDto);

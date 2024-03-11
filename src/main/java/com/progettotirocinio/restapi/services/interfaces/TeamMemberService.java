@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface TeamMemberService {
     PagedModel<TeamMemberDto> getTeamMembers(Pageable pageable);
     PagedModel<TeamMemberDto> getTeamMembersByMember(UUID memberID,Pageable pageable);
+    PagedModel<TeamMemberDto> getTeamMembersByUser(UUID userID,Pageable pageable);
     CollectionModel<TeamMemberDto> getTeamMembersByTeam(UUID teamID);
     TeamMemberDto getTeamMember(UUID memberID);
     TeamMemberDto createTeamMember(UUID teamID);
