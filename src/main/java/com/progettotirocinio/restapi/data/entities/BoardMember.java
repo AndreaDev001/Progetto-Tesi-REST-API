@@ -4,22 +4,21 @@ package com.progettotirocinio.restapi.data.entities;
 import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "BOARD_MEMBERS",uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_ID","BOARD_ID"})})
-public class BoardMember extends GenericEntity implements OwnableEntity, BoardElement
+public class BoardMember extends AmountEntity implements OwnableEntity, BoardElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
@@ -28,6 +27,9 @@ public class BoardMember extends GenericEntity implements OwnableEntity, BoardEl
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
     private Board board;
+
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "member",orphanRemoval = true)
+    private Set<TaskAssignment> assignedTasks = new HashSet<>();
 
     @Override
     public UUID getOwnerID() {

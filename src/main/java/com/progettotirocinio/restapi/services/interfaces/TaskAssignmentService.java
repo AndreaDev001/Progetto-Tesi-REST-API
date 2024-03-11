@@ -14,7 +14,7 @@ public interface TaskAssignmentService
     TaskAssignmentDto getTaskAssignment(UUID taskAssignment);
     PagedModel<TaskAssignmentDto> getTaskAssignmentsByPublisher(UUID publisherID,Pageable pageable);
     CollectionModel<TaskAssignmentDto> getTaskAssignmentsByTask(UUID taskID);
-    PagedModel<TaskAssignmentDto> getTaskAssignmentsByUser(UUID userID,Pageable pageable);
+    PagedModel<TaskAssignmentDto> getTaskAssignmentsByMember(UUID memberID,Pageable pageable);
     TaskAssignmentDto getTaskAssignment(UUID userID,UUID taskID);
     TaskAssignmentDto createTaskAssignment(CreateTaskAssignmentDto createTaskAssignmentDto);
     CollectionModel<TaskAssignmentDto> createTaskAssignmentFromTeam(UUID taskID,UUID teamID);

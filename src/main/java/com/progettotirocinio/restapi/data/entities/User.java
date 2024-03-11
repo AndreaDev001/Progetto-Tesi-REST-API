@@ -119,9 +119,6 @@ public class User extends AmountEntity
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "banned")
     private Set<Ban> receivedBans = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
-    private Set<TaskAssignment> assignedTasks = new HashSet<>();
-
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "publisher")
     private Set<TaskAssignment> createdAssignments = new HashSet<>();
 

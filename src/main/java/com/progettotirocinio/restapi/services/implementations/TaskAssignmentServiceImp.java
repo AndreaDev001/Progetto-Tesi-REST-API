@@ -28,14 +28,16 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
 
     private final TaskAssignmentDao taskAssignmentDao;
     private final TeamDao teamDao;
+    private final TeamMemberDao teamMemberDao;
     private final TaskDao taskDao;
     private final BoardMemberDao boardMemberDao;
 
-    public TaskAssignmentServiceImp(BoardMemberDao boardMember,TeamDao teamDao, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper,PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
+    public TaskAssignmentServiceImp(BoardMemberDao boardMember,TeamMemberDao teamMemberDao,TeamDao teamDao, TaskDao taskDao, TaskAssignmentDao taskAssignmentDao, CacheHandler cacheHandler, UserDao userDao, Mapper mapper,PagedResourcesAssembler<TaskAssignment> pagedResourcesAssembler) {
         super(cacheHandler, userDao, mapper,TaskAssignment.class,TaskAssignmentDto.class, pagedResourcesAssembler);
         this.taskAssignmentDao = taskAssignmentDao;
         this.taskDao = taskDao;
         this.boardMemberDao = boardMember;
+        this.teamMemberDao = teamMemberDao;
         this.teamDao = teamDao;
     }
 
@@ -64,8 +66,8 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
     }
 
     @Override
-    public PagedModel<TaskAssignmentDto> getTaskAssignmentsByUser(UUID userID, Pageable pageable) {
-        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByUser(userID,pageable);
+    public PagedModel<TaskAssignmentDto> getTaskAssignmentsByMember(UUID memberID, Pageable pageable) {
+        Page<TaskAssignment> taskAssignments = this.taskAssignmentDao.getTaskAssignmentsByMember(memberID,pageable);
         return this.pagedResourcesAssembler.toModel(taskAssignments,modelAssembler);
     }
 
@@ -73,13 +75,12 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
     @Transactional
     public TaskAssignmentDto createTaskAssignment(CreateTaskAssignmentDto createTaskAssignmentDto) {
         User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
-        User user = this.userDao.findById(createTaskAssignmentDto.getUserID()).orElseThrow();
         Task task = this.taskDao.findById(createTaskAssignmentDto.getTaskID()).orElseThrow();
-        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(task.getGroup().getBoard().getId(),user.getId());
+        Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(task.getGroup().getBoard().getId(),createTaskAssignmentDto.getUserID());
         if(boardMemberOptional.isEmpty())
             throw new InvalidFormat("error.taskAssignment.invalidUser");
         TaskAssignment taskAssignment = new TaskAssignment();
-        taskAssignment.setUser(user);
+        taskAssignment.setMember(boardMemberOptional.get());
         taskAssignment.setPublisher(publisher);
         taskAssignment.setTask(task);
         taskAssignment = this.taskAssignmentDao.save(taskAssignment);
@@ -92,12 +93,16 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Task task = this.taskDao.findById(taskID).orElseThrow();
         Team team = this.teamDao.findById(teamID).orElseThrow();
+        List<TeamMember> teamMembers = this.teamMemberDao.getTeamMembersByTeam(team.getId());
         if(!team.getBoard().getId().equals(task.getGroup().getBoard().getId()))
             throw new InvalidFormat("error.taskAssignment.invalidTeam");
         List<TaskAssignment> taskAssignments = new ArrayList<>();
-        for(TeamMember member : team.getMembers()) {
+        for(TeamMember member : teamMembers) {
             TaskAssignment taskAssignment = new TaskAssignment();
-            taskAssignment.setUser(member.getMember());
+            BoardMember requiredMember = this.boardMemberDao.getBoardMember(task.getBoardID(),member.getMember().getId()).orElseThrow();
+            if(this.taskAssignmentDao.getTaskAssignment(requiredMember.getId(),taskID).isPresent())
+                continue;
+            taskAssignment.setMember(requiredMember);
             taskAssignment.setTask(task);
             taskAssignment.setPublisher(authenticatedUser);
             taskAssignments.add(taskAssignment);

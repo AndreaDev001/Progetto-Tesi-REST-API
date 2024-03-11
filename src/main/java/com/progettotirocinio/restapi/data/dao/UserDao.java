@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @Repository
 public interface UserDao extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+
     @Query("select u from User u where u.username = :requiredUsername")
     Optional<User> getUserByUsername(@Param("requiredUsername") String username);
     @Query("select u from User u where u.name = :requiredName")
@@ -24,4 +25,6 @@ public interface UserDao extends JpaRepository<User, UUID>, JpaSpecificationExec
     Page<User> findByUsernameContaining(String username,Pageable pageable);
     @Query("select u from User u where u.email = :requiredEmail")
     Page<User> getUsersByEmail(@Param("requiredEmail") String email,Pageable pageable);
+    @Query("select u from User u where u.username LIKE CONCAT ('%',:requiredUsername,'%') and u.id != :requiredAuthenticatedID and not exists (select b from BoardMember b where b.board.id = :requiredID and b.user.id = u.id) and not exists (select b from BoardInvite b where b.board.id = :requiredID and b.receiver.id = u.id)")
+    Page<User> getPossibleBoardUsers(@Param("requiredID") UUID boardID,@Param("requiredUsername") String username,@Param("requiredAuthenticatedID") UUID authenticatedID,Pageable pageable);
 }

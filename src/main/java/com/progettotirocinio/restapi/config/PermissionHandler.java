@@ -135,8 +135,11 @@ public class PermissionHandler
         Optional<Task> taskOptional = this.taskDao.findById(taskID);
         if(taskOptional.isPresent()) {
             Optional<RoleOwner> roleOwnerOptional = this.roleOwnerDao.getOwnerByNameAndBoardAndUser(authenticatedUser.getId(),taskOptional.get().getId(),"MEMBER");
-            Optional<TaskAssignment> taskAssignmentOptional = this.taskAssignmentDao.getTaskAssignment(authenticatedUser.getUser().getId(),taskID);
-            return roleOwnerOptional.isPresent() && taskAssignmentOptional.isPresent();
+            Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(taskOptional.get().getBoardID(),authenticatedUser.getId());
+            if(boardMemberOptional.isPresent()) {
+                Optional<TaskAssignment> taskAssignmentOptional = this.taskAssignmentDao.getTaskAssignment(boardMemberOptional.get().getId(), taskID);
+                return roleOwnerOptional.isPresent() && taskAssignmentOptional.isPresent();
+            }
         }
         return false;
     }

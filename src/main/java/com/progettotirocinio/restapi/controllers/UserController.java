@@ -6,6 +6,7 @@ import com.progettotirocinio.restapi.data.dao.specifications.UserSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.update.UpdateUserDto;
 import com.progettotirocinio.restapi.data.dto.output.UserDto;
+import com.progettotirocinio.restapi.data.entities.User;
 import com.progettotirocinio.restapi.data.entities.enums.Gender;
 import com.progettotirocinio.restapi.data.entities.enums.UserVisibility;
 import com.progettotirocinio.restapi.services.interfaces.UserService;
@@ -31,6 +32,7 @@ import java.util.UUID;
 public class UserController
 {
     private final UserService userService;
+
 
     @GetMapping("/private")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
@@ -71,6 +73,12 @@ public class UserController
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<UserDto>> getUsers(@ParameterObject @Valid UserSpecifications.Filter filter,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<UserDto> users = this.userService.getUsersBySpec(UserSpecifications.withFilter(filter),paginationRequest.toPageRequest());
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/private/possible/board/{boardID}/user/{username}")
+    public ResponseEntity<PagedModel<UserDto>> getPossibleBoardUsers(@PathVariable("boardID") UUID boardID,@PathVariable("username") String username,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<UserDto> users = this.userService.getPossibleBoardUsers(boardID,username,paginationRequest.toPageRequest());
         return ResponseEntity.ok(users);
     }
 

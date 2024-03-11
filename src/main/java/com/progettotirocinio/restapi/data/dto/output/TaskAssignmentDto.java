@@ -1,5 +1,6 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
+import com.progettotirocinio.restapi.data.dto.output.refs.BoardMemberRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.TaskRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "content")
 public class TaskAssignmentDto extends GenericOutput<TaskAssignmentDto>
 {
-    public UserRef user;
+    public BoardMemberRef member;
     public TaskRef task;
     public UserRef publisher;
 }

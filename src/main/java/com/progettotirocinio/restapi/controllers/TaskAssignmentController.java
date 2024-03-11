@@ -51,10 +51,10 @@ public class TaskAssignmentController
         return ResponseEntity.ok(collectionModel);
     }
 
-    @GetMapping("/private/user/{userID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
-    public ResponseEntity<PagedModel<TaskAssignmentDto>> getTaskAssignmentsByUser(@PathVariable("userID") UUID userID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.getTaskAssignmentsByUser(userID,paginationRequest.toPageRequest());
+    @GetMapping("/private/member/{memberID}")
+    @PreAuthorize("@permissionHandler.hasAccess(#memberID)")
+    public ResponseEntity<PagedModel<TaskAssignmentDto>> getTaskAssignmentsByUser(@PathVariable("memberID") UUID memberID,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.getTaskAssignmentsByMember(memberID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskAssignments);
     }
 
@@ -70,6 +70,13 @@ public class TaskAssignmentController
     public ResponseEntity<TaskAssignmentDto> createTaskAssignment(@RequestBody @Valid CreateTaskAssignmentDto createTaskAssignmentDto) {
         TaskAssignmentDto taskAssignmentDto = this.taskAssignmentService.createTaskAssignment(createTaskAssignmentDto);
         return ResponseEntity.status(201).body(taskAssignmentDto);
+    }
+
+    @PostMapping("/private/task/{taskID}/team/{teamID}")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#taskID,@taskDao)")
+    public ResponseEntity<CollectionModel<TaskAssignmentDto>> createTaskAssignmentFromTeam(@PathVariable("taskID") UUID taskID,@PathVariable("teamID") UUID teamID) {
+        CollectionModel<TaskAssignmentDto> taskAssignments = this.taskAssignmentService.createTaskAssignmentFromTeam(taskID,teamID);
+        return ResponseEntity.status(201).body(taskAssignments);
     }
 
     @DeleteMapping("/private/{taskAssignmentID}")

@@ -16,12 +16,12 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
-@Table(name = "TASK_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TASK_ID","USER_ID"})})
+@Table(name = "TASK_ASSIGNMENTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"TASK_ID","MEMBER_ID"})})
 public class TaskAssignment extends GenericEntity implements OwnableEntity, BoardElement, TaskElement
 {
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "USER_ID",nullable = false,updatable = false)
-    private User user;
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
+    @JoinColumn(name = "MEMBER_ID",nullable = false,updatable = false)
+    private BoardMember member;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "TASK_ID",nullable = false,updatable = false)

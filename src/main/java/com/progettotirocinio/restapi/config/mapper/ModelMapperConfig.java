@@ -82,6 +82,12 @@ public class ModelMapperConfig
             return new TagRef(tag);
         }
     };
+    private static final Converter<BoardMember,BoardMemberRef> boardMemberRefConverter = new AbstractConverter<BoardMember, BoardMemberRef>() {
+        @Override
+        protected BoardMemberRef convert(BoardMember member) {
+            return new BoardMemberRef(member);
+        }
+    };
 
     public static ModelMapper generateModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -98,6 +104,7 @@ public class ModelMapperConfig
         modelMapper.addConverter(pollRefConverter);
         modelMapper.addConverter(checkListRefConverter);
         modelMapper.addConverter(tagRefConverter);
+        modelMapper.addConverter(boardMemberRefConverter);
         return modelMapper;
     }
 

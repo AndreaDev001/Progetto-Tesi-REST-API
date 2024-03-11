@@ -83,6 +83,12 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     }
 
     @Override
+    public PagedModel<UserDto> getPossibleBoardUsers(UUID boardID,String username, Pageable pageable) {
+        Page<User> users = this.userDao.getPossibleBoardUsers(boardID,username,UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName()),pageable);
+        return this.pagedResourcesAssembler.toModel(users,modelAssembler);
+    }
+
+    @Override
     public CollectionModel<String> getOrderTypes() {
         List<String> orderTypes = SpecificationsUtils.generateOrderTypes(User.class);
         return CollectionModel.of(orderTypes);

@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.data.dto.output;
 
 
+import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,6 @@ public class BoardMemberDto extends GenericOutput<BoardMemberDto>
 {
     private UserRef user;
     private BoardRef board;
+    @AmountReference(name = "assignedTasks")
+    private Integer amountOfAssignedTasks;
 }

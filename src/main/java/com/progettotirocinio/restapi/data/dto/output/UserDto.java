@@ -74,8 +74,6 @@ public class UserDto extends GenericOutput<UserDto>
     private Integer amountOfCreatedBans;
     @AmountReference(name = "receivedBans")
     private Integer amountOfReceivedBans;
-    @AmountReference(name = "assignedTasks")
-    private Integer amountOfAssignedTasks;
     @AmountReference(name = "createdAssignments")
     private Integer amountOfCreatedAssignments;
     @AmountReference(name = "createdVotes")

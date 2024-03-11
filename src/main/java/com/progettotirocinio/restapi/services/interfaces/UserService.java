@@ -20,6 +20,7 @@ public interface UserService {
     PagedModel<UserDto> getUsersByUsername(String username,Pageable pageable);
     PagedModel<UserDto> getUsersBySpec(Specification<User> specification,Pageable pageable);
     PagedModel<UserDto> getSimilarUsers(UUID userID,Pageable pageable);
+    PagedModel<UserDto> getPossibleBoardUsers(UUID boardID,String username,Pageable pageable);
     CollectionModel<String> getOrderTypes();
     CollectionModel<Gender> getGenders();
     CollectionModel<UserVisibility> getVisibilities();
