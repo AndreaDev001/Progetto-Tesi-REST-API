@@ -15,6 +15,7 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "content")
 public class TaskURLDto extends GenericOutput<TaskURLDto>
 {
+    private String name;
     private String url;
     private BoardMemberRef publisher;
     private TaskRef task;

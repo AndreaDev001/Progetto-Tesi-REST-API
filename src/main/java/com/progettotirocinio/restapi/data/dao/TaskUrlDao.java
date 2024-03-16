@@ -15,6 +15,8 @@ import java.util.UUID;
 @Repository
 public interface TaskUrlDao extends JpaRepository<TaskURL, UUID>
 {
+    @Query("select t from TaskURL t where t.name = :requiredName")
+    Page<TaskURL> getTaskURLSFromName(@Param("requiredName") String name,Pageable pageable);
     @Query("select t from TaskURL t where t.publisher.id = :requiredID")
     Page<TaskURL> getTaskURLsFromPublisher(@Param("requiredID") UUID publisherID, Pageable pageable);
     @Query("select t from TaskURL t where t.task.id = :requiredID")

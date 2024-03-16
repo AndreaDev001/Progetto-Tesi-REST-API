@@ -18,6 +18,11 @@ public class CreateTaskURLDto
     @NotNull
     @NotBlank
     private String url;
+
+    @NotNull
+    @NotBlank
+    private String name;
+
     @NotNull
     private UUID taskID;
 }

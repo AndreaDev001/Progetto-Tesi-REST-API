@@ -13,6 +13,7 @@ public interface TaskURLService
 {
     PagedModel<TaskURLDto> getTaskURLs(Pageable pageable);
     PagedModel<TaskURLDto> getTaskURLsByPublisher(UUID publisherID,Pageable pageable);
+    PagedModel<TaskURLDto> getTaskURLsByName(String name,Pageable pageable);
     PagedModel<TaskURLDto> getTaskURLsByURL(String url,Pageable pageable);
     CollectionModel<TaskURLDto> getTaskURLsByTask(UUID taskID);
     TaskURLDto getTaskURL(UUID taskURLId);

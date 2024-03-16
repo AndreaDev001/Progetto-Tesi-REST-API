@@ -54,6 +54,12 @@ public class TaskURLServiceImp extends GenericServiceImp<TaskURL, TaskURLDto> im
     }
 
     @Override
+    public PagedModel<TaskURLDto> getTaskURLsByName(String name, Pageable pageable) {
+        Page<TaskURL> taskURLS = this.taskUrlDao.getTaskURLSFromName(name,pageable);
+        return this.pagedResourcesAssembler.toModel(taskURLS,modelAssembler);
+    }
+
+    @Override
     public PagedModel<TaskURLDto> getTaskURLsByURL(String url, Pageable pageable) {
         Page<TaskURL> taskURLS = this.taskUrlDao.getTaskURLsFromURL(url,pageable);
         return this.pagedResourcesAssembler.toModel(taskURLS,modelAssembler);

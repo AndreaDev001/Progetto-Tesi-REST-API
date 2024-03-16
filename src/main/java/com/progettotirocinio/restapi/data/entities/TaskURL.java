@@ -23,6 +23,10 @@ import java.util.UUID;
 public class TaskURL extends GenericEntity implements OwnableEntity, TaskElement, BoardElement
 {
 
+    @Column(name = "NAME",nullable = false)
+    @Convert(converter = TrimConverter.class)
+    private String name;
+
     @Column(name = "URL",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String url;

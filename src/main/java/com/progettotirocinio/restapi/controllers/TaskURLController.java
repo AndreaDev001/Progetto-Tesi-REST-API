@@ -35,6 +35,8 @@ public class TaskURLController
         return ResponseEntity.ok(pagedModel);
     }
 
+
+
     @GetMapping("/private/task/{taskID}")
     @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")
     public ResponseEntity<CollectionModel<TaskURLDto>> getTaskURLSByTask(@PathVariable("taskID") UUID taskID) {
@@ -46,6 +48,13 @@ public class TaskURLController
     @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<PagedModel<TaskURLDto>> getTaskURLSByURL(@PathVariable("url") String url,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<TaskURLDto> taskURLS = this.taskURLService.getTaskURLsByURL(url,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(taskURLS);
+    }
+
+    @GetMapping("/private/name/{name}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<TaskURLDto>> getTaskURLSByName(@PathVariable("name") String name,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<TaskURLDto> taskURLS = this.taskURLService.getTaskURLsByName(name,paginationRequest.toPageRequest());
         return ResponseEntity.ok(taskURLS);
     }
 
