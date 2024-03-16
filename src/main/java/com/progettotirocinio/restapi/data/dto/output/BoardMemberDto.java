@@ -23,6 +23,8 @@ public class BoardMemberDto extends GenericOutput<BoardMemberDto>
     private Integer amountOfAssignedTasks;
     @AmountReference(name = "members")
     private Integer amountOfJoinedTeams;
+    @AmountReference(name = "availableURLS")
+    private Integer amountOfURLs;
 
     @Override
     public void addLinks(Object... params) {

@@ -34,6 +34,9 @@ public class BoardMember extends AmountEntity implements OwnableEntity, BoardEle
     @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "member",orphanRemoval = true)
     private Set<TeamMember> teams = new HashSet<>();
 
+    @OneToMany(mappedBy = "publisher",orphanRemoval = true)
+    private Set<TaskURL> availableURLS = new HashSet<>();
+
     @Override
     public UUID getOwnerID() {
         return this.user.getId();

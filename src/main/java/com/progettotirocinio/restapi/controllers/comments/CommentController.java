@@ -1,6 +1,7 @@
 package com.progettotirocinio.restapi.controllers.comments;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateCommentDto;
 import com.progettotirocinio.restapi.data.dto.output.comments.CommentDto;
 import com.progettotirocinio.restapi.data.entities.enums.CommentType;
 import com.progettotirocinio.restapi.services.interfaces.comments.CommentService;
@@ -34,7 +35,6 @@ public class CommentController
     }
 
     @GetMapping("/private/{commentID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#commentID,@commentDao)")
     public ResponseEntity<CommentDto> getComment(@PathVariable("commentID") UUID commentID) {
         CommentDto commentDto = this.commentService.getCommentByID(commentID);
         return ResponseEntity.ok(commentDto);
@@ -45,6 +45,12 @@ public class CommentController
     public ResponseEntity<PagedModel<CommentDto>> getCommentsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<CommentDto> comments = this.commentService.getCommentsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(comments);
+    }
+
+    @PutMapping("/private")
+    public ResponseEntity<CommentDto> updateComment(@RequestBody @Valid UpdateCommentDto updateCommentDto) {
+        CommentDto commentDto = this.commentService.updateComment(updateCommentDto);
+        return ResponseEntity.ok(commentDto);
     }
 
     @GetMapping("/private/title/{title}")
@@ -74,7 +80,6 @@ public class CommentController
     }
 
     @DeleteMapping("/private/{commentID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteComment(@PathVariable("commentID") UUID commentID) {
         this.commentService.deleteComment(commentID);
         return ResponseEntity.noContent().build();

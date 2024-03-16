@@ -69,7 +69,7 @@ public class CommentServiceImp extends GenericServiceImp<Comment, CommentDto> im
         if(updateCommentDto.getTitle() != null)
             comment.setTitle(updateCommentDto.getTitle());
         if(updateCommentDto.getText() != null)
-            comment.setTitle(updateCommentDto.getText());
+            comment.setText(updateCommentDto.getText());
         comment = this.commentDao.save(comment);
         return this.modelMapper.map(comment,CommentDto.class);
     }

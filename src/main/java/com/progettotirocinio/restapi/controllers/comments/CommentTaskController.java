@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/commentTasks")
+@RequestMapping("/taskComments")
 @RequiredArgsConstructor
 public class CommentTaskController
 {
@@ -53,8 +53,7 @@ public class CommentTaskController
         return ResponseEntity.ok(commentTaskDto);
     }
 
-    @PostMapping("/private/{taskID}")
-    @PreAuthorize("@permissionHandler.isAssigned(#taskID,@taskDao)")
+    @PostMapping("/private/task/{taskID}")
     public ResponseEntity<CommentTaskDto> createCommentTask(@PathVariable("taskID") UUID taskID, @RequestBody @Valid CreateCommentDto createCommentDto) {
         CommentTaskDto commentTaskDto = this.commentTaskService.createTaskComment(taskID,createCommentDto);
         return ResponseEntity.status(201).body(commentTaskDto);

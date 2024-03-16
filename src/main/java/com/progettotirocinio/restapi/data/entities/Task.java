@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.dao.TaskUrlDao;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationOrderType;
 import com.progettotirocinio.restapi.data.dao.specifications.annotations.SpecificationPrefix;
 import com.progettotirocinio.restapi.data.entities.checklists.CheckList;
@@ -76,6 +77,9 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
     private Set<CheckList> checkLists = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "task",orphanRemoval = true)
+    private Set<TaskURL> taskURLS = new HashSet<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

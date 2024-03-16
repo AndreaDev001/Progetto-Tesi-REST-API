@@ -24,7 +24,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "REPORTS",uniqueConstraints = {@UniqueConstraint(columnNames = {"REPORTER_ID","REPORTED_ID","TYPE"})})
+@Table(name = "REPORTS")
 @SpecificationPrefix
 public class Report extends GenericEntity implements OwnableEntity
 {

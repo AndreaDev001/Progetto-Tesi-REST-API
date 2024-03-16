@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(name = "/commentLikes")
+@RequestMapping("/commentLikes")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Authorization")
 public class CommentLikeController
@@ -42,8 +42,7 @@ public class CommentLikeController
         return ResponseEntity.ok(commentLikes);
     }
 
-    @PostMapping("/private/{commentID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    @PostMapping("/private/comment/{commentID}")
     public ResponseEntity<CommentLikeDto> createLike(@PathVariable("commentID") UUID commentID) {
         CommentLikeDto commentLikeDto = this.commentLikeService.createLike(commentID);
         return ResponseEntity.ok(commentLikeDto);

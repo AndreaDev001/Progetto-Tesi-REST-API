@@ -45,6 +45,8 @@ public class TaskDto extends GenericOutput<TaskDto>
     private Integer amountOfImages;
     @AmountReference(name = "checkLists")
     private Integer amountOfCheckLists;
+    @AmountReference(name = "taskURLS")
+    private Integer amountOfURLs;
 
     @Override
     public void addLinks(Object... params) {
