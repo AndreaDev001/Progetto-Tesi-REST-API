@@ -16,6 +16,7 @@ public interface TaskFileService
     PagedModel<TaskFileDto> getTaskFilesByPublisher(UUID publisherID,Pageable pageable);
     PagedModel<TaskFileDto> getTaskFilesByName(String name,Pageable pageable);
     CollectionModel<TaskFileDto> getTaskFilesByTask(UUID taskID);
+    byte[] getFileByID(UUID taskFileID);
     TaskFileDto getTaskFile(UUID taskFileID);
     TaskFileDto createTaskFile(CreateTaskFileDto createTaskFileDto);
     CollectionModel<NotAllowedExtension> getNotAllowedExtensions();

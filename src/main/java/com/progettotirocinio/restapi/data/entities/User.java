@@ -36,7 +36,7 @@ public class User extends AmountEntity
     @SpecificationOrderType
     private String email;
 
-    @Column(name = "USERNAME",nullable = false,updatable = false)
+    @Column(name = "USERNAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String username;
@@ -46,7 +46,7 @@ public class User extends AmountEntity
     @SpecificationOrderType
     private String name;
 
-    @Column(name = "SURNAME",nullable = false,updatable = false)
+    @Column(name = "SURNAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String surname;

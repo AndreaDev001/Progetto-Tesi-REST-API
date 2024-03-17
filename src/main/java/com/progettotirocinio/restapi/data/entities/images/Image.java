@@ -27,7 +27,7 @@ public class Image extends GenericEntity implements OwnableEntity
 {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE",nullable = false,updatable = false)
+    @Column(name = "TYPE",nullable = false)
     protected ImageType type;
 
     @Enumerated(EnumType.STRING)

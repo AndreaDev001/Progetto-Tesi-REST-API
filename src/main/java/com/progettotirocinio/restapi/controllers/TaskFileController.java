@@ -66,7 +66,7 @@ public class TaskFileController
     @GetMapping("/private/{taskFileID}/file")
     public ResponseEntity<byte[]> getFileAsBytes(@PathVariable("taskFileID") UUID taskFileID) {
         TaskFileDto taskFileDto = this.taskFileService.getTaskFile(taskFileID);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + taskFileDto.getFileName()+ "\"").body(taskFileDto.getFile());
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + taskFileDto.getFileName()+ "\"").body(this.taskFileService.getFileByID(taskFileID));
     }
 
     @GetMapping("/public/extensions")
@@ -82,7 +82,6 @@ public class TaskFileController
     }
 
     @DeleteMapping("/private/{taskFileID}")
-    @PreAuthorize("@permissionHandler.isAssigned(#taskFileID,@taskFileDao)")
     public ResponseEntity<Void> deleteTaskFile(@PathVariable("taskFileID") UUID taskFileID) {
         this.taskFileService.deleteTaskFile(taskFileID);
         return ResponseEntity.noContent().build();

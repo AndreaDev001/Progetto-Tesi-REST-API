@@ -120,9 +120,16 @@ public class UserServiceImp extends GenericServiceImp<User, UserDto> implements 
     @Transactional
     public UserDto updateUser(UpdateUserDto updateUserDto) {
         User user = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
-        user.setName(updateUserDto.getName());
-        user.setSurname(updateUserDto.getSurname());
-        user.setEmail(updateUserDto.getEmail());
+        if(updateUserDto.getName() != null)
+            user.setName(updateUserDto.getName());
+        if(updateUserDto.getSurname() != null)
+            user.setSurname(updateUserDto.getSurname());
+        if(updateUserDto.getUsername() != null)
+            user.setUsername(user.getUsername());
+        if(updateUserDto.getEmail() != null)
+            user.setEmail(updateUserDto.getEmail());
+        if(updateUserDto.getGender() != null)
+            user.setGender(updateUserDto.getGender());
         user =  this.userDao.save(user);
         return this.modelMapper.map(user,UserDto.class);
     }

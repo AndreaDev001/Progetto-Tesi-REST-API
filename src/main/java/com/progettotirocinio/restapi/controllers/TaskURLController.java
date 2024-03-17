@@ -66,7 +66,6 @@ public class TaskURLController
     }
 
     @DeleteMapping("/private/{taskURLId}")
-    @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskURLId,@taskURLDao)")
     public ResponseEntity<TaskURLDto> deleteTaskURL(@PathVariable("taskURLId") UUID taskURLId) {
         this.taskURLService.deleteTaskURL(taskURLId);
         return ResponseEntity.noContent().build();

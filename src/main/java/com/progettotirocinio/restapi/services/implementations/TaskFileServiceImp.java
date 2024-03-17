@@ -33,6 +33,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class TaskFileServiceImp extends GenericServiceImp<TaskFile, TaskFileDto> implements TaskFileService
 {
     private final TaskFileDao taskFileDao;
@@ -71,13 +72,18 @@ public class TaskFileServiceImp extends GenericServiceImp<TaskFile, TaskFileDto>
     }
 
     @Override
+    public byte[] getFileByID(UUID taskFileID) {
+        TaskFile taskFile = this.taskFileDao.findById(taskFileID).orElseThrow();
+        return taskFile.getFile();
+    }
+
+    @Override
     public TaskFileDto getTaskFile(UUID taskFileID) {
         TaskFile taskFile = this.taskFileDao.findById(taskFileID).orElseThrow();
         return this.modelMapper.map(taskFile,TaskFileDto.class);
     }
 
     @Override
-    @Transactional
     @SneakyThrows
     public TaskFileDto createTaskFile(CreateTaskFileDto createTaskFileDto) {
         Task task = this.taskDao.findById(createTaskFileDto.getTaskID()).orElseThrow();
@@ -105,7 +111,6 @@ public class TaskFileServiceImp extends GenericServiceImp<TaskFile, TaskFileDto>
     }
 
     @Override
-    @Transactional
     public void deleteTaskFile(UUID taskFileID) {
         this.taskFileDao.findById(taskFileID).orElseThrow();
         this.taskFileDao.deleteById(taskFileID);
