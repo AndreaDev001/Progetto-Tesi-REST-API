@@ -84,6 +84,7 @@ public class TaskURLServiceImp extends GenericServiceImp<TaskURL, TaskURLDto> im
         Optional<BoardMember> boardMemberOptional = this.boardMemberDao.getBoardMember(task.getBoardID(),UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName()));
         if(boardMemberOptional.isPresent()) {
             TaskURL taskURL = new TaskURL();
+            taskURL.setName(createTaskURLDto.getName());
             taskURL.setUrl(createTaskURLDto.getUrl());
             taskURL.setTask(task);
             taskURL.setPublisher(boardMemberOptional.get());
