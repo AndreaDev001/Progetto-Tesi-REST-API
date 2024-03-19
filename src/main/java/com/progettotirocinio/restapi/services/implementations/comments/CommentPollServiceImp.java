@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CommentPollServiceImp extends GenericServiceImp<CommentPoll, CommentPollDto> implements CommentPollService
 {
     private final CommentPollDao commentPollDao;

@@ -62,6 +62,12 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     }
 
     @Override
+    public PagedModel<DiscussionDto> getDiscussionsByText(String text, Pageable pageable) {
+        Page<Discussion> discussions = this.discussionDao.getDiscussionsByText(text,pageable);
+        return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
+    }
+
+    @Override
     public PagedModel<DiscussionDto> getDiscussionsBySpec(Specification<Discussion> specification, Pageable pageable) {
         Page<Discussion> discussions = this.discussionDao.findAll(specification,pageable);
         return this.pagedResourcesAssembler.toModel(discussions,modelAssembler);
@@ -93,6 +99,7 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
         Discussion discussion = new Discussion();
         discussion.setTitle(createDiscussionDto.getTitle());
         discussion.setTopic(createDiscussionDto.getTopic());
+        discussion.setText(createDiscussionDto.getText());
         discussion.setPublisher(publisher);
         discussion = this.discussionDao.save(discussion);
         return this.modelMapper.map(discussion,DiscussionDto.class);
@@ -101,12 +108,13 @@ public class DiscussionServiceImp extends GenericServiceImp<Discussion, Discussi
     @Override
     @Transactional
     public DiscussionDto updateDiscussion(UpdateDiscussionDto updateDiscussionDto) {
-        User publisher = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         Discussion discussion = this.discussionDao.findById(updateDiscussionDto.getDiscussionID()).orElseThrow();
-        if(discussion.getTitle() != null)
+        if(updateDiscussionDto.getTitle() != null)
             discussion.setTitle(updateDiscussionDto.getTitle());
-        if(discussion.getTopic() != null)
+        if(updateDiscussionDto.getTopic() != null)
             discussion.setTopic(updateDiscussionDto.getTopic());
+        if(updateDiscussionDto.getText() != null)
+            discussion.setText(updateDiscussionDto.getText());
         discussion = this.discussionDao.save(discussion);
         return this.modelMapper.map(discussion,DiscussionDto.class);
     }

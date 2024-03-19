@@ -43,7 +43,7 @@ public class DiscussionLikeController
         return ResponseEntity.ok(discussionLikes);
     }
 
-    @PostMapping("/private/{discussionID}")
+    @PostMapping("/private/discussion/{discussionID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<DiscussionLikeDto> createDiscussion(@PathVariable("discussionID") UUID discussionID) {
         DiscussionLikeDto discussionLikeDto = this.discussionLikeService.createLike(discussionID);
@@ -58,7 +58,6 @@ public class DiscussionLikeController
     }
 
     @GetMapping("/private/user/{userID}/discussion/{discussionID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
     public ResponseEntity<DiscussionLikeDto> hasLike(@PathVariable("userID") UUID userID,@PathVariable("discussionID") UUID discussionID) {
         DiscussionLikeDto discussionLikeDto = this.discussionLikeService.hasLike(userID,discussionID);
         return ResponseEntity.ok(discussionLikeDto);

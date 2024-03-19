@@ -44,6 +44,7 @@ public class Poll extends AmountEntity implements OwnableEntity
     @Column(name = "DESCRIPTION",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
+    @Lob
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")

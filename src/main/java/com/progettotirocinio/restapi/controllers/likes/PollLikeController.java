@@ -42,15 +42,14 @@ public class PollLikeController
         return ResponseEntity.ok(pollLikes);
     }
 
-    @PostMapping("/private/{pollID}")
+    @PostMapping("/private/poll/{pollID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PollLikeDto> createLike(@PathVariable("pollID") UUID pollID) {
         PollLikeDto pollLikeDto = this.pollLikeService.createLike(pollID);
         return ResponseEntity.ok(pollLikeDto);
     }
 
-    @GetMapping("/private/user/{userID}/poll/{pollID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID)")
+    @GetMapping("/private/poll/{pollID}/user/{userID}")
     public ResponseEntity<PollLikeDto> hasLike(@PathVariable("userID") UUID userID,@PathVariable("pollID") UUID pollID) {
         PollLikeDto pollLikeDto = this.pollLikeService.hasLike(userID,pollID);
         return ResponseEntity.ok(pollLikeDto);
@@ -64,7 +63,6 @@ public class PollLikeController
     }
 
     @DeleteMapping("/private/{pollLikeID}")
-    @PreAuthorize("@permissionHandler.hasAccess(@pollLikeDao,#pollLikeID)")
     public ResponseEntity<Void> deleteLike(@PathVariable("pollLikeID") UUID pollLikeID) {
         this.pollLikeService.deletePollLike(pollLikeID);
         return ResponseEntity.noContent().build();

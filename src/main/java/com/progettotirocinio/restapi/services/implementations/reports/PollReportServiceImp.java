@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiresCaching(allCacheName = "ALL_POLL_REPORTS")
 public class PollReportServiceImp extends GenericServiceImp<PollReport, PollReportDto> implements PollReportService {
 
@@ -70,7 +71,7 @@ public class PollReportServiceImp extends GenericServiceImp<PollReport, PollRepo
 
     @Override
     public PollReportDto getPollReportBetween(UUID userID, UUID pollID) {
-        PollReport pollReport = this.pollReportDao.getReportBetween(pollID,userID).orElseThrow();
+        PollReport pollReport = this.pollReportDao.getReportBetween(userID,pollID).orElseThrow();
         return this.modelMapper.map(pollReport,PollReportDto.class);
     }
 

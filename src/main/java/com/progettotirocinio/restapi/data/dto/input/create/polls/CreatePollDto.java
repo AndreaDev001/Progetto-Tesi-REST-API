@@ -1,4 +1,4 @@
-package com.progettotirocinio.restapi.data.dto.input.create;
+package com.progettotirocinio.restapi.data.dto.input.create.polls;
 
 
 import jakarta.validation.constraints.Future;

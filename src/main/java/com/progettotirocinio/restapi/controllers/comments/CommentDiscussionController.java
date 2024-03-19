@@ -50,8 +50,8 @@ public class CommentDiscussionController
         return ResponseEntity.ok(commentDiscussionDto);
     }
 
-    @PostMapping("/private/{discussionID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#discussionID,@discussionDao)")
+    @PostMapping("/private/discussion/{discussionID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<CommentDiscussionDto> createCommentDiscussion(@PathVariable("discussionID") UUID discussionID, @RequestBody @Valid CreateCommentDto createCommentDto) {
         CommentDiscussionDto commentDiscussionDto = this.commentDiscussionService.createCommentDiscussion(discussionID,createCommentDto);
         return ResponseEntity.status(201).body(commentDiscussionDto);

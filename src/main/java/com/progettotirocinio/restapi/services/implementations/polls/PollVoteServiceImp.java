@@ -19,9 +19,11 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class PollVoteServiceImp extends GenericServiceImp<PollVote, PollVoteDto> implements PollVoteService
 {
     private final PollVoteDao pollVoteDao;
@@ -59,6 +61,12 @@ public class PollVoteServiceImp extends GenericServiceImp<PollVote, PollVoteDto>
     }
 
     @Override
+    public PollVoteDto getCurrentVote(UUID pollID) {
+        PollVote pollVote = this.pollVoteDao.getCurrentVote(pollID).orElseThrow();
+        return this.modelMapper.map(pollVote,PollVoteDto.class);
+    }
+
+    @Override
     public PollVoteDto getVoteBetween(UUID userID, UUID pollVoteID) {
         PollVote pollVote = this.pollVoteDao.getPollVote(userID,pollVoteID).orElseThrow();
         return this.modelMapper.map(pollVote,PollVoteDto.class);
@@ -69,8 +77,10 @@ public class PollVoteServiceImp extends GenericServiceImp<PollVote, PollVoteDto>
     public PollVoteDto createVote(UUID optionID) {
         User authenticatedUser = this.userDao.findById(UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName())).orElseThrow();
         PollOption pollOption = this.pollOptionDao.findById(optionID).orElseThrow();
+        Optional<PollVote> currentPollVote = this.pollVoteDao.getCurrentVote(pollOption.getPoll().getId());
+        currentPollVote.ifPresent(pollVote -> this.pollVoteDao.deleteById(pollVote.getId()));
         PollVote pollVote = new PollVote();
-        pollVote.setPollOption(pollOption);
+        pollVote.setOption(pollOption);
         pollVote.setUser(authenticatedUser);
         pollVote = this.pollVoteDao.save(pollVote);
         return this.modelMapper.map(pollVote,PollVoteDto.class);

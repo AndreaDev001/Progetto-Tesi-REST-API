@@ -2,13 +2,14 @@ package com.progettotirocinio.restapi.services.implementations.polls;
 
 import com.progettotirocinio.restapi.config.caching.CacheHandler;
 import com.progettotirocinio.restapi.config.caching.RequiresCaching;
+import com.progettotirocinio.restapi.config.exceptions.InvalidFormat;
 import com.progettotirocinio.restapi.config.mapper.Mapper;
 import com.progettotirocinio.restapi.data.dao.PollDao;
 import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.specifications.PollSpecifications;
 import com.progettotirocinio.restapi.data.dao.specifications.SpecificationsUtils;
-import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
-import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.create.polls.CreatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.update.polls.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.polls.PollDto;
 import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.data.entities.User;
@@ -113,6 +114,8 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
         Poll poll = new Poll();
         poll.setTitle(createPollDto.getTitle());
         poll.setDescription(createPollDto.getDescription());
+        if(createPollDto.getMaximumVotes() < createPollDto.getMinimumVotes())
+            throw new InvalidFormat("error.poll.invalidVoteRange");
         poll.setMaximumVotes(createPollDto.getMaximumVotes());
         poll.setMinimumVotes(createPollDto.getMinimumVotes());
         poll.setStatus(PollStatus.OPEN);
@@ -126,13 +129,13 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
     @Transactional
     public PollDto updatePoll(UpdatePollDto updatePollDto) {
         Poll poll = this.pollDao.findById(updatePollDto.getPollID()).orElseThrow();
-        if(poll.getTitle() != null)
+        if(updatePollDto.getTitle() != null)
             poll.setTitle(updatePollDto.getTitle());
-        if(poll.getDescription() != null)
+        if(updatePollDto.getDescription() != null)
             poll.setDescription(updatePollDto.getDescription());
-        if(poll.getMaximumVotes() != null)
+        if(updatePollDto.getMaximumVotes() != null)
             poll.setMaximumVotes(updatePollDto.getMaximumVotes());
-        if(poll.getMinimumVotes() != null)
+        if(updatePollDto.getMinimumVotes() != null)
             poll.setMinimumVotes(updatePollDto.getMinimumVotes());
         poll = this.pollDao.save(poll);
         return this.modelMapper.map(poll,PollDto.class);

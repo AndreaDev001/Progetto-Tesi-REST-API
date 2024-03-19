@@ -21,7 +21,7 @@ public class PollVote extends GenericEntity implements OwnableEntity
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "POLL_OPTION_ID",nullable = false,updatable = false)
-    private PollOption pollOption;
+    private PollOption option;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "USER_ID",nullable = false,updatable = false)

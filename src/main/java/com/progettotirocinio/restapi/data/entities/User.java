@@ -59,9 +59,6 @@ public class User extends AmountEntity
     @Enumerated(EnumType.STRING)
     private UserVisibility visibility;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
-    private UserImage user;
-
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = false,mappedBy = "publisher")
     private Set<Board> createdBoards = new HashSet<>();
 

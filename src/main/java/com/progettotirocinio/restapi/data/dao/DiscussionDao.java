@@ -17,6 +17,8 @@ public interface DiscussionDao extends JpaRepository<Discussion, UUID>, JpaSpeci
 {
     @Query("select d from Discussion d where d.publisher.id = :requiredPublisherID")
     Page<Discussion> getDiscussionByPublisher(@Param("requiredPublisherID") UUID publisherID,Pageable pageable);
+    @Query("select d from Discussion d where d.text = :requiredText")
+    Page<Discussion> getDiscussionsByText(@Param("requiredText") String text,Pageable pageable);
     @Query("select d from Discussion d where d.topic = :requiredTopic")
     Page<Discussion> getDiscussionsByTopic(@Param("requiredTopic") String topic,Pageable pageable);
     @Query("select d from Discussion d where d.title = :requiredTitle")

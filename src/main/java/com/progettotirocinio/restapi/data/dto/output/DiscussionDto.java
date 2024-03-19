@@ -27,6 +27,7 @@ public class DiscussionDto extends GenericOutput<DiscussionDto>
 {
     private String title;
     private String topic;
+    private String text;
     private UserRef publisher;
     private LocalDate expirationDate;
     @AmountReference(name = "receivedLikes")

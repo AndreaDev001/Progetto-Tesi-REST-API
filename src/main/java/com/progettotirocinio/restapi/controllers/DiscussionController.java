@@ -59,6 +59,13 @@ public class DiscussionController
         return ResponseEntity.ok(discussions);
     }
 
+    @GetMapping("/private/text/{text}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PagedModel<DiscussionDto>> getDiscussionsByText(@PathVariable("text") String text,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<DiscussionDto> discussions = this.discussionService.getDiscussionsByText(text,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(discussions);
+    }
+
     @GetMapping("/public/orderTypes")
     public ResponseEntity<CollectionModel<String>> getOrderTypes() {
         return ResponseEntity.ok(this.discussionService.getOrderTypes());
@@ -72,7 +79,7 @@ public class DiscussionController
     }
 
     @PutMapping("/private")
-    @PreAuthorize("@permissionHandler.hasAccess(@discussionDao,#updateDiscussionDto.discussionID")
+    @PreAuthorize("@permissionHandler.hasAccess(@discussionDao,#updateDiscussionDto.discussionID)")
     public ResponseEntity<DiscussionDto> updateDiscussion(@RequestBody @Valid UpdateDiscussionDto updateDiscussionDto) {
         DiscussionDto discussionDto = this.discussionService.updateDiscussion(updateDiscussionDto);
         return ResponseEntity.ok(discussionDto);

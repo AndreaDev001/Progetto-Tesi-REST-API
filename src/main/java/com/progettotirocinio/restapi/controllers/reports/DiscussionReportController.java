@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/discussionsReports")
+@RequestMapping("/discussionReports")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "Authorization")
 public class DiscussionReportController
@@ -47,7 +47,6 @@ public class DiscussionReportController
     }
 
     @GetMapping("/private/discussion/{discussionID}/reporter/{reporterID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
     public ResponseEntity<DiscussionReportDto> getReportBetween(@PathVariable("discussionID") UUID discussionID,@PathVariable("reporterID") UUID reporterID) {
         DiscussionReportDto discussionReportDto = this.discussionReportService.getReportBetween(reporterID,discussionID);
         return ResponseEntity.ok(discussionReportDto);

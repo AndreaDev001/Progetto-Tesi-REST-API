@@ -19,14 +19,18 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 public class PollOption extends AmountEntity
 {
-    @Column(name = "NAME",nullable = false,updatable = false)
+    @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String name;
+
+    @Column(name = "DESCRIPTION",nullable = false)
+    @Convert(converter = TrimConverter.class)
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "POLL_ID",nullable = false,updatable = false)
     private Poll poll;
 
-    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "pollOption")
+    @OneToMany(fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "option")
     private Set<PollVote> receivedVotes = new HashSet<>();
 }

@@ -50,7 +50,7 @@ public class CommentPollController
         return ResponseEntity.ok(commentPollDto);
     }
 
-    @PostMapping("/private/{pollID}")
+    @PostMapping("/private/poll/{pollID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<CommentPollDto> createCommentPoll(@PathVariable("pollID") UUID pollID, @RequestBody @Valid CreateCommentDto createCommentDto) {
         CommentPollDto commentPollDto = this.commentPollService.createCommentPoll(pollID,createCommentDto);

@@ -57,5 +57,6 @@ public class TaskDto extends GenericOutput<TaskDto>
         this.add(linkTo(methodOn(TaskImageController.class).getTaskImages(this.id)).withRel("images").withName("images"));
         this.add(linkTo(methodOn(CommentTaskController.class).getCommentsByTask(this.id)).withRel("receivedComments").withName("receivedComments"));
         this.add(linkTo(methodOn(CheckListController.class).getCheckListsByTask(this.id)).withRel("checklists").withName("checklists"));
+        this.add(linkTo(methodOn(CheckListController.class).getCheckListsByTask(this.id)).withRel("URLS").withName("URLS"));
     }
 }

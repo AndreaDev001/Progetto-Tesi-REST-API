@@ -3,8 +3,8 @@ package com.progettotirocinio.restapi.controllers.polls;
 
 import com.progettotirocinio.restapi.data.dao.specifications.PollSpecifications;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
-import com.progettotirocinio.restapi.data.dto.input.create.CreatePollDto;
-import com.progettotirocinio.restapi.data.dto.input.update.UpdatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.create.polls.CreatePollDto;
+import com.progettotirocinio.restapi.data.dto.input.update.polls.UpdatePollDto;
 import com.progettotirocinio.restapi.data.dto.output.polls.PollDto;
 import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.services.interfaces.polls.PollService;

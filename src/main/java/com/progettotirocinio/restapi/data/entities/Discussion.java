@@ -16,11 +16,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@Builder
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "DISCUSSIONS")
@@ -36,6 +35,11 @@ public class Discussion extends AmountEntity implements OwnableEntity
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
     private String topic;
+
+    @Column(name = "TEXT",nullable = false)
+    @Convert(converter = TrimConverter.class)
+    @Lob
+    private String text;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "discussion")
     private Set<DiscussionLike> receivedLikes = new HashSet<>();

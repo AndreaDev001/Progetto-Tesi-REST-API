@@ -19,6 +19,7 @@ public class UpdateDiscussionDto
     @NotNull
     private UUID discussionID;
     private String title;
+    private String text;
     private String topic;
     private LocalDate expirationDate;
 }

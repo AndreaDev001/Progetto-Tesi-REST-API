@@ -17,5 +17,5 @@ import org.springframework.hateoas.server.core.Relation;
 public class PollVoteDto extends GenericOutput<PollVoteDto>
 {
     private UserRef user;
-    private PollOptionRef pollOption;
+    private PollOptionRef option;
 }

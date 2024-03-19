@@ -1,4 +1,4 @@
-package com.progettotirocinio.restapi.data.dto.input.create;
+package com.progettotirocinio.restapi.data.dto.input.create.polls;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +16,10 @@ public class CreatePollOptionDto
     @NotNull
     @NotBlank
     private String name;
+
+    @NotNull
+    @NotBlank
+    private String description;
 
     @NotNull
     private UUID pollID;

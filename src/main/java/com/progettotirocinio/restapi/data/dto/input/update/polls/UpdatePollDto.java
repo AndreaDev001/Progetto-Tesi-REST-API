@@ -1,4 +1,4 @@
-package com.progettotirocinio.restapi.data.dto.input.update;
+package com.progettotirocinio.restapi.data.dto.input.update.polls;
 
 
 import jakarta.validation.constraints.NotNull;

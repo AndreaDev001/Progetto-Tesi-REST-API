@@ -56,7 +56,6 @@ public class PollReportController
     }
 
     @GetMapping("/private/poll/{pollID}/reporter/{reporterID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#reporterID)")
     public ResponseEntity<PollReportDto> getReportBetween(@PathVariable("pollID") UUID pollID,@PathVariable("reporterID") UUID reporterID) {
         PollReportDto pollReportDto = this.pollReportService.getPollReportBetween(reporterID,pollID);
         return ResponseEntity.ok(pollReportDto);

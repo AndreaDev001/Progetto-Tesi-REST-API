@@ -24,4 +24,8 @@ public class CreateDiscussionDto
     @NotNull
     @NotBlank
     private String topic;
+
+    @NotNull
+    @NotBlank
+    private String text;
 }

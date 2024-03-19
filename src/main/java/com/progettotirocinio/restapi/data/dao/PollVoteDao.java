@@ -16,8 +16,10 @@ public interface PollVoteDao extends JpaRepository<PollVote, UUID>
 {
     @Query("select p from PollVote p where p.user.id = :requiredID")
     Page<PollVote> getPollVotesByUser(@Param("requiredID") UUID userID, Pageable pageable);
-    @Query("select p from PollVote p where p.pollOption.id = :requiredID")
+    @Query("select p from PollVote p where p.option.id = :requiredID")
     Page<PollVote> getPollVotesByOption(@Param("requiredID") UUID optionID,Pageable pageable);
-    @Query("select p from PollVote p where p.user.id = :requiredUserID and p.pollOption.id = :requiredOptionID")
+    @Query("select p from PollVote p where p.user.id = :requiredUserID and p.option.id = :requiredOptionID")
     Optional<PollVote> getPollVote(@Param("requiredUserID") UUID userID, @Param("requiredOptionID") UUID optionID);
+    @Query("select p from PollVote p where p.option.poll.id = :requiredPollID")
+    Optional<PollVote> getCurrentVote(@Param("requiredPollID") UUID pollID);
 }

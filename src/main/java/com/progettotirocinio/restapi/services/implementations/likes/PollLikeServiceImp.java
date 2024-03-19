@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiresCaching(allCacheName = "ALL_POLL_LIKES")
 public class PollLikeServiceImp extends GenericServiceImp<PollLike, PollLikeDto> implements PollLikeService
 {

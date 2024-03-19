@@ -17,6 +17,7 @@ import org.springframework.hateoas.server.core.Relation;
 public class PollOptionDto extends GenericOutput<PollOptionDto>
 {
     private String name;
+    private String description;
     private PollRef poll;
     @AmountReference(name = "receivedVotes")
     private Integer amountOfVotes;

@@ -41,6 +41,13 @@ public class PollVoteController
         return ResponseEntity.ok(pagedModel);
     }
 
+    @GetMapping("/private/poll/{pollID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PollVoteDto> getCurrentVote(@PathVariable("pollID") UUID pollID) {
+        PollVoteDto pollVoteDto = this.pollVoteService.getCurrentVote(pollID);
+        return ResponseEntity.ok(pollVoteDto);
+    }
+
     @GetMapping("/private/option/{optionID}")
     @PreAuthorize("@permissionHandler.hasAccess(@pollOptionDao,#optionID)")
     public ResponseEntity<PagedModel<PollVoteDto>> getPollVotesByOption(@PathVariable("optionID") UUID optionID,@ParameterObject @Valid PaginationRequest paginationRequest) {

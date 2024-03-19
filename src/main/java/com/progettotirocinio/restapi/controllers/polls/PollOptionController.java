@@ -1,12 +1,15 @@
 package com.progettotirocinio.restapi.controllers.polls;
 
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
-import com.progettotirocinio.restapi.data.dto.input.create.CreatePollOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.create.polls.CreatePollOptionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.polls.UpdatePollOptionDto;
 import com.progettotirocinio.restapi.data.dto.output.polls.PollOptionDto;
+import com.progettotirocinio.restapi.data.entities.polls.Poll;
 import com.progettotirocinio.restapi.services.interfaces.polls.PollOptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,9 +40,16 @@ public class PollOptionController
 
     @GetMapping("/private/poll/{pollID}")
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
-    public ResponseEntity<PagedModel<PollOptionDto>> getPollOptionsByPoll(@PathVariable("pollID") UUID pollID,@ParameterObject @Valid PaginationRequest paginationRequest) {
-        PagedModel<PollOptionDto> pagedModel = this.pollOptionService.getPollOptionsByPoll(pollID,paginationRequest.toPageRequest());
-        return ResponseEntity.ok(pagedModel);
+    public ResponseEntity<CollectionModel<PollOptionDto>> getPollOptionsByPoll(@PathVariable("pollID") UUID pollID) {
+        CollectionModel<PollOptionDto> collectionModel = this.pollOptionService.getPollOptionsByPoll(pollID);
+        return ResponseEntity.ok(collectionModel);
+    }
+
+    @GetMapping("/private/description/{description}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PagedModel<PollOptionDto>> getPollOptionsByDescription(@PathVariable("description") String description,@ParameterObject @Valid PaginationRequest paginationRequest) {
+        PagedModel<PollOptionDto> pollOptions = this.pollOptionService.getPollOptionsByDescription(description,paginationRequest.toPageRequest());
+        return ResponseEntity.ok(pollOptions);
     }
 
     @GetMapping("/private/name/{name}")
@@ -53,6 +63,13 @@ public class PollOptionController
     @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PollOptionDto> createPollOption(@RequestBody @Valid CreatePollOptionDto createPollOptionDto) {
         PollOptionDto pollOptionDto = this.pollOptionService.createOption(createPollOptionDto);
+        return ResponseEntity.status(201).body(pollOptionDto);
+    }
+
+    @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<PollOptionDto> updatePollOption(@RequestBody @Valid UpdatePollOptionDto updatePollOptionDto) {
+        PollOptionDto pollOptionDto = this.pollOptionService.updateOption(updatePollOptionDto);
         return ResponseEntity.ok(pollOptionDto);
     }
 

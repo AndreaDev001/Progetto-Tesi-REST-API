@@ -3,15 +3,12 @@ package com.progettotirocinio.restapi.data.entities.reports;
 import com.progettotirocinio.restapi.data.entities.Discussion;
 import com.progettotirocinio.restapi.data.entities.GenericEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "DISCUSSION_REPORTS")
 public class DiscussionReport extends Report

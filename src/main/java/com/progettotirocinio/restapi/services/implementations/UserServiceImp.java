@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiresCaching(allCacheName = "ALL_USERS",allSearchName = "SEARCH_USERS",searchCachingRequired = true)
 public class UserServiceImp extends GenericServiceImp<User, UserDto> implements UserService {
 
