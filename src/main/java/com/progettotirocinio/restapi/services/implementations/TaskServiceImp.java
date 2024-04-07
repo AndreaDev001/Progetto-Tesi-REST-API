@@ -26,6 +26,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -181,6 +182,7 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void handleExpiredTasks() {
         List<Task> expiredTasks = this.taskDao.getExpiredTasks(LocalDate.now());
         for(Task current : expiredTasks)
@@ -190,6 +192,7 @@ public class TaskServiceImp extends GenericServiceImp<Task, TaskDto> implements 
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredTasks() {
         List<Task> expiredTasks = this.taskDao.getTasksByStatus(TaskStatus.EXPIRED);
         this.taskDao.deleteAll(expiredTasks);

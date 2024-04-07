@@ -35,7 +35,12 @@ public class TaskURLController
         return ResponseEntity.ok(pagedModel);
     }
 
-
+    @GetMapping("/private/{taskURLID}")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_ADMIN')")
+    public ResponseEntity<TaskURLDto> getTaskURL(@PathVariable("taskURLID") UUID taskURLID) {
+        TaskURLDto taskURLDto = this.taskURLService.getTaskURL(taskURLID);
+        return ResponseEntity.ok(taskURLDto);
+    }
 
     @GetMapping("/private/task/{taskID}")
     @PreAuthorize("@permissionHandler.hasBoardRole('MEMBER',#taskID,@taskDao)")

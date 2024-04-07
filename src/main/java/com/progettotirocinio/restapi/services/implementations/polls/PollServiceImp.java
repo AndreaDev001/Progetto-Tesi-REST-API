@@ -23,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -144,6 +145,8 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
 
     @Override
     @Transactional
+    @Scheduled()
+    @Scheduled(fixedDelay = 24 * 60 * 60  * 1000)
     public void handleExpiredPolls() {
         List<Poll> polls = this.pollDao.getPollsByDate(LocalDate.now());
         for(Poll poll : polls)
@@ -153,6 +156,7 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredPolls() {
         List<Poll> polls = this.pollDao.getPollsByStatus(PollStatus.EXPIRED);
         this.pollDao.deleteAll(polls);

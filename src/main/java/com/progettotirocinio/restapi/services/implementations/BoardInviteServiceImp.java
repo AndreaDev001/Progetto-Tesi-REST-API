@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -141,6 +142,7 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void handleExpiredInvites() {
         List<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByDate(LocalDate.now());
         for(BoardInvite boardInvite : boardInvites)
@@ -150,6 +152,7 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredInvites() {
         List<BoardInvite> boardInvites = this.boardInviteDao.getBoardInvitesByStatus(TaskStatus.EXPIRED);
         this.boardInviteDao.deleteAll(boardInvites);

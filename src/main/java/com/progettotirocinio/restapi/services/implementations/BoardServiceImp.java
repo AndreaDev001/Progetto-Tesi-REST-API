@@ -25,6 +25,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -259,6 +260,7 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void handleExpiredBoards() {
         List<Board> boards = this.boardDao.getBoardsByDate(LocalDate.now());
         for(Board current : boards)
@@ -268,6 +270,7 @@ public class BoardServiceImp extends GenericServiceImp<Board, BoardDto> implemen
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredBoards() {
         List<Board> boards = this.boardDao.getBoardsByStatus(BoardStatus.EXPIRED);
         this.boardDao.deleteAll(boards);

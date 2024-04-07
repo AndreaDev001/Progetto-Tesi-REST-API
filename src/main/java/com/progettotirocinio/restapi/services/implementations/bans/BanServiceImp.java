@@ -24,6 +24,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -145,6 +146,7 @@ public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements Ban
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void handleExpiredBans() {
         List<Ban> bans = this.banDao.getBansByDate(LocalDate.now());
         for(Ban current : bans)
@@ -154,6 +156,7 @@ public class BanServiceImp extends GenericServiceImp<Ban, BanDto> implements Ban
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredBans() {
         List<Ban> bans = this.banDao.getBansByExpired(true);
         this.banDao.deleteAll(bans);

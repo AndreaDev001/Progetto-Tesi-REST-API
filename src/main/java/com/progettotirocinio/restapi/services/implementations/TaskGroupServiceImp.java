@@ -25,6 +25,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -122,6 +123,7 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000)
     public void handleExpiredTaskGroups() {
         List<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByDate(LocalDate.now());
         for(TaskGroup current : taskGroups)
@@ -131,6 +133,7 @@ public class TaskGroupServiceImp extends GenericServiceImp<TaskGroup, TaskGroupD
 
     @Override
     @Transactional
+    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000,initialDelay = 24 * 60 * 60 * 1000)
     public void deleteExpiredTaskGroups() {
         List<TaskGroup> taskGroups = this.taskGroupDao.getTaskGroupsByStatus(TaskGroupStatus.EXPIRED);
         this.taskGroupDao.deleteAll(taskGroups);

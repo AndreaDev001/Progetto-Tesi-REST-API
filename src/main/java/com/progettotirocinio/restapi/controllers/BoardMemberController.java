@@ -2,6 +2,7 @@ package com.progettotirocinio.restapi.controllers;
 
 import com.progettotirocinio.restapi.data.dao.BoardMemberDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardMemberDto;
 import com.progettotirocinio.restapi.services.interfaces.BoardMemberService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
