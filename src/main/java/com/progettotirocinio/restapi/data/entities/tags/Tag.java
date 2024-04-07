@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class Tag extends GenericEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 10)
     private String name;
 
     @Column(name = "COLOR",nullable = false,updatable = false)

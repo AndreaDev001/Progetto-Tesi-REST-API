@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiresCaching(allCacheName = "ALL_POLLS")
 public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements PollService {
 

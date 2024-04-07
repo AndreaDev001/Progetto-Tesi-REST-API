@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -30,12 +31,12 @@ import java.util.UUID;
 @Table(name = "BANS",uniqueConstraints = {@UniqueConstraint(columnNames = {"BANNER_ID","BANNED_ID"})})
 public class Ban extends GenericEntity implements OwnableEntity
 {
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BANNER_ID",nullable = false,updatable = false)
     @SpecificationOrderType(allowDepth = true)
     protected User banner;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BANNED_ID",nullable = false,updatable = false)
     @SpecificationOrderType(allowDepth = true)
     protected User banned;
@@ -59,11 +60,13 @@ public class Ban extends GenericEntity implements OwnableEntity
 
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     @SpecificationOrderType
     protected String title;
 
     @Column(name = "DESCRIPTION",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 20,max = 200)
     @SpecificationOrderType
     protected String description;
 

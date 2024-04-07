@@ -11,6 +11,7 @@ import com.progettotirocinio.restapi.data.entities.likes.CommentLike;
 import com.progettotirocinio.restapi.data.entities.likes.Like;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
@@ -29,10 +30,12 @@ public class Comment extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     protected String title;
 
     @Column(name = "TEXT",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 10,max = 200)
     protected String text;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "comment")

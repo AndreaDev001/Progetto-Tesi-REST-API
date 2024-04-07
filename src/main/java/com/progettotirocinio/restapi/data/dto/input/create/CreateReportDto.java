@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
@@ -18,10 +19,12 @@ public class CreateReportDto
 {
     @NotNull
     @NotBlank
+    @Length(min = 3,max = 20)
     protected String title;
 
     @NotNull
     @NotBlank
+    @Length(min = 20,max = 200)
     protected String description;
 
     @NotNull

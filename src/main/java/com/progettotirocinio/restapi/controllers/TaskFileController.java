@@ -66,7 +66,7 @@ public class TaskFileController
     @GetMapping("/private/{taskFileID}/file")
     public ResponseEntity<byte[]> getFileAsBytes(@PathVariable("taskFileID") UUID taskFileID) {
         TaskFileDto taskFileDto = this.taskFileService.getTaskFile(taskFileID);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + taskFileDto.getFileName()+ "\"").body(this.taskFileService.getFileByID(taskFileID));
+        return ResponseEntity.ok().contentType(MediaType.valueOf(taskFileDto.getType())).header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + taskFileDto.getFileName()+ "\"").body(this.taskFileService.getFileByID(taskFileID));
     }
 
     @GetMapping("/public/extensions")

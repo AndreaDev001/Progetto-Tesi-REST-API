@@ -10,8 +10,10 @@ import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -34,11 +36,13 @@ public class Board extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     @SpecificationOrderType
     private String title;
 
     @Column(name = "DESCRIPTION",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 20,max = 200)
     @SpecificationOrderType
     private String description;
 
@@ -76,6 +80,8 @@ public class Board extends AmountEntity implements OwnableEntity
     private Set<Tag> associatedTags = new HashSet<>();
 
     @Column(name = "MAX_MEMBERS",nullable = false)
+    @Min(value = 5)
+    @Min(value = 20)
     private Integer maxMembers;
 
     @Column(name = "EXPIRATION_DATE")

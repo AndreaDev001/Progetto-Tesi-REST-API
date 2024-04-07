@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ public class TaskFile extends GenericEntity implements OwnableEntity,TaskElement
 
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "FILE_NAME",nullable = false,updatable = false)

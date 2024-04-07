@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class TaskURL extends GenericEntity implements OwnableEntity, TaskElement
 
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "URL",nullable = false)

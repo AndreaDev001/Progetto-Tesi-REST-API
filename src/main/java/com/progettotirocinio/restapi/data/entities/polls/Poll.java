@@ -11,7 +11,11 @@ import com.progettotirocinio.restapi.data.entities.enums.PollStatus;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.PollLike;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -33,16 +37,18 @@ public class Poll extends AmountEntity implements OwnableEntity
 
     @Column(name = "TITLE",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     @SpecificationOrderType
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",updatable = false,nullable = false)
     @SpecificationOrderType(allowDepth = true)
     private User publisher;
 
     @Column(name = "DESCRIPTION",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 20,max = 200)
     @SpecificationOrderType
     @Lob
     private String description;
@@ -58,10 +64,14 @@ public class Poll extends AmountEntity implements OwnableEntity
 
     @Column(name = "MINIMUM_VOTES",nullable = false)
     @SpecificationOrderType
+    @Positive
+    @Max(value = 20)
     private Integer minimumVotes;
 
     @Column(name = "MAXIMUM_VOTES",nullable = false)
     @SpecificationOrderType
+    @Min(value = 20)
+    @Max(value = 40)
     private Integer maximumVotes;
 
     @Column(name = "STATUS",nullable = false)

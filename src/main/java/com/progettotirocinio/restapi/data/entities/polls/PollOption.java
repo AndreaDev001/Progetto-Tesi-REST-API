@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +22,12 @@ public class PollOption extends AmountEntity
 {
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "DESCRIPTION",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

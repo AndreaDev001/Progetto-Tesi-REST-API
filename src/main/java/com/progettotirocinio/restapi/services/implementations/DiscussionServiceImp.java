@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiresCaching(allCacheName = "ALL_DISCUSSIONS")
 public class DiscussionServiceImp extends GenericServiceImp<Discussion, DiscussionDto> implements DiscussionService {
 

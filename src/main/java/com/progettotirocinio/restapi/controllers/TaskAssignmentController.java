@@ -59,9 +59,8 @@ public class TaskAssignmentController
     }
 
     @GetMapping("/private/user/{userID}/task/{taskID}")
-    @PreAuthorize("@permissionHandler.hasAccess(#userID) and @permissionHandler.isMember(#taskID,@taskDao)")
-    public ResponseEntity<TaskAssignmentDto> getTaskAssignment(@PathVariable("userID") UUID userID,@PathVariable("taskAssignmentID") UUID taskAssignmentID) {
-        TaskAssignmentDto taskAssignmentDto = this.taskAssignmentService.getTaskAssignment(userID,taskAssignmentID);
+    public ResponseEntity<TaskAssignmentDto> getTaskAssignment(@PathVariable("userID") UUID userID,@PathVariable("taskID") UUID taskID) {
+        TaskAssignmentDto taskAssignmentDto = this.taskAssignmentService.getTaskAssignment(userID,taskID);
         return ResponseEntity.ok(taskAssignmentDto);
     }
 

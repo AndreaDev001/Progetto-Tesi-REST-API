@@ -86,7 +86,6 @@ public class DiscussionController
     }
 
     @GetMapping("/private/publisher/{publisherID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<DiscussionDto>> getDiscussionsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<DiscussionDto> discussions = this.discussionService.getDiscussionsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(discussions);

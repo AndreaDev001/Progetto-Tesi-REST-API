@@ -16,6 +16,7 @@ import com.progettotirocinio.restapi.data.entities.likes.TaskLike;
 import com.progettotirocinio.restapi.data.entities.tags.TagAssignment;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -36,16 +37,19 @@ public class Task extends AmountEntity implements OwnableEntity, BoardElement
     @Column(name = "TITLE",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
+    @Length(min = 3,max = 20)
     private String title;
 
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "DESCRIPTION",nullable = false)
     @Convert(converter = TrimConverter.class)
     @SpecificationOrderType
+    @Length(min = 20,max = 200)
     private String description;
 
     @Column(name = "CURRENT_ORDER",nullable = false)

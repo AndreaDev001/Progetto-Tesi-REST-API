@@ -36,7 +36,6 @@ public class PollController
     }
 
     @GetMapping("/private/publisher/{publisherID}")
-    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
     public ResponseEntity<PagedModel<PollDto>> getPollsByPublisher(@PathVariable("publisherID") UUID publisherID,@ParameterObject @Valid PaginationRequest paginationRequest) {
         PagedModel<PollDto> polls = this.pollService.getPollsByPublisher(publisherID,paginationRequest.toPageRequest());
         return ResponseEntity.ok(polls);

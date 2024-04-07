@@ -10,6 +10,7 @@ import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
@@ -27,6 +28,7 @@ public class CheckList extends AmountEntity implements OwnableEntity, BoardEleme
 {
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 5,max = 15)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

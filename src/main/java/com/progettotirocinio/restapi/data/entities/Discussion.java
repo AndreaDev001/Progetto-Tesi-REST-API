@@ -10,6 +10,7 @@ import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.likes.DiscussionLike;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
@@ -28,16 +29,19 @@ public class Discussion extends AmountEntity implements OwnableEntity
 {
     @Column(name = "TITLE",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     @SpecificationOrderType
     private String title;
 
     @Column(name = "TOPIC",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     @SpecificationOrderType
     private String topic;
 
     @Column(name = "TEXT",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 20,max = 200)
     @Lob
     private String text;
 

@@ -9,6 +9,7 @@ import com.progettotirocinio.restapi.data.entities.interfaces.TaskElement;
 import com.progettotirocinio.restapi.data.entities.listeners.UUIDEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class CheckListOption extends GenericEntity implements OwnableEntity, Boa
 {
     @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "COMPLETED",nullable = false)

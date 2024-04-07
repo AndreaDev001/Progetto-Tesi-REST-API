@@ -22,6 +22,7 @@ public class TaskGroupRef extends GenericOutput<TaskGroupRef>
     public TaskGroupRef(TaskGroup taskGroup) {
         this.id = taskGroup.getId();
         this.name = taskGroup.getName();
+        this.board = new BoardRef(taskGroup.getBoard());
         this.createdDate = taskGroup.getCreatedDate();
     }
 }

@@ -21,13 +21,13 @@ public class DiscussionSpecifications
         private String title;
         @SpecificationPath(path = "topic",comparison = SpecificationComparison.LIKE)
         private String topic;
-        @SpecificationPath(path = "name",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.name",comparison = SpecificationComparison.LIKE)
         private String publisherName;
-        @SpecificationPath(path = "surname",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.surname",comparison = SpecificationComparison.LIKE)
         private String publisherSurname;
-        @SpecificationPath(path = "username",comparison = SpecificationComparison.LIKE)
+        @SpecificationPath(path = "publisher.username",comparison = SpecificationComparison.LIKE)
         private String publisherUsername;
-        @SpecificationPath(path = "gender",comparison = SpecificationComparison.EQUAL)
+        @SpecificationPath(path = "publisher.gender",comparison = SpecificationComparison.EQUAL)
         private Gender publisherGender;
 
         public Filter(Discussion discussion) {

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class CreateCheckListDto
 {
     @NotNull
     @NotBlank
+    @Length(min = 5,max = 15)
     private String name;
 
     @NotNull

@@ -9,6 +9,8 @@ import com.progettotirocinio.restapi.controllers.likes.TaskLikeController;
 import com.progettotirocinio.restapi.controllers.tags.TagAssignmentController;
 import com.progettotirocinio.restapi.data.dto.annotations.AmountReference;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
+import com.progettotirocinio.restapi.data.dto.output.refs.BoardRef;
+import com.progettotirocinio.restapi.data.dto.output.refs.TaskGroupRef;
 import com.progettotirocinio.restapi.data.dto.output.refs.UserRef;
 import com.progettotirocinio.restapi.data.entities.enums.Priority;
 import com.progettotirocinio.restapi.data.entities.enums.TaskStatus;
@@ -32,6 +34,7 @@ public class TaskDto extends GenericOutput<TaskDto>
     private Priority priority;
     private TaskStatus status;
     private UserRef publisher;
+    private TaskGroupRef taskGroup;
     private Integer currentOrder;
     @AmountReference(name = "receivedLikes")
     private Integer amountOfReceivedLikes;

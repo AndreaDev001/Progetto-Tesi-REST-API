@@ -4,6 +4,8 @@ package com.progettotirocinio.restapi.controllers;
 import com.progettotirocinio.restapi.data.dao.BoardInviteDao;
 import com.progettotirocinio.restapi.data.dto.input.PaginationRequest;
 import com.progettotirocinio.restapi.data.dto.input.create.CreateBoardInviteDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdateBoardInviteDto;
 import com.progettotirocinio.restapi.data.dto.output.BoardInviteDto;
 import com.progettotirocinio.restapi.data.entities.BoardInvite;
 import com.progettotirocinio.restapi.data.entities.enums.BoardInviteStatus;
@@ -48,6 +50,13 @@ public class BoardInviteController
     public ResponseEntity<BoardInviteDto> createBoardInvite(@RequestBody @Valid CreateBoardInviteDto createBoardInviteDto) {
         BoardInviteDto boardInviteDto = this.boardInviteService.createBoardInvite(createBoardInviteDto);
         return ResponseEntity.status(201).body(boardInviteDto);
+    }
+
+    @PutMapping("/private")
+    @PreAuthorize("@permissionHandler.hasRole('ROLE_MEMBER')")
+    public ResponseEntity<BoardInviteDto> updateBoardInvite(@RequestBody @Valid UpdateBoardInviteDto updateBoardInviteDto) {
+        BoardInviteDto boardInviteDto = this.boardInviteService.updateBoardInvite(updateBoardInviteDto);
+        return ResponseEntity.ok(boardInviteDto);
     }
 
     @GetMapping("/private/publisher/{publisherID}")

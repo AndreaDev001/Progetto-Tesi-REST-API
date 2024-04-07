@@ -114,6 +114,8 @@ public class BoardInviteServiceImp extends GenericServiceImp<BoardInvite, BoardI
             throw new InvalidFormat("error.boardInvite.update.invalidUser");
         if(updateBoardInviteDto.getText() != null)
             boardInvite.setText(updateBoardInviteDto.getText());
+        if(updateBoardInviteDto.getStatus() != null)
+             boardInvite.setStatus(updateBoardInviteDto.getStatus());
         if(updateBoardInviteDto.getStatus().equals(BoardInviteStatus.ACCEPTED))
         {
             Board board = this.boardDao.findById(boardInvite.getBoardID()).orElseThrow();

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class CreateTagDto
 {
     @NotNull
     @NotBlank
+    @Length(min = 3,max = 10)
     private String name;
 
     @NotNull

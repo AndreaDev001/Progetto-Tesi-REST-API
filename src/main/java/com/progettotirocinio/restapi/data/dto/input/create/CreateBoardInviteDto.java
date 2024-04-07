@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class CreateBoardInviteDto
     private UUID boardID;
     @NotNull
     @NotBlank
+    @Length(min = 3,max = 20)
     private String text;
     @NotNull
     private LocalDate expirationDate;
