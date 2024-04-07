@@ -145,7 +145,6 @@ public class PollServiceImp extends GenericServiceImp<Poll, PollDto> implements 
 
     @Override
     @Transactional
-    @Scheduled()
     @Scheduled(fixedDelay = 24 * 60 * 60  * 1000)
     public void handleExpiredPolls() {
         List<Poll> polls = this.pollDao.getPollsByDate(LocalDate.now());
