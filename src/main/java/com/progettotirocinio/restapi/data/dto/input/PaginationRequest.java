@@ -19,10 +19,17 @@ public class PaginationRequest
     @PositiveOrZero
     Integer page;
 
+    @NotNull
+    @PositiveOrZero
     @Max(20)
     Integer pageSize;
 
     public Pageable toPageRequest() {
         return PageRequest.of(page,pageSize);
+    }
+
+    @Override
+    public String toString() {
+        return "?page=" + page.toString() + "&" + "pageSize=" + pageSize.toString();
     }
 }

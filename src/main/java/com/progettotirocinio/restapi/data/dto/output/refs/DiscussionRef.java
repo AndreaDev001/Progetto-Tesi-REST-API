@@ -1,10 +1,9 @@
 package com.progettotirocinio.restapi.data.dto.output.refs;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.progettotirocinio.restapi.data.dto.output.GenericOutput;
+import com.progettotirocinio.restapi.data.entities.Discussion;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,11 +11,18 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class DiscussionRef
+@EqualsAndHashCode(callSuper = false)
+public class DiscussionRef extends GenericOutput<DiscussionRef>
 {
-    private UUID id;
     private String title;
-    private String name;
-    private LocalDate createdDate;
+    private String topic;
+    private UserRef publisher;
+
+    public DiscussionRef(Discussion discussion) {
+        this.id = discussion.getId();
+        this.title = discussion.getTitle();
+        this.topic = discussion.getTopic();
+        this.publisher = new UserRef(discussion.getPublisher());
+        this.createdDate = discussion.getCreatedDate();
+    }
 }

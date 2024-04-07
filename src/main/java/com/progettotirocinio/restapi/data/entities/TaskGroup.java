@@ -2,12 +2,11 @@ package com.progettotirocinio.restapi.data.entities;
 
 
 import com.progettotirocinio.restapi.data.converters.TrimConverter;
+import com.progettotirocinio.restapi.data.entities.enums.TaskGroupStatus;
+import com.progettotirocinio.restapi.data.entities.interfaces.BoardElement;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,47 +16,48 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Table(name = "TASK_GROUPS")
-public class TaskGroup implements OwnableEntity
+public class TaskGroup extends AmountEntity implements OwnableEntity, BoardElement
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(name = "NAME",nullable = false,updatable = false)
+    @Column(name = "NAME",nullable = false)
     @Convert(converter = TrimConverter.class)
     private String name;
 
-    @Column(name = "EXPIRATION_DATE",nullable = false,updatable = false)
+    @Column(name = "CURRENT_ORDER",nullable = false)
+    private Integer currentOrder;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS",nullable = false)
+    private TaskGroupStatus status;
+
+    @Column(name = "EXPIRATION_DATE",updatable = false)
     private LocalDate expirationDate;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "PUBLISHER_ID",nullable = false)
     private User publisher;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JoinColumn(name = "BOARD_ID",nullable = false,updatable = false)
+    @EqualsAndHashCode.Exclude
     private Board board;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "group",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "group",orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private Set<Task> tasks = new HashSet<>();
-
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    private LocalDate createdDate;
-
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    private LocalDate lastModifiedDate;
-
     @Override
     public UUID getOwnerID() {
         return this.publisher.getId();
+    }
+
+    @Override
+    public UUID getBoardID() {
+        return this.board.getId();
     }
 }

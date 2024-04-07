@@ -1,7 +1,11 @@
 package com.progettotirocinio.restapi.services.implementations.images;
 
+import com.progettotirocinio.restapi.config.caching.CacheHandler;
+import com.progettotirocinio.restapi.config.mapper.Mapper;
+import com.progettotirocinio.restapi.data.dao.UserDao;
 import com.progettotirocinio.restapi.data.dao.images.ImageDao;
 import com.progettotirocinio.restapi.data.dto.output.images.ImageDto;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
 import com.progettotirocinio.restapi.data.entities.images.Image;
 import com.progettotirocinio.restapi.services.implementations.GenericServiceImp;
@@ -10,16 +14,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @Service
 public class ImageServiceImp extends GenericServiceImp<Image, ImageDto> implements ImageService {
     private final ImageDao imageDao;
-    public ImageServiceImp(ModelMapper modelMapper,ImageDao imageDao, PagedResourcesAssembler<Image> pagedResourcesAssembler) {
-        super(modelMapper, Image.class,ImageDto.class, pagedResourcesAssembler);
+    public ImageServiceImp(CacheHandler cacheHandler,UserDao userDao, Mapper mapper, ImageDao imageDao, PagedResourcesAssembler<Image> pagedResourcesAssembler) {
+        super(cacheHandler,userDao,mapper, Image.class,ImageDto.class, pagedResourcesAssembler);
         this.imageDao = imageDao;
     }
 
@@ -33,6 +39,22 @@ public class ImageServiceImp extends GenericServiceImp<Image, ImageDto> implemen
     public PagedModel<ImageDto> getImagesByType(ImageType type, Pageable pageable) {
         Page<Image> images = this.imageDao.getImagesByType(type,pageable);
         return this.pagedResourcesAssembler.toModel(images,modelAssembler);
+    }
+
+    @Override
+    public PagedModel<ImageDto> getImagesByOwner(ImageOwnerType ownerType, Pageable pageable) {
+        Page<Image> images = this.imageDao.getImagesByOwner(ownerType,pageable);
+        return this.pagedResourcesAssembler.toModel(images,modelAssembler);
+    }
+
+    @Override
+    public CollectionModel<ImageType> getTypes() {
+        return CollectionModel.of(Arrays.stream(ImageType.values()).toList());
+    }
+
+    @Override
+    public CollectionModel<ImageOwnerType> getOwnerTypes() {
+        return CollectionModel.of(Arrays.stream(ImageOwnerType.values()).toList());
     }
 
     @Override

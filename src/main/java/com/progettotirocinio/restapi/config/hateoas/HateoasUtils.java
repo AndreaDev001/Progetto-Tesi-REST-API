@@ -1,8 +1,12 @@
 package com.progettotirocinio.restapi.config.hateoas;
 
+import com.progettotirocinio.restapi.config.mapper.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+
 
 public class HateoasUtils
 {
@@ -24,7 +28,7 @@ public class HateoasUtils
         }
         return stringBuilder.toString();
     }
-    public static <R> R convertToType(Object source, Class<R> resultClass, ModelMapper modelMapper) {
-        return modelMapper.map(source, resultClass);
+    public static <R> R convertToType(Object source, Class<R> resultClass,Mapper mapper) {
+        return mapper.map(source, resultClass);
     }
 }

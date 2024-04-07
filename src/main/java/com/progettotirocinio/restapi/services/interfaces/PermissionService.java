@@ -1,5 +1,7 @@
 package com.progettotirocinio.restapi.services.interfaces;
 
+import com.progettotirocinio.restapi.data.dto.input.create.CreatePermissionDto;
+import com.progettotirocinio.restapi.data.dto.input.update.UpdatePermissionDto;
 import com.progettotirocinio.restapi.data.dto.output.PermissionDto;
 import com.progettotirocinio.restapi.data.entities.enums.PermissionType;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +15,7 @@ public interface PermissionService {
     PagedModel<PermissionDto> getPermissionsByType(PermissionType type,Pageable pageable);
     PagedModel<PermissionDto> getPermissionsByName(String name,Pageable pageable);
     PermissionDto getPermission(UUID id);
+    PermissionDto createPermission(CreatePermissionDto createPermissionDto);
+    PermissionDto updatePermission(UpdatePermissionDto updatePermission);
     void deletePermission(UUID id);
 }

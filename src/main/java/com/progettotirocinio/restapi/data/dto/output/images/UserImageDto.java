@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.server.core.Relation;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class UserImageDto extends GenericOutput<UserImageDto>
+@Relation(collectionRelation = "content")
+public class UserImageDto extends ImageDto
 {
     private UserRef user;
 }

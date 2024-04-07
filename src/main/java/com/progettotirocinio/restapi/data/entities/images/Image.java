@@ -1,12 +1,13 @@
 package com.progettotirocinio.restapi.data.entities.images;
 
 
+import com.progettotirocinio.restapi.data.entities.GenericEntity;
+import com.progettotirocinio.restapi.data.entities.User;
+import com.progettotirocinio.restapi.data.entities.enums.ImageOwnerType;
 import com.progettotirocinio.restapi.data.entities.enums.ImageType;
+import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,28 +18,31 @@ import java.util.UUID;
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Image
+public class Image extends GenericEntity implements OwnableEntity
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    protected UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE",nullable = false,updatable = false)
+    @Column(name = "TYPE",nullable = false)
     protected ImageType type;
 
-    @Column(name = "IMAGE",nullable = false,updatable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "OWNER_TYPE",nullable = false,updatable = false)
+    protected ImageOwnerType owner;
+
+    @Column(name = "IMAGE",nullable = false)
     protected byte[] image;
 
-    @CreatedDate
-    @Column(name = "CREATED_DATE",nullable = false,updatable = false)
-    protected LocalDate createdDate;
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name = "UPLOADER_ID",nullable = false)
+    private User uploader;
 
-    @LastModifiedDate
-    @Column(name = "LAST_MODIFIED_DATE",nullable = false,updatable = false)
-    protected LocalDate lastModifiedDate;
+    @Override
+    public UUID getOwnerID() {
+        return uploader.getId();
+    }
 }

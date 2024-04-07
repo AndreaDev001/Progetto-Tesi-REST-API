@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -18,6 +19,8 @@ public interface RoleDao extends JpaRepository<Role, UUID> {
     Page<Role> getRolesByPublisher(@Param("requiredPublisherID") UUID publisherID, Pageable pageable);
     @Query("select r from Role r where r.name = :requiredName")
     Page<Role> getRolesByName(@Param("requiredName") String name,Pageable pageable);
+    @Query("select r from Role r where r.name = :requiredName and r.board.id = :requiredID")
+    Optional<Role> getRoleByNameAndBoard(@Param("requiredName") String name,@Param("requiredID") UUID id);
     @Query("select r from Role r where r.board.id = :requiredID")
     Page<Role> getRolesByBoard(@Param("requiredID") UUID requiredID,Pageable pageable);
 }
