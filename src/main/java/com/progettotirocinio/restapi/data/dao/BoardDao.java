@@ -28,6 +28,6 @@ public interface BoardDao extends JpaRepository<Board, UUID>, JpaSpecificationEx
     Page<Board> getBoardsByStatus(@Param("requiredStatus")BoardStatus status,Pageable pageable);
     @Query("select b from Board b where b.status = :requiredStatus")
     List<Board> getBoardsByStatus(@Param("requiredStatus") BoardStatus status);
-    @Query("select b from Board b where b.expirationDate > :requiredDate")
+    @Query("select b from Board b where :requiredDate > b.expirationDate")
     List<Board> getBoardsByDate(@Param("requiredDate")LocalDate date);
 }

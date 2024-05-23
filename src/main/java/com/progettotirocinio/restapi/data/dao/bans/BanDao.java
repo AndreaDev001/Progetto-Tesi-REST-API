@@ -30,7 +30,7 @@ public interface BanDao extends JpaRepository<Ban, UUID>, JpaSpecificationExecut
     Page<Ban> getBansByReason(@Param("requiredReason")ReportReason reason,Pageable pageable);
     @Query("select b from Ban b where b.expired = :requiredExpired")
     Page<Ban> getBansByExpired(@Param("requiredExpired") boolean expired,Pageable pageable);
-    @Query("select b from Ban b where b.expirationDate > :requiredDate")
+    @Query("select b from Ban b where :requiredDate > b.expirationDate")
     List<Ban> getBansByDate(@Param("requiredDate")LocalDate date);
     @Query("select b from Ban b where b.expired = :requiredExpired")
     List<Ban> getBansByExpired(@Param("requiredExpired") boolean expired);

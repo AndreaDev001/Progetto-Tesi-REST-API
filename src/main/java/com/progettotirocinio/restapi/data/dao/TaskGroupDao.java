@@ -31,6 +31,6 @@ public interface TaskGroupDao extends JpaRepository<TaskGroup, UUID> {
     Page<TaskGroup> getTaskGroupsByStatus(@Param("requiredStatus")TaskGroupStatus status,Pageable pageable);
     @Query("select t from TaskGroup t where t.status = :requiredStatus")
     List<TaskGroup> getTaskGroupsByStatus(@Param("requiredStatus") TaskGroupStatus status);
-    @Query("select t from TaskGroup t where t.expirationDate > :requiredDate")
+    @Query("select t from TaskGroup t where :requiredDate > t.expirationDate")
     List<TaskGroup> getTaskGroupsByDate(@Param("requiredDate")LocalDate date);
 }

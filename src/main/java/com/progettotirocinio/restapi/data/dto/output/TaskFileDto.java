@@ -20,6 +20,7 @@ public class TaskFileDto extends GenericOutput<TaskFileDto>
     private String name;
     private String fileName;
     private String type;
+    private String extension;
     private TaskRef task;
     private BoardMemberRef publisher;
 }

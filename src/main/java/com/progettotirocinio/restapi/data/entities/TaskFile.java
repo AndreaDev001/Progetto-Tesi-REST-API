@@ -33,6 +33,9 @@ public class TaskFile extends GenericEntity implements OwnableEntity,TaskElement
     @Column(name = "TYPE",nullable = false,updatable = false)
     private String type;
 
+    @Column(name = "EXTENSION",nullable = false,updatable = false)
+    private String extension;
+
     @Column(name = "FILE",nullable = false)
     @Lob
     private byte[] file;

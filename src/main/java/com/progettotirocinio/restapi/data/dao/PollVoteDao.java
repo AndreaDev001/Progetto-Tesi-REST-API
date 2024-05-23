@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @Repository
 public interface PollVoteDao extends JpaRepository<PollVote, UUID>
@@ -20,6 +21,8 @@ public interface PollVoteDao extends JpaRepository<PollVote, UUID>
     Page<PollVote> getPollVotesByOption(@Param("requiredID") UUID optionID,Pageable pageable);
     @Query("select p from PollVote p where p.user.id = :requiredUserID and p.option.id = :requiredOptionID")
     Optional<PollVote> getPollVote(@Param("requiredUserID") UUID userID, @Param("requiredOptionID") UUID optionID);
+    @Query("select p from PollVote p where p.option.poll.id = :requiredID")
+    List<PollVote> getPollVotesByPoll(@Param("requiredID") UUID pollID);
     @Query("select p from PollVote p where p.option.poll.id = :requiredPollID")
     Optional<PollVote> getCurrentVote(@Param("requiredPollID") UUID pollID);
 }

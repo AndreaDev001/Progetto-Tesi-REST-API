@@ -97,9 +97,10 @@ public class TaskAssignmentServiceImp extends GenericServiceImp<TaskAssignment, 
         if(!team.getBoard().getId().equals(task.getGroup().getBoard().getId()))
             throw new InvalidFormat("error.taskAssignment.invalidTeam");
         List<TaskAssignment> taskAssignments = new ArrayList<>();
-        for(TeamMember member : teamMembers) {
+        for(TeamMember member : teamMembers)
+        {
             TaskAssignment taskAssignment = new TaskAssignment();
-            if(this.taskAssignmentDao.getTaskAssignment(member.getMember().getId(),taskID).isPresent())
+            if(this.taskAssignmentDao.getTaskAssignment(member.getMember().getUser().getId(),taskID).isPresent())
                 continue;
             taskAssignment.setMember(member.getMember());
             taskAssignment.setTask(task);

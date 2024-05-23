@@ -25,6 +25,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -96,12 +97,25 @@ public class TaskFileServiceImp extends GenericServiceImp<TaskFile, TaskFileDto>
                 throw new InvalidFormat("error.taskFiles.invalidType");
             }
         }
+        String fileExtension = this.getExtension(createTaskFileDto.getMultipartFile());
         taskFile.setPublisher(boardMember);
         taskFile.setTask(task);
         taskFile.setType(createTaskFileDto.getMultipartFile().getContentType());
         taskFile.setFile(createTaskFileDto.getMultipartFile().getBytes());
+        taskFile.setExtension(fileExtension);
         taskFile = this.taskFileDao.save(taskFile);
         return this.modelMapper.map(taskFile,TaskFileDto.class);
+    }
+
+    private String getExtension(MultipartFile file) {
+        if(file != null) {
+            String fileName = file.getOriginalFilename();
+            if(fileName != null) {
+                String[] values = fileName.split("\\.");
+                return values.length >= 1 ? values[values.length - 1] : "";
+            }
+        }
+        return null;
     }
 
     @Override
