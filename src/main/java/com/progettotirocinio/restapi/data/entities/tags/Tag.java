@@ -29,7 +29,7 @@ public class Tag extends GenericEntity implements OwnableEntity, BoardElement
 {
     @Column(name = "NAME",nullable = false,updatable = false)
     @Convert(converter = TrimConverter.class)
-    @Length(min = 3,max = 10)
+    @Length(min = 3,max = 20)
     private String name;
 
     @Column(name = "COLOR",nullable = false,updatable = false)

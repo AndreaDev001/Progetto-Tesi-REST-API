@@ -46,7 +46,7 @@ public class RoleOwnerController
     }
 
     @PostMapping("/private")
-    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createRoleOwnerDto.roleID,@roleDao)")
+    @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#createRoleOwnerDto.boardID)")
     public ResponseEntity<RoleOwnerDto> createRoleOwner(@RequestBody @Valid CreateRoleOwnerDto createRoleOwnerDto) {
         RoleOwnerDto roleOwnerDto = this.roleOwnerService.createRoleOwner(createRoleOwnerDto);
         return ResponseEntity.status(201).body(roleOwnerDto);
@@ -83,7 +83,7 @@ public class RoleOwnerController
     @DeleteMapping("/private/name/{name}/owner/{ownerID}/board/{boardID}")
     @PreAuthorize("@permissionHandler.hasBoardRole('ADMIN',#boardID)")
     public ResponseEntity<Void> deleteRoleOwner(@PathVariable("name") String name,@PathVariable("ownerID") UUID ownerID,@PathVariable("boardID") UUID boardID) {
-        this.roleOwnerService.deleteOwner(name,ownerID,boardID);
+        this.roleOwnerService.deleteOwner(name,boardID,ownerID);
         return ResponseEntity.noContent().build();
     }
 }

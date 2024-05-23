@@ -23,10 +23,10 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Builder
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
@@ -53,13 +53,13 @@ public class Poll extends AmountEntity implements OwnableEntity
     @Lob
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,orphanRemoval = true,mappedBy = "poll")
     private Set<PollLike> receivedLikes = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,orphanRemoval = true,mappedBy = "poll")
     private Set<CommentPoll> receivedComments = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,orphanRemoval = true,mappedBy = "poll")
     private Set<PollOption> options = new HashSet<>();
 
     @Column(name = "MINIMUM_VOTES",nullable = false)

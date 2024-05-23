@@ -19,7 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @EntityListeners(value = AuditingEntityListener.class)
-@Table(name = "TEAM_MEMBERS")
+@Table(name = "TEAM_MEMBERS",uniqueConstraints = {@UniqueConstraint(columnNames = {"MEMBER_ID","TEAM_ID"})})
 public class TeamMember extends GenericEntity implements OwnableEntity, BoardElement
 {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

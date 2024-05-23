@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public enum NotAllowedExtension
 {
 
-    BIN("application/octet-stream"),
     OGV(" application/ogg"),
     SH("application/x-sh"),
     BAT("application/x-msdownload");

@@ -10,6 +10,7 @@ import com.progettotirocinio.restapi.data.entities.images.BoardImage;
 import com.progettotirocinio.restapi.data.entities.interfaces.OwnableEntity;
 import com.progettotirocinio.restapi.data.entities.tags.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -81,7 +82,7 @@ public class Board extends AmountEntity implements OwnableEntity
 
     @Column(name = "MAX_MEMBERS",nullable = false)
     @Min(value = 5)
-    @Min(value = 20)
+    @Max(value = 20)
     private Integer maxMembers;
 
     @Column(name = "EXPIRATION_DATE")

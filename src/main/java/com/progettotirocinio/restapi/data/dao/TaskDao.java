@@ -32,7 +32,7 @@ public interface TaskDao extends JpaRepository<Task, UUID>, JpaSpecificationExec
     List<Task> getTasksByGroup(@Param("requiredGroupID") UUID groupID);
     @Query("select t from Task t where t.priority = :requiredPriority")
     Page<Task> getTasksByPriority(@Param("requiredPriority") Priority priority,Pageable pageable);
-    @Query("select t from Task t where t.expirationDate > :requiredDate")
+    @Query("select t from Task t where :requiredDate > t.expirationDate")
     List<Task> getExpiredTasks(@Param("requiredDate") LocalDate date);
     @Query("select t from Task t where t.status = :requiredStatus")
     List<Task> getTasksByStatus(@Param("requiredStatus") TaskStatus status);
